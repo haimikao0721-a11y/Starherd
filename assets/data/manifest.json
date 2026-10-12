@@ -1,0 +1,350 @@
+{
+  "version": "1.0",
+  "generator": "assets_gen.py",
+  "seed": 20260101,
+  "generated_at": "2026-10-12T02:31:09Z",
+  "audio": [
+    {
+      "name": "ui_hover",
+      "file": "audio/ui_hover.wav",
+      "bytes": 15920,
+      "seconds": 0.09,
+      "peak": 0.949982,
+      "rate": 44100,
+      "channels": 2,
+      "sha256": "1f71411b4fe0ff7734851472a503644bc5973486aa9e7804961a6ac4cb32254e"
+    },
+    {
+      "name": "ui_click",
+      "file": "audio/ui_click.wav",
+      "bytes": 19448,
+      "seconds": 0.11,
+      "peak": 0.949982,
+      "rate": 44100,
+      "channels": 2,
+      "sha256": "b8ce924c2874a18fccfc0f8c6de549483320428ac0116e48d170ed678a9d49c1"
+    },
+    {
+      "name": "ui_back",
+      "file": "audio/ui_back.wav",
+      "bytes": 38852,
+      "seconds": 0.22,
+      "peak": 0.949982,
+      "rate": 44100,
+      "channels": 2,
+      "sha256": "03570e6a48f8ca60009705b85bfc28431251f4f21544071cb954fab8efd19ac4"
+    },
+    {
+      "name": "pulse_attract",
+      "file": "audio/pulse_attract.wav",
+      "bytes": 105884,
+      "seconds": 0.6,
+      "peak": 0.949982,
+      "rate": 44100,
+      "channels": 2,
+      "sha256": "a108755fe24a3f920efeb4547469ff56c640fd63d4e9dee75a4c9b18c8bda77c"
+    },
+    {
+      "name": "pulse_repel",
+      "file": "audio/pulse_repel.wav",
+      "bytes": 97064,
+      "seconds": 0.55,
+      "peak": 0.949982,
+      "rate": 44100,
+      "channels": 2,
+      "sha256": "bd116e86cdaca7bb0307be41302da37fb3eda168b2cbc27425ea122e4df177f7"
+    },
+    {
+      "name": "thruster_loop",
+      "file": "audio/thruster_loop.wav",
+      "bytes": 211724,
+      "seconds": 1.2,
+      "peak": 0.949982,
+      "rate": 44100,
+      "channels": 2,
+      "sha256": "d8e04ca0d3f07b3ff2ce06c2328f61f48da563f2aca26f87059f98765d012548"
+    },
+    {
+      "name": "dock_success",
+      "file": "audio/dock_success.wav",
+      "bytes": 609504,
+      "seconds": 3.454989,
+      "peak": 0.949982,
+      "rate": 44100,
+      "channels": 2,
+      "sha256": "9e14df0a7666c5948fba99186c9233b4441ef7945e39ddeab419d246b28b301e"
+    },
+    {
+      "name": "dock_fail",
+      "file": "audio/dock_fail.wav",
+      "bytes": 158804,
+      "seconds": 0.9,
+      "peak": 0.949982,
+      "rate": 44100,
+      "channels": 2,
+      "sha256": "b55883494a1a78dbbe58f44789f851a6e1a73bc620de2da37006d88aab907bc1"
+    },
+    {
+      "name": "tidal_tear",
+      "file": "audio/tidal_tear.wav",
+      "bytes": 334316,
+      "seconds": 1.894966,
+      "peak": 0.949982,
+      "rate": 44100,
+      "channels": 2,
+      "sha256": "a3ae249ea29d5876e59b21584ded8d18b38c3d882e8b409c72448888da6e004e"
+    },
+    {
+      "name": "impact_rock",
+      "file": "audio/impact_rock.wav",
+      "bytes": 88244,
+      "seconds": 0.5,
+      "peak": 0.949982,
+      "rate": 44100,
+      "channels": 2,
+      "sha256": "9b28e2245e2196cca032c6a8ed6d494a8afc07cff4d0fa25fff426f80f816b87"
+    },
+    {
+      "name": "impact_hull",
+      "file": "audio/impact_hull.wav",
+      "bytes": 203784,
+      "seconds": 1.154989,
+      "peak": 0.949982,
+      "rate": 44100,
+      "channels": 2,
+      "sha256": "c19eae4b52dc22d1bec71d2ad53b11cfb313a0566fdbc214ca8d77498378cbfc"
+    },
+    {
+      "name": "wind_warning",
+      "file": "audio/wind_warning.wav",
+      "bytes": 252296,
+      "seconds": 1.43,
+      "peak": 0.949982,
+      "rate": 44100,
+      "channels": 2,
+      "sha256": "052b5844434989742f70993ddd0da0127e2eb30568a5cd7d4caf07edd87934af"
+    },
+    {
+      "name": "chapter_fanfare",
+      "file": "audio/chapter_fanfare.wav",
+      "bytes": 790316,
+      "seconds": 4.48,
+      "peak": 0.949982,
+      "rate": 44100,
+      "channels": 2,
+      "sha256": "91e38b78af2a62f412efb81aea8c26d76b1b42063305bc086f46116147446e97"
+    },
+    {
+      "name": "blackhole_rumble",
+      "file": "audio/blackhole_rumble.wav",
+      "bytes": 793844,
+      "seconds": 4.5,
+      "peak": 0.949982,
+      "rate": 44100,
+      "channels": 2,
+      "sha256": "44d5b3d9c90b53627aaad453efe3a243b7b8f31cb710b074f5b1eccd71342bc7"
+    },
+    {
+      "name": "countdown",
+      "file": "audio/countdown.wav",
+      "bytes": 449864,
+      "seconds": 2.55,
+      "peak": 0.949982,
+      "rate": 44100,
+      "channels": 2,
+      "sha256": "6529ad8b1252e82d48f371627a1fb388583731f04277fe766cc99218a7ade664"
+    },
+    {
+      "name": "ignition",
+      "file": "audio/ignition.wav",
+      "bytes": 388124,
+      "seconds": 2.2,
+      "peak": 0.949982,
+      "rate": 44100,
+      "channels": 2,
+      "sha256": "ccd976623df8267aad1f2278600c87c510a7a222cbf6ac503f2762068fc2ba38"
+    },
+    {
+      "name": "launch",
+      "file": "audio/launch.wav",
+      "bytes": 659780,
+      "seconds": 3.74,
+      "peak": 0.949982,
+      "rate": 44100,
+      "channels": 2,
+      "sha256": "a6f8392d89cd03e465ae6d5a47f00942e9a26376b9ba36d1eba405f0b4e95342"
+    }
+  ],
+  "art": [
+    {
+      "name": "glow_soft",
+      "file": "art/glow_soft.png",
+      "w": 256,
+      "h": 256,
+      "bytes": 16349,
+      "sha256": "b5130de32cdd14e5dd337acca9e1e3e29a05a17f511afe5bd6cc4c3ba7180df4"
+    },
+    {
+      "name": "glow_ring",
+      "file": "art/glow_ring.png",
+      "w": 256,
+      "h": 256,
+      "bytes": 27079,
+      "sha256": "1aab39a8902e14efd234121e064330df61130a207ee11c836c09e6813f3486db"
+    },
+    {
+      "name": "star_field",
+      "file": "art/star_field.png",
+      "w": 512,
+      "h": 512,
+      "bytes": 41050,
+      "sha256": "5aa9bb7bc415969826ce55b2f2dfb220a564149f8c3d5dc9526893b721bfd2a7"
+    },
+    {
+      "name": "nebula_loop1",
+      "file": "art/nebula_loop1.png",
+      "w": 256,
+      "h": 256,
+      "bytes": 32145,
+      "sha256": "7e4315d8068c8d1151dff21ed04a692ff1ce7b552e7dda219b2a252d57dd0493"
+    },
+    {
+      "name": "nebula_loop2",
+      "file": "art/nebula_loop2.png",
+      "w": 256,
+      "h": 256,
+      "bytes": 27303,
+      "sha256": "4566f91b3a1b0ce5d8b1c6cfd386f111084dd23cd60a68a7b95dc16abfc4ec48"
+    },
+    {
+      "name": "nebula_loop3",
+      "file": "art/nebula_loop3.png",
+      "w": 256,
+      "h": 256,
+      "bytes": 38251,
+      "sha256": "25878ecd3d1bcbe07fcf2bcaea6c0d3759a9cb9d3d799c68c49675da77f0721a"
+    },
+    {
+      "name": "nebula_loop4",
+      "file": "art/nebula_loop4.png",
+      "w": 256,
+      "h": 256,
+      "bytes": 43458,
+      "sha256": "64a48b259dc4caaae0af9f1548c8ed90731d659120daa5b11dfc2bac57213716"
+    },
+    {
+      "name": "grid_hex",
+      "file": "art/grid_hex.png",
+      "w": 384,
+      "h": 222,
+      "bytes": 5788,
+      "sha256": "599da365445da285a79391b8c405b0d7eba28eb513e3b3c1072e5f0b03934bb0"
+    },
+    {
+      "name": "spark",
+      "file": "art/spark.png",
+      "w": 64,
+      "h": 64,
+      "bytes": 567,
+      "sha256": "55eae82818ddcec116c6bb82d166652981655dbe4c52e165f46a5e5840be2ee6"
+    },
+    {
+      "name": "shard",
+      "file": "art/shard.png",
+      "w": 64,
+      "h": 64,
+      "bytes": 1311,
+      "sha256": "232b1b5d17384e58db9be4c9370b438e4391c5bfd1347d3e712aa7a3a7f58394"
+    },
+    {
+      "name": "vignette",
+      "file": "art/vignette.png",
+      "w": 256,
+      "h": 256,
+      "bytes": 17193,
+      "sha256": "c531aaa1c628ffede11c578e85447515fc49660a219de8038be2d88ec7671f05"
+    },
+    {
+      "name": "lens_gradient",
+      "file": "art/lens_gradient.png",
+      "w": 256,
+      "h": 256,
+      "bytes": 15544,
+      "sha256": "e0b2ee8904fa5d71dc7a014fa58ba9feddb394f806086e9025911616e587ee1f"
+    },
+    {
+      "name": "ring_dock",
+      "file": "art/ring_dock.png",
+      "w": 256,
+      "h": 256,
+      "bytes": 5032,
+      "sha256": "49a30c65339bfaacc524869a6739e5dd581f86f9643394036503572f959e2d13"
+    },
+    {
+      "name": "app.ico",
+      "file": "art/app.ico",
+      "w": 256,
+      "h": 256,
+      "bytes": 55821,
+      "sha256": "ad7020b2ba99610f7e17b7a4f3a7959e7def68ad50e77d55c6b2fce8b71136f8"
+    }
+  ],
+  "music": [
+    {
+      "name": "loop1",
+      "file": "audio/music_loop1.json",
+      "bpm": 96,
+      "bars": 16,
+      "beats_per_bar": 4,
+      "key": "A",
+      "mode": "aeolian",
+      "bytes": 36654,
+      "sha256": "984b08e19d1111e0e0253f7e7b79c88ae159cbd9ebdbac12a065007ffe7c56d1"
+    },
+    {
+      "name": "loop2",
+      "file": "audio/music_loop2.json",
+      "bpm": 110,
+      "bars": 16,
+      "beats_per_bar": 4,
+      "key": "D",
+      "mode": "dorian",
+      "bytes": 48500,
+      "sha256": "e4a531392d1e1f0cd279bed6046fb00862601edd40822b3df1dae5ad4a9a7085"
+    },
+    {
+      "name": "loop3",
+      "file": "audio/music_loop3.json",
+      "bpm": 116,
+      "bars": 16,
+      "beats_per_bar": 4,
+      "key": "G",
+      "mode": "lydian",
+      "bytes": 62035,
+      "sha256": "f783d62aaf4351872e904bbb62cb7067f18fb19c59fdc153936fd7d5b5f9f07a"
+    },
+    {
+      "name": "loop4",
+      "file": "audio/music_loop4.json",
+      "bpm": 92,
+      "bars": 16,
+      "beats_per_bar": 4,
+      "key": "E",
+      "mode": "phrygian",
+      "bytes": 24602,
+      "sha256": "c14d0807ec2fd3d65f0adc9e6bcf18334bd40b25f00e08f7dbd4044571eae1b4"
+    },
+    {
+      "name": "menu",
+      "file": "audio/music_menu.json",
+      "bpm": 84,
+      "bars": 16,
+      "beats_per_bar": 4,
+      "key": "C",
+      "mode": "mixolydian",
+      "bytes": 28674,
+      "sha256": "b6bdabbdfffa97b060b0fd808038c37237a7bcae134a609e77352537e4216154"
+    }
+  ],
+  "total_bytes": 5745124
+}

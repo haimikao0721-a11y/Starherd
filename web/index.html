@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<meta name="description" content="牧星者 / STARHERD —— 你不是射手，你是引力源。用真实的牛顿引力去搬运货物。">
+<title>牧星者 / STARHERD</title>
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <!-- 唯一画布：渲染器先把世界（含后处理）画完，HUD（src/ui/hud.ts）用 save/restore 叠画在上层。
+       canvas 的 width/height 属性由 JS 控制（renderer.resize / hud.resize），此处不设。 -->
+  <canvas id="game"></canvas>
+
+  <!-- 菜单系统挂载点（src/ui/menu.ts）。pointer-events:none，面板/按钮各自 auto。 -->
+  <div id="ui-root"></div>
+
+  <!-- 启动画面：Python 宿主/主程序通过 window.LCShell 更新进度 -->
+  <div id="boot">
+    <div class="boot-box">
+      <div class="boot-logo">
+        <span class="boot-logo-zh">牧星者</span>
+        <span class="boot-logo-en">STARHERD</span>
+      </div>
+      <div class="boot-tag">你不是射手，你是引力源</div>
+      <div class="boot-status" id="boot-text">正在连接任务控制中心…</div>
+      <div class="boot-track"><div class="boot-fill" id="boot-fill"></div></div>
+      <div class="boot-meta">
+        <span id="boot-pct">0%</span>
+        <span id="boot-detail">初始化遥测链路</span>
+      </div>
+      <ul class="boot-log" id="boot-log"></ul>
+    </div>
+  </div>
+
+  <script>
+    /* ---------------------------------------------------------------
+       外壳内联脚本（无框架、无依赖）：
+       1) 右键菜单禁用 —— 游戏用右键做"斥力井"，浏览器菜单必须让路；
+       2) 画布/界面禁止拖拽与选择（避免拖动时选中文字、拖出图片幽灵）；
+       3) 暴露 window.LCShell 给主程序更新启动进度（可选 API，不存在也能跑）。
+       --------------------------------------------------------------- */
+    (function () {
+      'use strict';
+
+      document.addEventListener('contextmenu', function (e) { e.preventDefault(); }, false);
+      window.oncontextmenu = function () { return false; };
+
+      document.addEventListener('dragstart', function (e) {
+        var t = e.target;
+        if (t && (t.tagName === 'CANVAS' || t.tagName === 'IMG')) e.preventDefault();
+      }, false);
+
+      document.addEventListener('selectstart', function (e) {
+        var t = e.target;
+        if (t && t.tagName === 'CANVAS') e.preventDefault();
+      }, false);
+
+      var boot = document.getElementById('boot');
+      // 状态行优先用 #boot-text（主程序 bootText() 也优先找它，这样不会破坏启动面板结构）
+      var statusEl = document.getElementById('boot-text') || document.getElementById('boot-status');
+      var fillEl = document.getElementById('boot-fill');
+      var pctEl = document.getElementById('boot-pct');
+      var detailEl = document.getElementById('boot-detail');
+      var logEl = document.getElementById('boot-log');
+      var hideTimer = 0;
+
+      function setProgress(pct, text) {
+        var p = Number(pct);
+        if (!isFinite(p)) p = 0;
+        p = Math.max(0, Math.min(1, p));
+        if (fillEl) fillEl.style.width = (p * 100).toFixed(1) + '%';
+        if (pctEl) pctEl.textContent = Math.round(p * 100) + '%';
+        if (text && detailEl) detailEl.textContent = String(text);
+      }
+
+      window.LCShell = {
+        /** 更新启动进度：pct 0..1，detail 为可选的一行说明 */
+        progress: function (pct, detail) { setProgress(pct, detail); },
+        /** 更新主状态文案 */
+        status: function (text) { if (statusEl) statusEl.textContent = String(text); },
+        /** 追加一行启动日志（最多保留 6 行） */
+        log: function (text) {
+          if (!logEl || !text) return;
+          var li = document.createElement('li');
+          li.textContent = String(text);
+          logEl.appendChild(li);
+          while (logEl.children.length > 6) logEl.removeChild(logEl.firstChild);
+        },
+        /** 素材加载完毕后淡出启动画面 */
+        done: function (delayMs) {
+          hideTimer = window.setTimeout(function () {
+            if (!boot) return;
+            boot.classList.add('boot-out');
+            window.setTimeout(function () { if (boot && boot.parentNode) boot.style.display = 'none'; }, 650);
+          }, Math.max(0, Number(delayMs) || 0));
+        },
+        /** 启动失败时把画面切到错误态（自检脚本据此断言） */
+        fail: function (message) {
+          if (hideTimer) window.clearTimeout(hideTimer);
+          if (boot) boot.classList.add('boot-error');
+          if (statusEl) statusEl.textContent = '启动失败：' + String(message || '未知错误');
+        }
+      };
+    })();
+  </script>
+
+  <script type="module" src="/app.js"></script>
+</body>
+</html>

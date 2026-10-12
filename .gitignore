@@ -1,0 +1,33 @@
+# ---- 依赖 ----
+node_modules/
+
+# ---- 构建产物：全部可由源码重新生成，不进版本库 ----
+# build/ 是 PyInstaller 的中间目录（本机 255 MB），dist_exe/ 是打包出的 EXE（94 MB）
+build/
+dist/
+dist_exe/
+dist_offline/
+dist_music/
+*.spec
+
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# ---- 临时 / 日志 ----
+*.log
+*.tmp
+*.bak
+~$*
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# ---- 编辑器 / IDE ----
+.vscode/
+.idea/
+*.swp

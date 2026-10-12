@@ -1,0 +1,16 @@
+{
+  "name": "lagrange-courier",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "STARHERD - a real-physics gravity shepherd game (TypeScript sim + Python mission control)",
+  "scripts": {
+    "build": "node tools/build.mjs",
+    "watch": "node tools/build.mjs --watch",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "devDependencies": {
+    "esbuild": "^0.24.0",
+    "typescript": "^5.6.3"
+  }
+}

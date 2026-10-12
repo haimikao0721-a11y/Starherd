@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<title>LC SMOKE — 物理与渲染独立自检</title>
+<style>
+  html,body{margin:0;background:#05070f;overflow:hidden;color:#9fb3c8;font:12px/1.5 ui-monospace,Consolas,monospace}
+  canvas{position:fixed;left:0;top:0}
+  #rep{position:fixed;right:8px;top:8px;width:520px;max-height:96vh;overflow:auto;background:#0009;padding:8px;white-space:pre-wrap;z-index:9}
+  .ok{color:#8ef7d0}.bad{color:#ff4d5e}
+</style>
+</head>
+<body>
+<canvas id="cv"></canvas>
+<pre id="rep">running…</pre>
+<script type="module" src="./app.js"></script>
+</body>
+</html>
