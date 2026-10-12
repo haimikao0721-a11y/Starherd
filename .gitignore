@@ -2,6 +2,8 @@
 node_modules/
 
 # ---- 构建产物：全部可由源码重新生成，不进版本库 ----
+# 政策：EXE 只做"打包分发"，通过 GitHub Releases 上传附件，不提交进仓库。
+#（单文件 50MB+ 会触发警告；dist_exe/ 共 94MB，且可由源码一键重建）
 # build/ 是 PyInstaller 的中间目录（本机 255 MB），dist_exe/ 是打包出的 EXE（94 MB）
 build/
 dist/

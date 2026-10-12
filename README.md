@@ -585,3 +585,22 @@ LagrangeCourier/
 
 **分发建议**：把打包好的 EXE 转发给他人时，请一并附上
 `docs/使用条款与免责声明.md`（至少告知对方 SmartScreen 的处理方式）。
+
+### 发布策略：EXE 不进仓库
+
+**本仓库只放源码、关卡数据与程序化素材；可执行文件一律通过「打包 + Release 附件」分发，不提交进仓库。**
+
+| 内容 | 去向 | 原因 |
+|---|---|---|
+| `src/**`、`python/**`、`tools/**`、`assets/**`、`web/**`、文档 | **进仓库** | 可复现的源码与素材（素材由固定种子程序化生成） |
+| `Starherd.exe`(42 MB)、`Starherd_安装程序.exe`(52 MB)、`Starherd_离线单文件版.html`(8 MB) | **不进仓库** → 走 GitHub **Releases** 附件 | 单文件 50 MB 以上会触发警告、94 MB 的 `dist_exe/` 会把仓库撑爆；且它们可由源码一键重建 |
+| `build/`(255 MB)、`node_modules/`(32 MB)、`dist/`、`dist_music/`、`*.spec` | **不进仓库**（已在 `.gitignore`） | 中间产物/依赖，可重新生成 |
+
+重建方式（任何人 clone 后可复现三种产物）：
+
+```bash
+npm install && node tools/build.mjs          # 前端 → dist/app.js
+python python/build_exe.py                   # → dist_exe/Starherd.exe
+python python/build_installer.py             # → dist_exe/Starherd_安装程序.exe
+python python/build_offline.py               # → dist_offline/Starherd_离线单文件版.html
+```
