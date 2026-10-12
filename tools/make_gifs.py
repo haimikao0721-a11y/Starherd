@@ -37,6 +37,9 @@ CLIPS = [
     {"name": "gameplay", "level": 1, "skip": 6.0, "caption": "引力井搬运货舱入坞"},
     {"name": "multibody", "level": 9, "skip": 8.0, "caption": "双星 + L4/L5 稳定岛"},
     {"name": "blackhole", "level": 10, "skip": 8.0, "caption": "黑洞 + 恒星双星"},
+    # 教学动画：五幕演示是 DOM 里的独立画布，只截这块区域（画面聚焦、体积也小）
+    {"name": "tutorial", "level": 0, "skip": 0.8, "seconds": 6.0,
+     "selector": "#lc-tut-canvas", "caption": "五幕操作演示"},
 ]
 
 
@@ -91,23 +94,36 @@ def record(only: str, fps: int, seconds: float, width: int, colors: int, viewpor
         page.wait_for_timeout(1500)
 
         for clip in clips:
-            lv = int(clip["level"]) - 1
-            # attract=true → AI 接管；autotest 保持 false → 实时速度
-            page.evaluate(
-                """(lv) => {
-                    const g = window.__LC_GAME;
-                    g.autotest = false;
-                    g.attract = true;
-                    g.loadWorld(lv);
-                    g.setScreen('play');
-                }""", lv)
-            page.wait_for_timeout(int(clip["skip"] * 1000))
+            sel = clip.get("selector")
+            if sel:
+                # 教学动画：回到主菜单 → 点「看操作演示」→ 只截教学画布
+                page.evaluate("() => { const g = window.__LC_GAME; g.setScreen('menu'); }")
+                page.wait_for_timeout(700)
+                page.click('#ui-root button[data-act="tutorial"]')
+                page.wait_for_timeout(int(clip["skip"] * 1000))
+                shot = page.locator(sel)
+                if shot.count() == 0:
+                    log(f"⚠ 找不到 {sel}，跳过 {clip['name']}")
+                    continue
+            else:
+                lv = int(clip["level"]) - 1
+                # attract=true → AI 接管；autotest 保持 false → 实时速度
+                page.evaluate(
+                    """(lv) => {
+                        const g = window.__LC_GAME;
+                        g.autotest = false;
+                        g.attract = true;
+                        g.loadWorld(lv);
+                        g.setScreen('play');
+                    }""", lv)
+                page.wait_for_timeout(int(clip["skip"] * 1000))
+                shot = page
             n = max(2, int(fps * seconds))
             frames: list[bytes] = []
             interval = 1.0 / fps
             t0 = time.perf_counter()
             for i in range(n):
-                frames.append(page.screenshot(type="png"))
+                frames.append(shot.screenshot(type="png"))
                 target = t0 + (i + 1) * interval
                 dt = target - time.perf_counter()
                 if dt > 0:

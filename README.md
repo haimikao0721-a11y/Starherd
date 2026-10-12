@@ -22,7 +22,7 @@
 </tr>
 </table>
 
-> 更多实机动画：[`docs/demo/multibody.gif`](docs/demo/multibody.gif) ｜ [`docs/demo/blackhole.gif`](docs/demo/blackhole.gif)
+> 更多实机动画：[`docs/demo/multibody.gif`](docs/demo/multibody.gif) ｜ [`docs/demo/blackhole.gif`](docs/demo/blackhole.gif) ｜ [`docs/demo/tutorial.gif`](docs/demo/tutorial.gif)
 
 ## 下载
 
@@ -51,7 +51,9 @@
 | `1` `2` `3` | 场强质量档位 ｜ `Shift` 精确模式 |
 | `R` / `Esc` / `H` | 重试本关 ｜ 暂停 ｜ 帮助 |
 
-**玩不明白？** 主菜单有 **30 秒五幕操作演示**（引力井 / 左右键区别 / 怎么对接）。
+**玩不明白？** 主菜单有 **五幕操作演示**（引力井 / 左右键区别 / 怎么对接）：
+
+![操作演示](docs/demo/tutorial.gif)
 
 ## 内容
 
