@@ -23,9 +23,11 @@ import os
 import re
 import sys
 import tempfile
+import webbrowser
 import threading
 import time
 from pathlib import Path
+from urllib.parse import urlsplit
 from typing import Any, Callable, Optional
 
 from aiohttp import WSMsgType, web
@@ -559,6 +561,9 @@ class MissionControl:
         app.router.add_get("/favicon.ico", self._h_favicon)
         app.router.add_get(r"/assets/{tail:.*}", self._h_asset)
         app.router.add_get("/api/health", self._h_health)
+        # 打开外部链接（游戏内「关于本作」的仓库/主页/Star 按钮）：交给系统默认浏览器，
+        # 这样 WebView 自身不会导航走（否则游戏页面会被替换掉）
+        app.router.add_post("/api/open", self._h_open_post)
         app.router.add_get("/api/manifest", self._h_manifest)
         app.router.add_get("/api/levels", self._h_levels)
         # 背景音乐下载（只服务 EXE / 网页模式：离线单文件没有宿主，因此天然没有这个入口）
@@ -574,6 +579,31 @@ class MissionControl:
         app.router.add_get("/ws", self._h_ws)
         app.router.add_route("*", "/{tail:.*}", self._h_notfound)
         return app
+
+    # ---------------------------------------------------------------- 打开外部链接
+
+    async def _h_open_post(self, req: web.Request) -> web.Response:
+        """用系统默认浏览器打开一个 https 链接（只允许 https，禁止本地/内网地址）。"""
+        try:
+            body = await req.json()
+        except Exception:  # noqa: BLE001
+            return web.json_response({"error": "bad json"}, status=400)
+        url = str((body or {}).get("url", "")).strip()
+        if len(url) > 512 or not re.match(r"^https://[A-Za-z0-9._~:/?#\[\]@!$&'()*+,;=%-]+$", url):
+            return web.json_response({"error": "only https allowed"}, status=400)
+        try:
+            host = (urlsplit(url).hostname or "").lower()
+        except Exception:  # noqa: BLE001
+            host = ""
+        if not host or host in ("localhost", "127.0.0.1", "::1") or host.endswith((".local", ".internal")):
+            return web.json_response({"error": "host not allowed"}, status=400)
+        try:
+            webbrowser.open(url)
+        except Exception as exc:  # noqa: BLE001
+            LOG.warning("打开链接失败 %s: %r", url, exc)
+            return web.json_response({"ok": False, "error": "open failed"}, status=500)
+        LOG.info("已在默认浏览器打开：%s", url)
+        return web.json_response({"ok": True, "url": url})
 
     # ---------------------------------------------------------------- 背景音乐下载
 

@@ -251,6 +251,7 @@ export class Game {
       onQuit: () => void this.quit(),
       onSetting: <K extends keyof SaveState['settings']>(key: K, value: SaveState['settings'][K]) => this.applySetting(key, value),
       onSelectChapter: () => { this.menu?.show('levels'); },
+      onOpenUrl: (url) => this.openExternal(url),
       onTutorialSeen: () => this.markTutorialSeen(),
     });
     this.menu.setLevels(this.doc);
@@ -578,6 +579,23 @@ export class Game {
       return;
     }
     this.startLevelAt(this.levelIndex + 2);
+  }
+
+  /**
+   * 打开外部链接（仓库 / 个人主页 / Star）。
+   * EXE 与网页模式交给宿主用系统默认浏览器打开——**绝不能让 WebView 自己导航**，
+   * 否则游戏页面会被仓库页面替换掉，玩家以为游戏崩了。离线单文件版没有宿主，走 window.open。
+   */
+  private openExternal(url: string): void {
+    if (!/^https:\/\//i.test(url)) return;
+    if (!this.isOffline) {
+      void fetch('/api/open', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url }),
+      }).catch(() => { try { window.open(url, '_blank', 'noopener'); } catch { /* 忽略 */ } });
+      return;
+    }
+    try { window.open(url, '_blank', 'noopener'); } catch { /* 忽略 */ }
   }
 
   private toMenu(): void {

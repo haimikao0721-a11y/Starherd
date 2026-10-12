@@ -1,5 +1,14 @@
 # 《牧星者 / STARHERD》
 
+[![Star](https://img.shields.io/github/stars/haimikao0721-a11y/Starherd?style=social&label=Star)](https://github.com/haimikao0721-a11y/Starherd/stargazers)
+[![Release](https://img.shields.io/github/v/release/haimikao0721-a11y/Starherd?label=%E4%B8%8B%E8%BD%BD)](https://github.com/haimikao0721-a11y/Starherd/releases/latest)
+[![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+[![Platform](https://img.shields.io/badge/platform-Windows-0078d4)](https://github.com/haimikao0721-a11y/Starherd/releases/latest)
+
+> **制作者**：海米糕（[@haimikao0721-a11y](https://github.com/haimikao0721-a11y)）
+> ｜ **仓库**：https://github.com/haimikao0721-a11y/Starherd
+> ｜ 觉得好玩就点个 ⭐ **Star** —— 这是对独立开发者最实在的鼓励。
+
 ### 三种交付形态（含"可安装"）
 
 | 形态 | 产物 | 大小 | 适用 |

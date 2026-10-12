@@ -17,9 +17,23 @@ import { DEFAULT_SAVE, podClassCounts } from '../sim/types';
 import { clamp01, fmtDv, fmtDurationShort, fmtInt, fmtPct, fmtSci, fmtTime } from './format';
 import { TUT_STEPS, TutorialAnim } from './tutorial';
 
+/**
+ * 制作者与仓库信息（**要改个人主页，只改下面的 `homepage` 这一行即可**）。
+ * 游戏内「关于本作」界面与 README/Release 说明共用这套信息。
+ */
+export const AUTHOR = {
+  name: '海米糕',
+  handle: 'haimikao0721-a11y',
+  /** GitHub 仓库（Star 按钮就指向这里） */
+  repo: 'https://github.com/haimikao0721-a11y/Starherd',
+  /** 个人主页：默认用 GitHub 主页；若你有独立博客/其他主页，把这一行换成你的网址 */
+  homepage: 'https://github.com/haimikao0721-a11y',
+  version: 'v1.0.0',
+};
+
 export type ScreenName =
   | 'none' | 'boot' | 'menu' | 'levels' | 'briefing' | 'pause'
-  | 'debrief' | 'chapter' | 'end' | 'help' | 'settings' | 'tutorial';
+  | 'debrief' | 'chapter' | 'end' | 'help' | 'settings' | 'tutorial' | 'about';
 
 /** 可下载曲目（由宿主 /api/music 提供；离线单文件版为空） */
 export interface MusicTrackInfo {
@@ -36,6 +50,8 @@ export interface MenuCallbacks {
   onQuit(): void;
   onSetting<K extends keyof SaveState['settings']>(key: K, value: SaveState['settings'][K]): void;
   onSelectChapter(chapter: number): void;
+  /** 打开外部链接（EXE 走宿主默认浏览器；离线版走 window.open） */
+  onOpenUrl(url: string): void;
   /** 玩家看过（或跳过）操作演示 —— 用于"首次游玩自动弹演示" */
   onTutorialSeen(): void;
 }
@@ -102,6 +118,8 @@ export class Menu {
   private save: SaveState = DEFAULT_SAVE;
   /** 可下载背景音乐（仅在有宿主时非空：EXE / 网页；离线单文件版恒为空 → 暂停页不渲染该区块） */
   private musicTracks: MusicTrackInfo[] = [];
+  /** 「关于本作」页：仓库地址是否刚被复制（用于按钮回显） */
+  private aboutCopied = false;
   private items: HTMLElement[] = [];
   private sel = 0;
   private tickerEl: HTMLElement | null = null;
@@ -340,6 +358,12 @@ export class Menu {
       case 'tut-step': this.tutStep = Math.max(0, Math.min(TUT_STEPS.length - 1, level)); this.render(); break;
       case 'tut-done': this.cb.onTutorialSeen(); this.show('menu'); break;
       case 'settings': this.show('settings'); break;
+      case 'about': this.show('about'); break;
+      case 'open-repo': this.cb.onOpenUrl(AUTHOR.repo); break;
+      case 'open-home': this.cb.onOpenUrl(AUTHOR.homepage); break;
+      case 'copy-repo':
+        void this.copyText(AUTHOR.repo);
+        break;
       case 'quit': this.cb.onQuit(); break;
       case 'level': {
         const lv = this.levelByIndex(level);
@@ -368,7 +392,7 @@ export class Menu {
   /** Esc / 返回：按界面的来源回退 */
   private back(): void {
     switch (this.current) {
-      case 'levels': case 'help': case 'settings': case 'tutorial': this.show('menu'); break;
+      case 'levels': case 'help': case 'settings': case 'tutorial': case 'about': this.show('menu'); break;
       case 'briefing': this.show('levels'); break;
       case 'pause': this.cb.onResume(); break;
       case 'debrief': this.cb.onBackToMenu(); break;
@@ -485,6 +509,7 @@ export class Menu {
       case 'help': this.renderHelp(); break;
       case 'tutorial': this.renderTutorial(); break;
       case 'settings': this.renderSettings(); break;
+      case 'about': this.renderAbout(); break;
       default: this.el.innerHTML = ''; break;
     }
   }
@@ -531,6 +556,7 @@ export class Menu {
       ${this.header('牧星者', 'STARHERD', '你不是射手，你是引力源')}
       <nav class="lc-nav">
         ${btn('tutorial', '看操作演示（30 秒学会）', { title: '5 幕动画：引力井 / 左右键区别 / 怎么对接' })}
+        ${btn('about', '关于本作 · 制作者与仓库', { title: '制作者 / GitHub 仓库 / 给仓库点 Star / 个人主页' })}
         ${btn('start-levels', '开始任务', { title: '选择关卡' })}
         ${btn('continue', '继续', { disabled: !hasSave, title: '从上次的关卡继续' })}
         ${btn('levels', '章节选择')}
@@ -684,6 +710,65 @@ export class Menu {
   setMusicTracks(tracks: MusicTrackInfo[]): void {
     this.musicTracks = tracks;
     if (this.screen === 'pause') this.renderPause();
+  }
+
+  /* ---- about（制作者 / 仓库 / Star / 个人主页）---- */
+  private renderAbout(): void {
+    const body = `
+      ${this.header('关于本作', 'ABOUT', `${AUTHOR.version} · 制作者与仓库`)}
+      <section class="lc-note lc-note-about">
+        <h4>制作者</h4>
+        <p class="lc-about-line"><b>${esc(AUTHOR.name)}</b>
+          <span class="lc-about-handle">@${esc(AUTHOR.handle)}</span></p>
+        <p class="lc-hint">一个人写完的：物理公式库、12 关关卡、渲染与音频合成、三种交付形态。</p>
+      </section>
+      <section class="lc-note lc-note-about">
+        <h4>GitHub 仓库 · 觉得好玩就点个 Star ⭐</h4>
+        <p class="lc-about-url" title="可选中复制">${esc(AUTHOR.repo)}</p>
+        <nav class="lc-nav lc-nav-about">
+          ${btn('open-repo', '⭐ 去仓库点 Star', { cls: 'lc-primary', title: '用默认浏览器打开仓库页面，右上角点 Star' })}
+          ${btn('open-home', '我的个人主页', { title: esc(AUTHOR.homepage) })}
+          ${btn('copy-repo', this.aboutCopied ? '已复制 ✓' : '复制仓库地址', { title: '把地址复制到剪贴板，方便分享给朋友' })}
+        </nav>
+        <p class="lc-hint">${this.aboutCopied
+          ? '仓库地址已复制到剪贴板，可以直接粘贴给朋友。'
+          : '一键 Star 是独立开发者最实在的鼓励 —— 也能让更多人看到这个项目。'}</p>
+      </section>
+      <section class="lc-note lc-note-about">
+        <h4>许可与素材</h4>
+        <p class="lc-hint">源码与素材均为 <b>MIT</b> 许可；美术、音效、音乐全部由本项目
+          <b>程序化生成</b>（生成器与固定种子都在仓库里），<b>不含任何第三方素材</b>。</p>
+        <p class="lc-hint">游戏内背景音乐可在暂停页下载（仅 EXE / 网页模式）。</p>
+      </section>
+      <nav class="lc-nav">
+        ${btn('back', '返回主菜单', { cls: 'lc-primary' })}
+      </nav>`;
+    this.shell(body);
+  }
+
+  /** 复制到剪贴板（离线 file:// 下 clipboard API 可能不可用，用 textarea 兜底） */
+  private async copyText(text: string): Promise<void> {
+    let ok = false;
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(text);
+        ok = true;
+      }
+    } catch { /* 继续走兜底 */ }
+    if (!ok) {
+      try {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        ok = document.execCommand('copy');
+        ta.remove();
+      } catch { ok = false; }
+    }
+    this.aboutCopied = ok;
+    if (this.current === 'about') this.renderAbout();
   }
 
   /* ---- debrief ---- */

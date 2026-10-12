@@ -190,7 +190,13 @@ def do_install(install_dir: Path, *, desktop: bool, menu: bool, run_after: bool,
         "不需要安装 Python 或任何运行环境；存档位于：\r\n"
         "  %LOCALAPPDATA%\\Starherd\\save.json\r\n\r\n"
         "卸载：运行本目录下的「卸载 Starherd.bat」，或从\r\n"
-        "「设置 → 应用 → 已安装的应用」中卸载。\r\n",
+        "「设置 → 应用 → 已安装的应用」中卸载。\r\n\r\n"
+        "----------------------------------------\r\n"
+        "制作者：海米糕\r\n"
+        "  仓库：https://github.com/haimikao0721-a11y/Starherd\r\n"
+        "  主页：https://github.com/haimikao0721-a11y\r\n"
+        "觉得好玩就在仓库页面点个 Star ⭐ —— 这是对独立开发者最实在的鼓励。\r\n"
+        "（游戏内也能找到同样内容：主菜单 → 关于本作）\r\n",
         encoding="utf-8")
     bat = write_uninstaller(install_dir, desktop=desktop, menu=menu)
     log(f"  生成卸载入口：{bat.name}")
