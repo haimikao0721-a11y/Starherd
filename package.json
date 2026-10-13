@@ -1,6 +1,6 @@
 {
   "name": "lagrange-courier",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "type": "module",
   "description": "STARHERD - a real-physics gravity shepherd game (TypeScript sim + Python mission control)",

@@ -28,7 +28,7 @@ export const AUTHOR = {
   repo: 'https://github.com/haimikao0721-a11y/Starherd',
   /** 个人主页：默认用 GitHub 主页；若你有独立博客/其他主页，把这一行换成你的网址 */
   homepage: 'https://github.com/haimikao0721-a11y',
-  version: 'v1.0.0',
+  version: 'v1.1.0',
 };
 
 export type ScreenName =
