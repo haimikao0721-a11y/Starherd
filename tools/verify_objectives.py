@@ -49,36 +49,53 @@ def main() -> int:
         pg.wait_for_function('window.__LC_DEBUG', timeout=60000)
         pg.wait_for_timeout(1500)
 
-        # ---- 1) 单站关（未注入）应保持 objectivesTotal = 1 ----
-        base = pg.evaluate('''() => {
+        # ---- 0) 挑一个货舱足够的关卡（航段推进需要多个货舱来依次送达）----
+        pick = pg.evaluate('''() => {
             const g = window.__LC_GAME;
             g.autotest = false; g.attract = true;
-            g.loadWorld(0); g.setScreen('play');
+            for (let i = 0; i < g.doc.levels.length; i++) {
+                g.loadWorld(i); g.setScreen('play'); g.attract = true; g.autotest = false;
+                const w = g.world;
+                const n = w.pods.filter(p => p.alive && !p.delivered).length;
+                if (n >= 2) return { idx: i, id: w.level.id, pods: n };
+            }
+            return { idx: 0, id: 'fallback', pods: 1 };
+        }''')
+        LV = pick['idx']
+        print(f'  选用关卡：index={LV} （{pick["id"]}，可用货舱 {pick["pods"]}）')
+
+        # ---- 1) 单站关（未注入）应保持 objectivesTotal = 1 ----
+        base = pg.evaluate('''(i) => {
+            const g = window.__LC_GAME;
+            g.autotest = false; g.attract = true;
+            g.loadWorld(i); g.setScreen('play');
             const lv = g.world.level;
             return { total: lv.objectivesTotal, idx: lv.objectiveIndex };
-        }''')
+        }''', LV)
         check('单站关不受影响', base['total'] == 1 and base['idx'] == 0, f'objectivesTotal={base["total"]}')
 
         # ---- 2) 注入三段目标 ----
         # 关键：body 的 key 要从**运行时**世界读（关卡 JSON 里主天体不一定带 key 字段），
         # 并且停掉吸引模式下的 AI —— 否则货舱会被 AI 撞掉，后面的瞬移测试就没有对象了。
-        info = pg.evaluate('''() => {
+        info = pg.evaluate('''(LV) => {
             const g = window.__LC_GAME;
-            g.loadWorld(0); g.setScreen('play');
+            g.loadWorld(LV); g.setScreen('play');
             const w = g.world;
-            g.attract = true; g.autotest = false;           // 保持世界演算（attract 关掉可能连物理都不跑）
+            g.attract = true; g.autotest = false;
             const keys = w.primaries.map(p => p.key);
-            const lv = g.doc.levels[0];
+            const lv = g.doc.levels[LV];
             const others = keys.filter(k => k !== lv.dock.body);
-            const seq = [lv.dock.body].concat(others.slice(0, 2));
+            const nPods = w.pods.filter(p => p.alive && !p.delivered).length;
+            const legs = Math.max(1, Math.min(nPods, others.length + 1, 3));
+            const seq = [lv.dock.body].concat(others.slice(0, legs - 1));
             lv.objectives = seq.map((k, i) => ({ body: k, label_zh: `测试站${i + 1}` }));
-            g.loadWorld(0); g.setScreen('play');
+            g.loadWorld(LV); g.setScreen('play');
             g.attract = true; g.autotest = false;
             const w2 = g.world;
             return { seq, total: w2.level.objectivesTotal, idx: w2.level.objectiveIndex,
                      dockBody: w2.dock.bodyId, dockX: +w2.dock.x.toFixed(3),
                      pods: w2.pods.filter(p => p.alive && !p.delivered).length };
-        }''')
+        }''', LV)
         check('注入后被识别为多段', info['total'] == len(info['seq']),
               f'objectivesTotal={info["total"]} 站序={info["seq"]}')
         check('有可用货舱', info['pods'] > 0, f'存活未送达={info["pods"]}')
@@ -94,10 +111,20 @@ def main() -> int:
                 const p = w.pods.find(q => q.alive && !q.delivered);
                 if (!p) return { err: '没有可用的货舱' };
                 const st = w.primaries.find(x => x.id === w.dock.bodyId);
-                // 瞬移到泊位中心，速度与站台一致 → 软对接
-                p.x = w.dock.x; p.y = w.dock.y; p.vx = st.vx; p.vy = st.vy;
-                return { ok: true };
+                // 从泊位**外侧一点**进场：避免瞬移到中心时踩进恒星禁入区
+                // （诊断显示泊位中心可能在 STAR_KEEPOUT 边界上，进中心会立即损毁）
+                const rx = w.dock.x, ry = w.dock.y;
+                const rr = Math.max(1e-6, Math.hypot(rx, ry));
+                const ux = rx / rr, uy = ry / rr;          // 背离恒星（原点）的方向
+                const stand = Math.min(0.30, w.dock.radius * 1.8 * 0.85);
+                p.x = rx + ux * stand; p.y = ry + uy * stand;
+                p.vx = st.vx; p.vy = st.vy;
+                return { ok: true, stand, d: stand, hardR: w.dock.radius * 1.8,
+                         r: Math.hypot(p.x, p.y), dockR: rr };
             }''')
+            if got.get('ok'):
+                print(f'    进场：离泊位 {got["d"]:.3f} RU（硬对接包络 {got["hardR"]:.3f}），'
+                      f'该点半径 {got["r"]:.3f}（泊位在 {got["dockR"]:.3f}）')
             if got.get('err'):
                 check(f'第 {step} 段推进', False, str(got['err']))
                 break
