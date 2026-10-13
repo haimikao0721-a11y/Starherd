@@ -1305,18 +1305,19 @@ export class Game {
     lv.fidelityGrade = this.verdict.grade;
     lv.fidelityFactor = this.verdict.fidelity;
     lv.fidelityNote = this.verdict.note;
-    const prev = this.save.best_scores[lv.id]?.score ?? -1;
+    const prevRec = this.save.best_scores[lv.id];
+    const prev = prevRec?.won === true ? prevRec.score : -1;
     const breakdown = computeScore(w, this.verdict, false);
-    breakdown.newBest = breakdown.score > prev;
+    breakdown.newBest = w.status === 'won' && breakdown.score > prev;
     result.score = breakdown.score;
-    if (breakdown.newBest) {
-      this.save.best_scores[lv.id] = { score: breakdown.score, grade: breakdown.grade, time: w.time, fuel: lv.fuelUsed };
-    }
-    this.save.totals.played++;
-    this.save.totals.delivered += lv.podsDelivered;
-    this.save.totals.lost += lv.podsLost;
-    this.save.totals.playtime += w.time * TIME_SCALE;
     if (w.status === 'won') {
+      if (!prevRec || prevRec.won !== true || breakdown.score >= prevRec.score) {
+        this.save.best_scores[lv.id] = {
+          score: breakdown.score, grade: breakdown.grade, time: w.time, fuel: lv.fuelUsed, won: true,
+        };
+      } else {
+        prevRec.won = true;
+      }
       const clip = this.recorder.freeze();
       const keep = breakdown.newBest || !this.save.clips?.[lv.id];
       if (clip && keep) {
@@ -1324,8 +1325,12 @@ export class Game {
         this.save.clips[lv.id] = clip;
       }
       const chapters = this.doc.levels[this.levelIndex]?.chapter ?? 1;
-      this.save.unlocked_chapters = Math.max(this.save.unlocked_chapters, Math.min(4, chapters));
+      this.save.unlocked_chapters = Math.max(this.save.unlocked_chapters, Math.min(5, chapters));
     }
+    this.save.totals.played++;
+    this.save.totals.delivered += lv.podsDelivered;
+    this.save.totals.lost += lv.podsLost;
+    this.save.totals.playtime += w.time * TIME_SCALE;
     this.menu?.setSave(this.save);
     this.persist();
     this.showDebrief(breakdown);
@@ -1763,7 +1768,11 @@ function sanitizeSave(s: SaveState, doc: LevelsDoc): SaveState {
   out.best_scores = s.best_scores ?? {};
   out.clips = s.clips && typeof s.clips === 'object' ? s.clips : {};
   out.totals = { ...DEFAULT_SAVE.totals, ...(s.totals ?? {}) };
-  out.unlocked_chapters = Math.max(1, Math.min(4, Number(s.unlocked_chapters) || 1));
+  out.unlocked_chapters = Math.max(1, Math.min(5, Number(s.unlocked_chapters) || 1));
+  const scores = out.best_scores;
+  for (const id of Object.keys(scores)) {
+    if (scores[id] && scores[id].won !== true) delete scores[id];
+  }
   const ids = (doc?.levels ?? []).map((l) => l.id);
   if (!out.last_level || !ids.includes(String(out.last_level))) out.last_level = ids[0] ?? 'L1-1';
   if (typeof out.settings.quality !== 'string') out.settings.quality = 'high';

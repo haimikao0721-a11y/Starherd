@@ -216,7 +216,7 @@ export function createWorld(level: LevelSpec, doc: LevelsDoc, attempt = 1): Worl
     objectives: level.objectives,
     objectiveIndex: 0,
     objectivesTotal: Math.max(1, level.objectives?.length ?? 1),
-    // 时限与 world.time 同一单位。第 1 章教学关在 missionBudget 里给到至少 180。
+    // 时限与 world.time 同一单位。第 1 章教学关在 missionBudget 里给到至少 108。
     // 时限不参与计分——时间分用的是 parTime（见 score.ts）。
     timeLimit: budget.timeLimit,
     combo: 0, comboTimer: 0,
@@ -301,7 +301,7 @@ export interface MissionBudget {
 /**
  * 关卡的燃料与时限。
  *
- * 普通关：燃料 = (40+6×难度)×fuel_scale，时限 = max(90, par×3.4)，第 1 章至少 180。
+ * 普通关：燃料 = (40+6×难度)×fuel_scale，时限 = max(90, par×3.4)，第 1 章至少 108。
  * 极限关（level.margin，例如 0.05）：只在熟练标准解之上留这个比例。
  *   燃料 = 名义预算 × (1+margin)
  *   时限 = max(par×熟练倍数, 12) × (1+margin)
@@ -323,7 +323,7 @@ export function missionBudget(level: Pick<LevelSpec, 'difficulty' | 'par_time' |
   const fuelScale = Number(level.fuel_scale ?? 1) || 1;
   return {
     fuel: nominalFuel * fuelScale,
-    timeLimit: Math.max(90, level.par_time * 3.4, level.chapter === 1 ? 180 : 0),
+    timeLimit: Math.max(90, level.par_time * 3.4, level.chapter === 1 ? 108 : 0),
     margin: 0,
     nominalFuel,
   };

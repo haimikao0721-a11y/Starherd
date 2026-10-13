@@ -33,7 +33,7 @@ export const AUTHOR = {
   homepage: 'https://github.com/haimikao0721-a11y',
   /** 联系邮箱（想改就改这一行；关于页会显示并可一键复制） */
   email: 'haimikao0721@gmail.com',
-  version: 'v1.3.0',
+  version: 'v1.3.1',
 };
 
 export type ScreenName =
@@ -497,7 +497,8 @@ export class Menu {
     const pos = inCh.findIndex((l) => l.index === level.index);
     if (pos <= 0) return true;
     for (let i = 0; i < pos; i++) {
-      if (!this.save.best_scores[inCh[i].id]) return false;
+      const rec = this.save.best_scores[inCh[i].id];
+      if (!rec || rec.won !== true) return false;
     }
     return true;
   }

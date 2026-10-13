@@ -568,7 +568,7 @@ export interface SaveState {
     physics60?: boolean;
   };
   unlocked_chapters: number;
-  best_scores: Record<string, { score: number; grade: string; time: number; fuel: number }>;
+  best_scores: Record<string, { score: number; grade: string; time: number; fuel: number; won?: boolean }>;
   /** 各关通关前几秒的操作片段。旧存档没有这个字段。 */
   clips?: Record<string, import('../game/clip').LevelClip>;
   totals: { played: number; delivered: number; lost: number; playtime: number };

@@ -89,6 +89,12 @@ function lightAccel(world: World, b: Body, wind: number): void {
   if (b.docked || !b.alive) return;
   ACC.x = 0; ACC.y = 0;
   primaryAccelRel(b.x, b.y, b.vx, b.vy, world.primaries, world.epsilon, ACC);
+  // 碎石雨只受主天体引力。辐射压按面积/质量会把它们加速到离谱，数量一多步长就拖垮。
+  if (b.kind === 'asteroid' && b.key.startsWith('rock')) {
+    b.ax = ACC.x;
+    b.ay = ACC.y;
+    return;
+  }
   const w = world.well;
   if (world.fieldEnabled && w.engaged && w.mass > 0) {
     wellAccel(b.x, b.y, w.x, w.y, w.mass, WELL_RANGE, w.repel, world.epsilon, ACC);
@@ -535,9 +541,38 @@ function applyShower(world: World, dt: number): void {
   }
 }
 
+function cullRocks(world: World): void {
+  const edge = world.bounds * 1.35;
+  const bs = world.bodies;
+  let live = 0;
+  for (let i = bs.length - 1; i >= 0; i--) {
+    const b = bs[i];
+    if (!b.key.startsWith('rock')) continue;
+    const gone = !b.alive || b.life > 36 || Math.hypot(b.x, b.y) > edge;
+    if (gone) { bs.splice(i, 1); continue; }
+    live++;
+  }
+  if (live <= 10) return;
+  for (let i = 0; i < bs.length && live > 10; i++) {
+    const b = bs[i];
+    if (!b.key.startsWith('rock') || !b.alive) continue;
+    bs.splice(i, 1);
+    i--;
+    live--;
+  }
+}
+
 /** 撒一批碎石：从 dir 反方向的场外飞入，带一定的横向散布 */
 function spawnShower(world: World, e: { dir: number; speed: number; width: number; count?: number; rockMass?: number; rockRadius?: number }): void {
-  const n = Math.max(1, Math.min(24, e.count ?? 6));
+  cullRocks(world);
+  let live = 0;
+  for (let i = 0; i < world.bodies.length; i++) {
+    const b = world.bodies[i];
+    if (b.alive && b.key.startsWith('rock')) live++;
+  }
+  const room = 10 - live;
+  if (room <= 0) return;
+  const n = Math.max(1, Math.min(room, e.count ?? 6));
   const rm = e.rockMass ?? 6e-6;
   const rr = e.rockRadius ?? 0.045;
   const area = Math.PI * rr * rr;
@@ -559,7 +594,7 @@ function spawnShower(world: World, e: { dir: number; speed: number; width: numbe
       docked: false, delivered: false, lost: false,
       tint: 0x9a8f86, ang: e.dir, spin: (i % 2 ? 1 : -1) * (0.5 + i * 0.07), primary: false,
       contact: 0, jolt: 0, stress: 0, dilation: 1, life: 0, tearT: 0,
-      trailX: new Float32Array(48), trailY: new Float32Array(48),
+      trailX: new Float32Array(12), trailY: new Float32Array(12),
       trailN: 0, trailHead: 0, trailTick: 0,
     };
     world.bodies.push(b);
