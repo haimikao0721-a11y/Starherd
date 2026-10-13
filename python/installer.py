@@ -195,6 +195,7 @@ def do_install(install_dir: Path, *, desktop: bool, menu: bool, run_after: bool,
         "制作者：海米糕\r\n"
         "  仓库：https://github.com/haimikao0721-a11y/Starherd\r\n"
         "  主页：https://github.com/haimikao0721-a11y\r\n"
+        "  邮箱：haimikao0721@gmail.com（反馈 bug / 建议关卡都欢迎）\r\n"
         "觉得好玩就在仓库页面点个 Star ⭐ —— 这是对独立开发者最实在的鼓励。\r\n"
         "（游戏内也能找到同样内容：主菜单 → 关于本作）\r\n",
         encoding="utf-8")

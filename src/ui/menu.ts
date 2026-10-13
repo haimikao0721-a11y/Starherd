@@ -28,6 +28,8 @@ export const AUTHOR = {
   repo: 'https://github.com/haimikao0721-a11y/Starherd',
   /** 个人主页：默认用 GitHub 主页；若你有独立博客/其他主页，把这一行换成你的网址 */
   homepage: 'https://github.com/haimikao0721-a11y',
+  /** 联系邮箱（想改就改这一行；关于页会显示并可一键复制） */
+  email: 'haimikao0721@gmail.com',
   version: 'v1.1.0',
 };
 
@@ -120,6 +122,8 @@ export class Menu {
   private musicTracks: MusicTrackInfo[] = [];
   /** 「关于本作」页：仓库地址是否刚被复制（用于按钮回显） */
   private aboutCopied = false;
+  /** 「关于本作」页：联系邮箱是否刚被复制 */
+  private mailCopied = false;
   private items: HTMLElement[] = [];
   private sel = 0;
   private tickerEl: HTMLElement | null = null;
@@ -395,6 +399,9 @@ export class Menu {
       case 'open-home': this.cb.onOpenUrl(AUTHOR.homepage); break;
       case 'copy-repo':
         void this.copyText(AUTHOR.repo);
+        break;
+      case 'copy-mail':
+        void this.copyText(AUTHOR.email);
         break;
       case 'quit': this.cb.onQuit(); break;
       case 'level': {
@@ -753,6 +760,14 @@ export class Menu {
         <p class="lc-about-line"><b>${esc(AUTHOR.name)}</b>
           <span class="lc-about-handle">@${esc(AUTHOR.handle)}</span></p>
         <p class="lc-hint">一个人写完的：物理公式库、12 关关卡、渲染与音频合成、三种交付形态。</p>
+        <p class="lc-about-line">联系邮箱
+          <span class="lc-about-url lc-about-mail" title="可选中复制">${esc(AUTHOR.email)}</span></p>
+        <nav class="lc-nav lc-nav-about">
+          ${btn('copy-mail', this.mailCopied ? '已复制 ✓' : '复制邮箱', { title: '把邮箱复制到剪贴板' })}
+        </nav>
+        <p class="lc-hint">${this.mailCopied
+          ? '邮箱已复制，欢迎反馈 bug、建议关卡或聊聊物理。'
+          : '发现问题、想加关卡、或想聊公式，都欢迎写信 —— 独立开发最需要的就是反馈。'}</p>
       </section>
       <section class="lc-note lc-note-about">
         <h4>GitHub 仓库 · 觉得好玩就点个 Star ⭐</h4>
@@ -800,6 +815,8 @@ export class Menu {
       } catch { ok = false; }
     }
     this.aboutCopied = ok;
+    this.mailCopied = ok && text === AUTHOR.email;
+    this.aboutCopied = ok && text !== AUTHOR.email;
     if (this.current === 'about') this.renderAbout();
   }
 

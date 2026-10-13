@@ -135,5 +135,8 @@ web/            页面外壳与样式
 ---
 
 **制作者**：海米糕（[@haimikao0721-a11y](https://github.com/haimikao0721-a11y)）
+｜ **邮箱**：haimikao0721@gmail.com
 ｜ **仓库**：https://github.com/haimikao0721-a11y/Starherd
 ｜ 觉得好玩就点个 ⭐ **Star** —— 这是对独立开发者最实在的鼓励。
+
+> 发现 bug、想加关卡、想聊公式，都欢迎写信：**haimikao0721@gmail.com**
