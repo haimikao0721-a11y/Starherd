@@ -183,7 +183,10 @@ export function createWorld(level: LevelSpec, doc: LevelsDoc, attempt = 1): Worl
   // 燃料：飞船自身的 Δv 预算由难度给出（与货舱的霍曼 Δv 是两种货币，HUD 分开显示）
   // 标定依据：悬停在 r≈1.5 处对抗恒星引力约需 0.44 Δv/TU，一次 1 RU 的转场约 3 Δv，
   // 因此 40~110 Δv 对应 20~60 TU 的真实任务时长。
-  const fuelCapacity = 40 + 6 * level.difficulty;
+  // 燃料预算：40 + 6×难度，再乘可选的关卡系数（fuel_scale）。
+  // 玩家反馈「有些关太极限、不像能过」——放宽预算即可，物理与几何一律不动。
+  const fuelScale = Number((level as { fuel_scale?: number }).fuel_scale ?? 1) || 1;
+  const fuelCapacity = (40 + 6 * level.difficulty) * fuelScale;
   const required = Math.max(1, Math.round(level.pods.length * (level.difficulty <= 2 ? 1 : 0.6)));
 
   const levelRt: LevelRuntime = {

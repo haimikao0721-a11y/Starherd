@@ -492,7 +492,8 @@ function createWorld(level, doc2, attempt = 1) {
     pulse: 0
   };
   const nebulae = (level.nebulae ?? []).map((n) => ({ ...n }));
-  const fuelCapacity = 40 + 6 * level.difficulty;
+  const fuelScale = Number(level.fuel_scale ?? 1) || 1;
+  const fuelCapacity = (40 + 6 * level.difficulty) * fuelScale;
   const required = Math.max(1, Math.round(level.pods.length * (level.difficulty <= 2 ? 1 : 0.6)));
   const levelRt = {
     id: level.id,

@@ -509,7 +509,10 @@ export interface ScoreBreakdown {
   delivered: number; total: number; lost: number; combo: number;
   fidelityGrade: string; fidelityNote: string;
   energyDrift: number; angularDrift: number;
-  difficulty: number; newBest: boolean; success: boolean;
+  difficulty: number;
+  /** 燃料预算系数（可选）：fuelCapacity = (40 + 6*difficulty) × 该值。
+   * 用于把「极限」关卡放宽成「难但能过」——只加预算，不改任何物理与几何。 */
+  fuel_scale?: number; newBest: boolean; success: boolean;
   title: string; subtitle: string;
 }
 
