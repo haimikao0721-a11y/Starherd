@@ -773,23 +773,22 @@ export class Menu {
   }
 
   /* ---- pause ---- */
-  private renderPause(): void {
-    // **背景音乐下载**：只在"有宿主进程"的模式下出现（EXE / 网页）。
-    // 离线单文件版（file://）没有宿主，`musicTracks` 永远为空 → 这个区块根本不渲染，
-    // 因此天然满足"只在 exe 里能下载"的要求。
-    const musicBlock = this.musicTracks.length
-      ? `<section class="lc-note lc-note-music">
+  private musicDownloadBlock(): string {
+    if (!this.musicTracks.length) return '';
+    return `<section class="lc-note lc-note-music">
           <h4>背景音乐下载 / SOUNDTRACK</h4>
-          <p class="lc-hint">全部由项目自身的程序化合成器生成（谱面 → 离线渲染 WAV，无第三方素材）。</p>
+          <p class="lc-hint">全部由项目自身的程序化合成器生成（谱面 → 离线渲染 WAV）。点一首就开始下载。</p>
           <nav class="lc-nav lc-nav-music">
             ${this.musicTracks.map((t) => `<a class="lc-btn" href="${esc(t.url)}" download
               title="${esc(t.title_en)} · ${t.bpm} BPM · ${esc(String(t.key))} ${esc(String(t.mode))} · ${t.seconds}s">
               ${esc(t.title_zh)}<span class="lc-music-en">${esc(t.title_en)}</span>
               <span class="lc-music-meta">${t.bpm} BPM · ${t.seconds}s</span></a>`).join('')}
           </nav>
-          <p class="lc-hint">首次点击需要在宿主端渲染约 10 秒（之后走缓存，秒下）。</p>
-        </section>`
-      : '';
+          <p class="lc-hint">第一次点需要渲染大约 10 秒，之后再点就是直接下载。</p>
+        </section>`;
+  }
+
+  private renderPause(): void {
     const body = `
       ${this.header('暂停', 'PAUSED', '牧星者号待机中 · 时空坐标已冻结')}
       <nav class="lc-nav">
@@ -799,14 +798,15 @@ export class Menu {
         ${btn('menu', '返回主菜单')}
       </nav>
       <p class="lc-hint">Esc 继续 · R 重试 · M 静音 · T 加速</p>
-      ${musicBlock}`;
+      ${this.musicDownloadBlock()}`;
     this.shell(body);
   }
 
   /** 由游戏层在有宿主时注入可下载曲目；离线单文件版不会调用它 */
   setMusicTracks(tracks: MusicTrackInfo[]): void {
     this.musicTracks = tracks;
-    if (this.screen === 'pause') this.renderPause();
+    if (this.current === 'pause') this.renderPause();
+    if (this.current === 'settings') this.renderSettings();
   }
 
   /* ---- about（制作者 / 仓库 / Star / 个人主页）---- */
@@ -1102,6 +1102,7 @@ export class Menu {
           <input class="lc-range" type="range" min="0" max="1" step="0.01" value="${st.sfx}" data-set="sfx" data-sfx="ui_click" aria-label="音效音量">
           <span class="lc-value" data-out="sfx">${fmtPct(st.sfx)}</span>
         </div>
+        ${this.musicDownloadBlock()}
         <div class="lc-slider-row">
           <span class="lc-label">画质</span>
           <select class="lc-select" data-set="quality" data-sfx="ui_click" aria-label="画质">

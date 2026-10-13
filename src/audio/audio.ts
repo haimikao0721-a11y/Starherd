@@ -18,6 +18,8 @@
  *   · 'alert'     0..1：叠加紧张高频脉冲层（G6/G#6 小二度 + 音频速率脉冲调制）。
  *   · 'fuel'      0..1：低于 0.25 加入低频心跳（越低越快越响）。
  *   · 'stability' 0..1：结构稳定性，越低 pad 失谐越宽（听感更"晃"）。
+ *   · 'musicGain' 0..1：音乐总线音量。
+ *   · 'sfxGain'   0..1：音效总线音量。
  *   未列出的名字一律忽略（不抛错）。
  *
  * 生命周期：init() 必须在用户手势后调用；document.hidden 时引擎自行暂停调度器并压掉输出。
@@ -57,7 +59,9 @@ function audioContextCtor(): AudioCtxCtor | null {
   return g.AudioContext ?? g.webkitAudioContext ?? null;
 }
 
-export type AudioParamName = 'wellMass' | 'wellThrust' | 'slowmo' | 'alert' | 'fuel' | 'stability';
+export type AudioParamName =
+  | 'wellMass' | 'wellThrust' | 'slowmo' | 'alert' | 'fuel' | 'stability'
+  | 'musicGain' | 'sfxGain';
 
 interface ParamState {
   wellMass: number; // 归一化 0..1（源值 M★ / 0.05）
@@ -96,7 +100,14 @@ export class AudioEngine {
   private disposed = false;
 
   private masterLevel = MASTER_DEFAULT;
+  /** 与存档默认一致：音乐 0.55、音效 0.9。滑块改的就是这两条总线。 */
+  private musicLevel = 0.55;
+  private sfxLevel = SFX_BUS_GAIN;
   private muted = false;
+  /** 滑块连发时用它记住“耳朵里现在的响度”，避免每次都从旧目标跳一下。 */
+  private masterGlide = { value: MASTER_DEFAULT, toward: MASTER_DEFAULT, at: 0, tau: 0.18 };
+  private musicGlide = { value: 0.55, toward: 0.55, at: 0, tau: 0.18 };
+  private sfxGlide = { value: SFX_BUS_GAIN, toward: SFX_BUS_GAIN, at: 0, tau: 0.18 };
   private hidden = false;
   private duckUntil = 0;
 
@@ -166,11 +177,11 @@ export class AudioEngine {
     comp.connect(ctx.destination);
 
     const sfxBus = ctx.createGain();
-    sfxBus.gain.value = SFX_BUS_GAIN;
+    sfxBus.gain.value = this.sfxLevel;
     sfxBus.connect(master);
 
     const musicBus = ctx.createGain();
-    musicBus.gain.value = this.hidden ? 0 : 1;
+    musicBus.gain.value = this.hidden ? 0 : this.musicLevel;
     musicBus.connect(master);
 
     const musicTone = ctx.createBiquadFilter();
@@ -417,12 +428,12 @@ export class AudioEngine {
   /** 0..1 */
   setMaster(gain: number): void {
     this.masterLevel = clamp(Number.isFinite(gain) ? gain : 0, 0, 1);
-    this.applyMaster(0.05);
+    this.applyMaster(0.18);
   }
 
   setMuted(m: boolean): void {
     this.muted = !!m;
-    this.applyMaster(0.04);
+    this.applyMaster(0.08);
   }
 
   /** 短暂压低音乐（号角/关键音效）；seconds 后恢复 */
@@ -432,14 +443,16 @@ export class AudioEngine {
     if (!ctx || !bus) return;
     const now = ctx.currentTime;
     const hold = clamp(Number.isFinite(seconds) ? seconds : 0.6, 0.05, 12);
-    const base = this.hidden ? 0 : 1;
-    const g = bus.gain;
-    g.cancelScheduledValues(now);
-    g.setValueAtTime(g.value, now);
-    g.setTargetAtTime(base * DUCK_LEVEL, now, DUCK_ATTACK_TAU);
+    const base = this.hidden ? 0 : this.musicLevel;
+    const dipped = base * DUCK_LEVEL;
+    this.glideGain(bus.gain, this.musicGlide, dipped, DUCK_ATTACK_TAU);
     const until = Math.max(now + hold, this.duckUntil);
     this.duckUntil = until;
-    g.setTargetAtTime(base, until + 0.05, DUCK_RELEASE_TAU);
+    bus.gain.setTargetAtTime(base, until + 0.05, DUCK_RELEASE_TAU);
+    this.musicGlide.value = dipped;
+    this.musicGlide.toward = base;
+    this.musicGlide.at = now;
+    this.musicGlide.tau = DUCK_RELEASE_TAU;
   }
 
   /* ------------------------------------------------------------------ 实时参数 */
@@ -472,6 +485,14 @@ export class AudioEngine {
       case 'stability':
         this.params.stability = clamp(x, 0, 1);
         this.music?.setStability(this.params.stability);
+        break;
+      case 'musicGain':
+        this.musicLevel = clamp(x, 0, 1);
+        this.applyMusicBus(0.18);
+        break;
+      case 'sfxGain':
+        this.sfxLevel = clamp(x, 0, 1);
+        this.applySfxBus(0.18);
         break;
       default:
         break; // 未知参数：静默忽略（不抛错）
@@ -507,25 +528,43 @@ export class AudioEngine {
     return this.muted || this.hidden ? 0 : this.masterLevel;
   }
 
-  private applyMaster(ramp: number): void {
+  private sampleGlide(g: { value: number; toward: number; at: number; tau: number }, now: number): number {
+    const dt = Math.max(0, now - g.at);
+    return g.toward + (g.value - g.toward) * Math.exp(-dt / Math.max(0.001, g.tau));
+  }
+
+  /** 从当前响度滑向目标，不读 AudioParam.value（那是上一次写下的目标，不是耳朵里的值）。 */
+  private glideGain(param: AudioParam, g: { value: number; toward: number; at: number; tau: number }, target: number, tau: number): void {
     const ctx = this.ctx;
-    const g = this.master?.gain;
-    if (!ctx || !g) return;
+    if (!ctx) return;
     const now = ctx.currentTime;
-    const target = this.effectiveMaster();
-    g.cancelScheduledValues(now);
-    g.setValueAtTime(g.value, now);
-    g.setTargetAtTime(target, now, Math.max(0.005, ramp / 3));
+    const current = this.sampleGlide(g, now);
+    const safeTau = Math.max(0.02, tau);
+    param.cancelScheduledValues(now);
+    param.setValueAtTime(Math.max(0, current), now);
+    param.setTargetAtTime(Math.max(0, target), now, safeTau);
+    g.value = current;
+    g.toward = target;
+    g.at = now;
+    g.tau = safeTau;
+  }
+
+  private applyMaster(ramp: number): void {
+    const g = this.master?.gain;
+    if (!g) return;
+    this.glideGain(g, this.masterGlide, this.effectiveMaster(), ramp);
   }
 
   private applyMusicBus(ramp: number): void {
-    const ctx = this.ctx;
     const g = this.musicBus?.gain;
-    if (!ctx || !g) return;
-    const now = ctx.currentTime;
-    g.cancelScheduledValues(now);
-    g.setValueAtTime(g.value, now);
-    g.setTargetAtTime(this.hidden ? 0 : 1, now, Math.max(0.005, ramp / 3));
+    if (!g) return;
+    this.glideGain(g, this.musicGlide, this.hidden ? 0 : this.musicLevel, ramp);
+  }
+
+  private applySfxBus(ramp: number): void {
+    const g = this.sfxBus?.gain;
+    if (!g) return;
+    this.glideGain(g, this.sfxGlide, this.sfxLevel, ramp);
   }
 
   private applyToneFilter(ramp: number): void {
