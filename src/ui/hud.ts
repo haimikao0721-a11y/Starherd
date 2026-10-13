@@ -1240,7 +1240,7 @@ export class Hud {
     const mode = w.well.engaged ? (w.well.repel ? '斥力' : '吸引') : '待机';
     return [
       '左键 吸引', '右键 斥力', '滚轮 场强', 'Alt+滚轮 缩放', '0 复位缩放', '空格 慢动作', 'T 加速', '1/2/3 质量档', 'Shift 精确',
-      'Tab 预测', 'G 场线', 'F 矢量', 'R 重置', 'Esc 暂停', 'M 静音', '(H 帮助)',
+      'Tab 预测', 'G 场线', 'Z 零速度曲线', 'F 矢量', 'R 重置', 'Esc 暂停', 'M 静音', '(H 帮助)',
     ].join(' · ') + `   [${mode}]`;
   }
 
