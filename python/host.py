@@ -47,7 +47,7 @@ if str(_HERE) not in sys.path:
 import paths  # noqa: E402
 import save as save_mod  # noqa: E402
 
-VERSION = "1.3.1"
+VERSION = "1.3.2"
 LOG = logging.getLogger("lagrange.host")
 
 TITLE = "牧星者 / STARHERD"

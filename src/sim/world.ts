@@ -192,7 +192,7 @@ export function createWorld(level: LevelSpec, doc: LevelsDoc, attempt = 1): Worl
   const eventState = (level.events ?? []).map((e) => ({
     kind: e.kind, x: 0, y: 0, dir: e.dir, eta: e.t0, active: false,
   }));
-  const required = Math.max(1, Math.round(level.pods.length * (level.difficulty <= 2 ? 1 : 0.6)));
+  const required = Math.max(1, level.pods.length);
 
   const levelRt: LevelRuntime = {
     id: level.id, index: level.index, chapter: level.chapter,
@@ -216,7 +216,7 @@ export function createWorld(level: LevelSpec, doc: LevelsDoc, attempt = 1): Worl
     objectives: level.objectives,
     objectiveIndex: 0,
     objectivesTotal: Math.max(1, level.objectives?.length ?? 1),
-    // 时限与 world.time 同一单位。第 1 章教学关在 missionBudget 里给到至少 108。
+    // 时限与 world.time 同一单位。第 1 章教学关在 missionBudget 里给到至少 180。
     // 时限不参与计分——时间分用的是 parTime（见 score.ts）。
     timeLimit: budget.timeLimit,
     combo: 0, comboTimer: 0,
@@ -301,7 +301,7 @@ export interface MissionBudget {
 /**
  * 关卡的燃料与时限。
  *
- * 普通关：燃料 = (40+6×难度)×fuel_scale，时限 = max(90, par×3.4)，第 1 章至少 108。
+ * 普通关：燃料 = (40+6×难度)×fuel_scale，时限 = max(90, par×3.4)，第 1 章至少 180。
  * 极限关（level.margin，例如 0.05）：只在熟练标准解之上留这个比例。
  *   燃料 = 名义预算 × (1+margin)
  *   时限 = max(par×熟练倍数, 12) × (1+margin)
@@ -323,17 +323,17 @@ export function missionBudget(level: Pick<LevelSpec, 'difficulty' | 'par_time' |
   const fuelScale = Number(level.fuel_scale ?? 1) || 1;
   return {
     fuel: nominalFuel * fuelScale,
-    timeLimit: Math.max(90, level.par_time * 3.4, level.chapter === 1 ? 108 : 0),
+    timeLimit: Math.max(90, level.par_time * 3.4, level.chapter === 1 ? 180 : 0),
     margin: 0,
     nominalFuel,
   };
 }
 
-/** 关卡要求的送达数量（存活率计分与胜负判定用） */
+/** 关卡要求的送达数量：场上有几艘货舱，就要送达几艘。 */
 export function requiredPods(world: World): number {
   const r = (world as World & { requiredPods?: number }).requiredPods;
   if (r) return r;
-  return Math.max(1, Math.round(world.level.podsTotal * (world.level.difficulty <= 2 ? 1 : 0.6)));
+  return Math.max(1, world.level.podsTotal);
 }
 
 /** 每颗主天体的洛希极限（相对标准货舱密度），供渲染危险环使用 */

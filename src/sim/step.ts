@@ -795,10 +795,10 @@ function interactions(world: World, dt: number): void {  // 1) 轻体 × 主天�
     world.dock.y = station.y + world.dock.oy;
     if (world.dock.pulse > 0) world.dock.pulse = Math.max(0, world.dock.pulse - dt * 1.6);
     const hard = world.dock.vMax * 2.6;
-    // 泊位包络：软对接（满分）要求在环内且速度达标；硬对接允许 1.8 倍半径内以损伤为代价捕获，
-    // 对应真实工程的"软捕获 / 硬捕获"两种对接模式。
+    // 泊位包络：软对接（满分）必须进环且速度达标。硬对接只比环略大一圈（1.2 倍），
+    // 再远就不算捕获，避免在环外很远处被自动吸进去。
     const softR = world.dock.radius;
-    const hardR = world.dock.radius * 1.8;
+    const hardR = world.dock.radius * 1.2;
     for (let i = 0; i < world.pods.length; i++) {
       const p = world.pods[i];
       if (!p.alive || p.delivered) continue;

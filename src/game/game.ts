@@ -281,6 +281,7 @@ export class Game {
       onOpenUrl: (url) => this.openExternal(url),
       onTutorialSeen: () => this.markTutorialSeen(),
       onFinale: () => this.startFinale(),
+      onResetProgress: () => this.resetProgress(),
     });
     this.menu.setLevels(this.doc);
     this.menu.setSave(this.save);
@@ -848,6 +849,23 @@ export class Game {
       return;
     }
     try { window.open(url, '_blank', 'noopener'); } catch { /* 忽略 */ }
+  }
+
+  private resetProgress(): void {
+    const settings = this.save.settings;
+    this.save.best_scores = {};
+    this.save.clips = {};
+    this.save.unlocked_chapters = 1;
+    this.save.totals = { played: 0, delivered: 0, lost: 0, playtime: 0 };
+    this.save.last_level = this.doc.levels[0]?.id ?? 'L1-1';
+    this.save.settings = settings;
+    this.levelIndex = 0;
+    try { localStorage.removeItem('lc_tut_seen'); } catch { /* 忽略 */ }
+    this.menu?.setSave(this.save);
+    this.persist();
+    this.toMenu();
+    this.menu?.show('menu');
+    this.pushToast('进度已清空，从第 1 关重新开始', 'info');
   }
 
   private toMenu(): void {

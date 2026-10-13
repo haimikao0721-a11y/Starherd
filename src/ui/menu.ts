@@ -33,7 +33,7 @@ export const AUTHOR = {
   homepage: 'https://github.com/haimikao0721-a11y',
   /** 联系邮箱（想改就改这一行；关于页会显示并可一键复制） */
   email: 'haimikao0721@gmail.com',
-  version: 'v1.3.1',
+  version: 'v1.3.2',
 };
 
 export type ScreenName =
@@ -61,6 +61,8 @@ export interface MenuCallbacks {
   onTutorialSeen(): void;
   /** 全部通关后的航线闭合 */
   onFinale(): void;
+  /** 清空通关、成绩、勋章，保留音量和画质 */
+  onResetProgress(): void;
 }
 
 /* ------------------------------------------------------------------ 工具 */
@@ -136,6 +138,8 @@ export class Menu {
   private factIdx = 0;
   private factT = 0;
   private bound = false;
+  /** 重置进度需要再点一次确认 */
+  private resetArmed = false;
 
   constructor(root: HTMLElement, cb: MenuCallbacks) {
     if (!root) throw new Error('[Menu] 构造需要一个挂载节点（#ui-root）');
@@ -168,6 +172,7 @@ export class Menu {
   show(screen: ScreenName, data?: unknown): void {
     // 离开演示界面时停掉动画循环（它自带 rAF，不挂到主循环上）
     if (this.current === 'tutorial' && screen !== 'tutorial') this.tut.detach();
+    if (screen !== 'settings') this.resetArmed = false;
     this.current = screen;
     this.data = data;
     this.factT = 0;
@@ -401,6 +406,15 @@ export class Menu {
       case 'settings': this.show('settings'); break;
       case 'about': this.show('about'); break;
       case 'finale': this.cb.onFinale(); break;
+      case 'reset-progress':
+        if (!this.resetArmed) {
+          this.resetArmed = true;
+          this.renderSettings();
+          break;
+        }
+        this.resetArmed = false;
+        this.cb.onResetProgress();
+        break;
       case 'open-repo': this.cb.onOpenUrl(AUTHOR.repo); break;
       case 'open-home': this.cb.onOpenUrl(AUTHOR.homepage); break;
       case 'copy-repo':
@@ -722,7 +736,7 @@ export class Menu {
     }
     const ch = this.chapterOf(lv);
     const pods = lv.pods.length;
-    const required = Math.max(1, Math.round(pods * (lv.difficulty <= 2 ? 1 : 0.6)));
+    const required = Math.max(1, pods);
     const budget = missionBudget(lv);
     const sol = lv.solution;
     // 本关货舱构成（cargo pod variants）：级别标签 + 数量，缺省级别按标准舱计
@@ -735,7 +749,7 @@ export class Menu {
       ${this.header(`${lv.name_zh}`, lv.name_en, `CH.${lv.chapter}${ch ? ' ' + ch.name_zh : ''} · 难度 ${lv.difficulty}/12${lv.difficulty_label ? ` · ${esc(lv.difficulty_label)}` : ''} · ${lv.id}`)}
       <div class="lc-brief">
         <div class="lc-stat-grid">
-          <div class="lc-stat"><span class="lc-stat-k">任务目标</span><span class="lc-stat-v">把 ${required} / ${pods} 个货舱送入对接环</span></div>
+          <div class="lc-stat"><span class="lc-stat-k">任务目标</span><span class="lc-stat-v">把全部 ${required} 个货舱送入对接环</span></div>
           <div class="lc-stat"><span class="lc-stat-k">时限</span><span class="lc-stat-v">${fmtTime(budget.timeLimit, 'floor')}</span></div>
           <div class="lc-stat"><span class="lc-stat-k">Δv 预算</span><span class="lc-stat-v">${fmtDv(budget.fuel)}${budget.margin > 0
             ? ` <span class="lc-dim">(极限 +${Math.round(budget.margin * 100)}%)</span>`
@@ -1157,7 +1171,10 @@ export class Menu {
           <span class="lc-value" data-out="muted">${st.muted ? '静音' : '开启'}</span>
         </div>
       </div>
-      <p class="lc-hint">滑杆用 ←→ 微调 · Esc 返回</p>
+      <nav class="lc-nav">
+        ${btn('reset-progress', this.resetArmed ? '再点一次：确认清空通关与成绩' : '重置游戏进度', { cls: 'lc-danger', title: '只清进度，音量和画质保留' })}
+      </nav>
+      <p class="lc-hint">${this.resetArmed ? '这一步不能撤销。通关、勋章、每关成绩都会消失。' : '滑杆用 ←→ 微调 · Esc 返回'}</p>
       <nav class="lc-nav lc-nav-row">${btn('back', '返回')}</nav>`;
     this.shell(body);
   }
