@@ -549,6 +549,7 @@ export class Hud {
 
     this.drawSling(f, pal);
     this.drawZVC(f, pal);
+    this.drawOberth(f, pal);
     this.drawLegs(f, pal);
     // 6) 屏幕世界的危险叠加（潮汐应力环 / 货舱标记 / 实体名牌 / 目标指示）
     this.drawPodMarkers(f, pal);
@@ -1036,6 +1037,57 @@ export class Hud {
    * 取**两个最重的主天体**做两体近似。本作多数关卡不止两个天体、还有引力井，
    * 因此 C 会漂移 —— 界面上如实标注"两体近似"，不宣称精确积分。
    */
+  /** 飞船相对主星的径向距离历史极小/极大（Oberth 提示用） */
+  private rMin = Number.POSITIVE_INFINITY;
+  private rMax = 0;
+
+  /** 每关重置（换关/重开时调用）。 */
+  /** 换关时由 game 层调用，清空 Oberth 的径向历史（因此是 public） */
+  resetOberth(): void { this.rMin = Number.POSITIVE_INFINITY; this.rMax = 0; }
+
+  /**
+   * Oberth 效应提示。
+   *
+   * OBER 效应：同样大小的 Δv，在速度大的地方做能换来更多动能。
+   * 椭圆轨道上近星点速度最大 → 近星点机动最省燃料；远星点最亏。
+   * 本作物理天然满足这一点（一次性 Δv 直接加到速度上），这里只是把它**显示出来**，
+   * 让玩家能自己判断"什么时候点火"。
+   */
+  private drawOberth(f: HudFrame, pal: Palette): void {
+    const w = f.world;
+    const ship = w.pods.find((p) => p.alive && !p.delivered) ?? w.pods[0];
+    const star = w.primaries.find((p) => p.kind === 'star' || p.kind === 'blackhole') ?? w.primaries[0];
+    if (!ship || !star) return;
+    const dx = ship.x - star.x;
+    const dy = ship.y - star.y;
+    const r = Math.hypot(dx, dy);
+    if (!(r > 1e-6) || !Number.isFinite(r)) return;
+    if (r < this.rMin) this.rMin = r;
+    if (r > this.rMax) this.rMax = r;
+    const span = this.rMax - this.rMin;
+    if (!(span > 1e-4)) return;                       // 圆轨道：没有近远星点之分
+    const relV = Math.hypot(ship.vx - star.vx, ship.vy - star.vy);
+    const radV = ((ship.vx - star.vx) * dx + (ship.vy - star.vy) * dy) / r;
+
+    const nearPeri = r < this.rMin + span * 0.08;
+    const nearApo = r > this.rMax - span * 0.08;
+    if (!nearPeri && !nearApo) return;
+
+    const boxW = 300;
+    const bx = this.w - boxW - 16;
+    const by = this.h - 214;
+    this.panel(bx, by, boxW, 56, pal);
+    this.txt('奥伯特窗口 / OBERTH', bx + 12, by + 16, pal.uiDim, 10);
+    if (nearPeri) {
+      const p = 0.6 + 0.4 * Math.sin(this.clock * 6);
+      this.txt('近星点 —— 此处加速最省 Δv', bx + 12, by + 34, rgba(pal.station, p), 12, 'left', '600');
+    } else {
+      this.txt('远星点 —— 此处加速最亏，尽量别在这点火', bx + 12, by + 34, pal.danger, 12, 'left', '600');
+    }
+    this.txt(`r = ${r.toFixed(2)} RU（${this.rMin.toFixed(2)}~${this.rMax.toFixed(2)}）· 相对速度 ${relV.toFixed(3)} · 径向 ${radV.toFixed(3)}`,
+      bx + 12, by + 48, pal.uiDim, 9);
+  }
+
   private drawZVC(f: HudFrame, pal: Palette): void {
     if (!f.view.showZVC) return;
     const w = f.world;

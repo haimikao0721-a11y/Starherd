@@ -507,6 +507,9 @@ export class Game {
   }
 
   /** 每帧调用；曲目变化时才真正切换，避免重启音乐。 */
+  /** 供 HUD 在换关时清空 Oberth 径向历史（HUD 自己保存状态） */
+  resetHudOberth(): void { this.hud?.resetOberth?.(); }
+
   private syncEventMusic(): void {
     const want = this.desiredMusic();
     if (want === this.musicTrack) return;
@@ -590,6 +593,7 @@ export class Game {
     this.podsMoved = 0;
     this.pilot = createPilot();
     this.brightFx = 0;
+    this.hud?.resetOberth?.();
     if (!this.autotest) this.audio?.setMusic(this.assets.music(this.world?.level.music ?? 'loop1') ?? null);
   }
 
