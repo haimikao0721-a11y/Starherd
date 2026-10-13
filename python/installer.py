@@ -37,7 +37,7 @@ APP_NAME = "Starherd"
 APP_TITLE = "牧星者 / STARHERD"
 GAME_EXE = "Starherd.exe"
 UNINST_KEY = r"Software\Microsoft\Windows\CurrentVersion\Uninstall\Starherd"
-VERSION = "1.1.0"
+VERSION = "1.2.0"
 
 # 是否由 PyInstaller 打包运行
 FROZEN = bool(getattr(sys, "frozen", False))

@@ -14,6 +14,14 @@ EXE 在任意目录启动都能工作：资源经 ``--add-data`` 打进包，宿
 
 from __future__ import annotations
 
+
+def _version_file() -> "Path":
+    """生成并返回 Windows 版本资源文件（文件属性里的制作者/邮箱/仓库）。"""
+    import importlib
+    mod = importlib.import_module("version_info")
+    return mod.generate()
+
+
 import argparse
 import json
 import os
@@ -238,6 +246,8 @@ def build_with_pyinstaller(args) -> int:
         return 2
 
     argv: list[str] = [
+        "--version-file",
+        str(_version_file()),
         "--name",
         args.name,
         "--onefile",

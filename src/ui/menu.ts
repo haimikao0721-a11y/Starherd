@@ -31,7 +31,7 @@ export const AUTHOR = {
   homepage: 'https://github.com/haimikao0721-a11y',
   /** 联系邮箱（想改就改这一行；关于页会显示并可一键复制） */
   email: 'haimikao0721@gmail.com',
-  version: 'v1.1.0',
+  version: 'v1.2.0',
 };
 
 export type ScreenName =
