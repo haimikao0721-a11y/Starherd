@@ -14,6 +14,7 @@ import type {
   ChapterSpec, LevelSpec, LevelsDoc, SaveState, ScoreBreakdown,
 } from '../sim/types';
 import { DEFAULT_SAVE, podClassCounts } from '../sim/types';
+import { recommendTransfer } from '../sim/transfer';
 import { clamp01, fmtDv, fmtDurationShort, fmtInt, fmtPct, fmtSci, fmtTime } from './format';
 import { TUT_STEPS, TutorialAnim } from './tutorial';
 
@@ -665,6 +666,42 @@ export class Menu {
   }
 
   /* ---- briefing ---- */
+  /**
+   * 由关卡几何给出"霍曼 vs 双椭圆"的对比文字。
+   *
+   * 只有起点与目标绕**同一父天体**、且都近似圆轨道时比较才成立；否则返回 null
+   * （宁可不显示，也不给玩家一个不成立的数字）。
+   */
+  private transferLine(lv: LevelSpec): string | null {
+    const byId = new Map(lv.bodies.map((b) => [b.id, b]));
+    const dockBody = byId.get(lv.dock.body);
+    if (!dockBody || !dockBody.orbit) return null;
+    const pod = lv.pods.find((q) => q.orbit) ?? null;
+    if (!pod || !pod.orbit) return null;
+    const o1 = pod.orbit;
+    const o2 = dockBody.orbit;
+    if (Math.abs(o1.e) > 0.25 || Math.abs(o2.e) > 0.25) return null;      // 近圆前提
+    const p1 = o1.parent ?? lv.bodies[0]?.id;
+    const p2 = o2.parent ?? lv.bodies[0].id;
+    if (p1 !== p2) return null;                                          // 必须同中心
+    const parent = byId.get(p1) ?? lv.bodies[0];
+    const mu = parent.mass;                                             // G = 1
+    const r1 = Math.min(o1.a, o2.a);
+    const r2 = Math.max(o1.a, o2.a);
+    if (!(mu > 0) || !(r2 > r1 * 1.02)) return null;
+    const rec = recommendTransfer(mu, r1, r2);
+    const save = (1 - rec.biPlan.dv / rec.hohmannPlan.dv) * 100;
+    const pick = rec.best.kind === 'hohmann' ? '霍曼' : '双椭圆';
+    let txt = `半径比 ${rec.ratio.toFixed(2)} · 霍曼 ${rec.hohmannPlan.dv.toFixed(4)}`;
+    txt += ` · 双椭圆 ${rec.biPlan.dv.toFixed(4)} → 推荐 ${pick}**`;
+    if (rec.best.kind === 'bi-elliptic') {
+      txt += `（省 ${save.toFixed(1)}% 燃料，但耗时 ${(rec.biPlan.time / rec.hohmannPlan.time).toFixed(1)} 倍）`;
+    } else if (rec.ratio > 1.2) {
+      txt += '（本半径比下双椭圆并不更省）';
+    }
+    return txt;
+  }
+
   private renderBriefing(): void {
     const lv = this.levelByIndex(this.briefingIndex());
     if (!lv) {
@@ -690,6 +727,8 @@ export class Menu {
           <div class="lc-stat"><span class="lc-stat-k">时限</span><span class="lc-stat-v">${fmtTime(Math.max(90, lv.par_time * 3.4), 'floor')}</span></div>
           <div class="lc-stat"><span class="lc-stat-k">Δv 预算</span><span class="lc-stat-v">${fmtDv((40 + 6 * lv.difficulty) * (lv.fuel_scale ?? 1))}${lv.fuel_scale ? ` <span class="lc-dim">(×${lv.fuel_scale} 余量)</span>` : ''}</span></div>
           <div class="lc-stat"><span class="lc-stat-k">par 时间 / par Δv</span><span class="lc-stat-v">${fmtTime(lv.par_time, 'floor')} / ${fmtDv(lv.par_fuel)}</span></div>
+          ${(() => { const t = this.transferLine(lv); return t
+            ? `<div class="lc-stat"><span class="lc-stat-k">转移方案</span><span class="lc-stat-v">${t}</span></div>` : ''; })()}
           <div class="lc-stat"><span class="lc-stat-k">星域尺度</span><span class="lc-stat-v">bounds ${lv.bounds} RU · μ★ ${lv.mu_star}</span></div>
           <div class="lc-stat"><span class="lc-stat-k">对接门限</span><span class="lc-stat-v">|v_rel| &lt; ${lv.dock.v_max} RU/TU · 环半径 ${lv.dock.radius}</span></div>
           <div class="lc-stat"><span class="lc-stat-k">货舱构成</span><span class="lc-stat-v">货舱 ${pods}：${compChips}</span></div>
