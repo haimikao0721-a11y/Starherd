@@ -1339,6 +1339,17 @@ export class Hud {
     /* 事件预警（宇宙风暴等）：**必须可预见**，否则就退化成运气 —— 提前 5 秒给 ETA。 */
     if (f.world.events && f.world.events.length) {
       const flare = f.world.level.events?.find((e) => e.kind === 'flare');
+      const shower = f.world.level.events?.find((e) => e.kind === 'shower');
+      if (shower) {
+        const per = shower.period > 0 ? shower.period : 1e9;
+        const lead = shower.t0 > f.world.time ? shower.t0 - f.world.time
+          : per - ((f.world.time - shower.t0) % per);
+        if (lead < 4) {
+          const ps = 0.55 + 0.45 * Math.sin(this.clock * 8);
+          this.txt(`⚠ 小行星雨 ${lead.toFixed(1)} 秒后进入 —— 把货舱挪出雨带，别硬闯`,
+            x + w * 0.5, y + h + 105, rgba(pal.danger, ps), 10.5, 'center', '600');
+        }
+      }
       const wave = f.world.level.events?.find((e) => e.kind === 'wave');
       if (flare) {
         const lead = flare.t0 - f.world.time;

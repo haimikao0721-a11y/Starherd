@@ -448,6 +448,62 @@ function applyFlare(world: World, dt: number): void {
  * 效果上表现为"货舱被拉长压扁"，对已经贴站的低速货舱影响小、对高速掠过的轨迹影响大——
  * 于是它惩罚"莽"，而不是随机惩罚玩家。
  */
+/**
+ * 小行星雨：每隔一个周期，从指定方向撒入一批碎石穿场而过。
+ *
+ * 复用 `spawnShards` 的造体方式（推入 world.bodies），因此**已有的小行星碰撞判定自动生效**：
+ * 货舱撞上就按 `dv > V_CRIT*2.2 → 撞击小行星` 损毁，抢在雨前把货舱挪开就行——是可控风险，不是随机灾难。
+ * 判定"跨过周期边界"而不是"每帧撒"，避免同一批被重复生成。
+ */
+function applyShower(world: World, dt: number): void {
+  const list = world.level.events;
+  if (!list || !list.length) return;
+  for (let i = 0; i < list.length; i++) {
+    const e = list[i];
+    if (e.kind !== 'shower') continue;
+    if (world.time < e.t0) continue;
+    const period = e.period > 0 ? e.period : Number.POSITIVE_INFINITY;
+    if (period === Number.POSITIVE_INFINITY) {
+      if (world.time - dt < e.t0 && world.time >= e.t0) spawnShower(world, e);
+      continue;
+    }
+    const k = Math.floor((world.time - e.t0) / period);
+    const key = e.t0 + k * period;
+    if (world.time - dt < key && world.time >= key) spawnShower(world, e);
+  }
+}
+
+/** 撒一批碎石：从 dir 反方向的场外飞入，带一定的横向散布 */
+function spawnShower(world: World, e: { dir: number; speed: number; width: number; count?: number; rockMass?: number; rockRadius?: number }): void {
+  const n = Math.max(1, Math.min(24, e.count ?? 6));
+  const rm = e.rockMass ?? 6e-6;
+  const rr = e.rockRadius ?? 0.045;
+  const area = Math.PI * rr * rr;
+  const nx = Math.cos(e.dir);
+  const ny = Math.sin(e.dir);
+  const base = 9_000_000 + world.bodies.length * 32;
+  const edge = world.bounds * 1.15;
+  for (let i = 0; i < n; i++) {
+    const t = n === 1 ? 0 : (i / (n - 1) - 0.5) * 2;      // -1..1
+    const ox = -ny * t * e.width;
+    const oy = nx * t * e.width;
+    const b: Body = {
+      id: base + i, key: `rock${base + i}`, kind: 'asteroid', tag: '碎石',
+      mass: rm, mu: rm, radius: rr,
+      x: -nx * edge + ox, y: -ny * edge + oy,
+      vx: nx * e.speed + ox * 0.05, vy: ny * e.speed + oy * 0.05,
+      ax: 0, ay: 0, px: -nx * edge + ox, py: -ny * edge + oy,
+      alive: true, integrity: 1, area, cd: 0.9, qpr: 1,
+      docked: false, delivered: false, lost: false,
+      tint: 0x9a8f86, ang: e.dir, spin: (i % 2 ? 1 : -1) * (0.5 + i * 0.07), primary: false,
+      contact: 0, jolt: 0, stress: 0, dilation: 1, life: 0, tearT: 0,
+      trailX: new Float32Array(48), trailY: new Float32Array(48),
+      trailN: 0, trailHead: 0, trailTick: 0,
+    };
+    world.bodies.push(b);
+  }
+}
+
 function applyWave(world: World, dt: number): void {
   const list = world.level.events;
   if (!list || !list.length) return;
@@ -782,6 +838,7 @@ export function stepOnce(world: World, dt: number, depth = 0): void {
   applyRescue(world, dt);
   applyFlare(world, dt);
   applyWave(world, dt);
+  applyShower(world, dt);
   updateTrails(world, dt);
 }
 
