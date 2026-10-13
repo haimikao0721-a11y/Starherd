@@ -80,6 +80,8 @@ export class Game {
   /** 时间加速倍率（T 键循环 1×/2×/4×）：把等相位窗口从被动等待变成玩家可主动推进的过程 */
   private fastFwd = 1;
   private predictOn = false;
+  /** 当前正在播放的曲目 id（事件驱动切换用；空串表示尚未设置） */
+  private musicTrack = '';
   private showHelp = false;
   private simAccum = 0;
   private frames = 0;
@@ -402,6 +404,7 @@ export class Game {
       if (this.input.pressed('Digit0') || this.input.pressed('Numpad0')) this.adjustZoom(1 / this.zoomBias);
       if (this.screen === 'play' || this.attract) this.driveControl(dtReal);
       this.updatePredict();
+      this.syncEventMusic();
       this.drainFx();
       this.updateCamera(dtReal);
       this.decayView(dtReal);
@@ -482,6 +485,39 @@ export class Game {
     if (s === 'play' && this.audio?.ready) this.audio.setMusic(this.assets.music(this.currentMusic()) ?? null);
     if (s === 'menu') this.audio?.setMusic(this.assets.music('menu') ?? null);
     if (s === 'play') setTimeout(() => this.flushHint(), 400); // 本关战术提示此刻才显示
+  }
+
+  /** 事件驱动选曲：风暴/救援/终章优先，其余用关卡自带曲目。 */
+  private desiredMusic(): string {
+    if (this.screen === 'end') return 'finale';
+    const w = this.world;
+    if (this.screen === 'play' && w) {
+      const evs = w.level.events ?? [];
+      for (const e of evs) {
+        if (e.kind === 'storm' && w.events?.some((x) => x.kind === 'storm' && x.active)) return 'storm';
+      }
+      for (const e of evs) {
+        if (e.kind === 'rescue' && w.time >= e.t0) {
+          // 泄漏开始且还有货舱在飞 → 放救援曲
+          if (w.pods.some((p) => p.alive && !p.delivered)) return 'rescue';
+        }
+      }
+    }
+    return this.currentMusic();
+  }
+
+  /** 每帧调用；曲目变化时才真正切换，避免重启音乐。 */
+  private syncEventMusic(): void {
+    const want = this.desiredMusic();
+    if (want === this.musicTrack) return;
+    const track = this.assets.music(want) ?? null;
+    if (!track) return;
+    this.musicTrack = want;
+    this.audio?.setMusic(track);
+    if (typeof window !== 'undefined') {
+      const dbg = (window as unknown as { __LC_DEBUG?: Record<string, unknown> }).__LC_DEBUG;
+      if (dbg) dbg.music = want;
+    }
   }
 
   private currentMusic(): string {

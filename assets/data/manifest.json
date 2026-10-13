@@ -2,7 +2,7 @@
   "version": "1.0",
   "generator": "assets_gen.py",
   "seed": 20260101,
-  "generated_at": "2026-10-12T02:31:09Z",
+  "generated_at": "2026-10-13T04:21:21Z",
   "audio": [
     {
       "name": "ui_hover",
@@ -344,7 +344,40 @@
       "mode": "mixolydian",
       "bytes": 28674,
       "sha256": "b6bdabbdfffa97b060b0fd808038c37237a7bcae134a609e77352537e4216154"
+    },
+    {
+      "name": "storm",
+      "file": "audio/music_storm.json",
+      "bpm": 118,
+      "bars": 16,
+      "beats_per_bar": 4,
+      "key": "G",
+      "mode": "hijaz",
+      "bytes": 88310,
+      "sha256": "389db8f1d6619ee1c955db25300f11c7ecdd9fd4eeefac55ab97f993927ebbbb"
+    },
+    {
+      "name": "rescue",
+      "file": "audio/music_rescue.json",
+      "bpm": 104,
+      "bars": 16,
+      "beats_per_bar": 4,
+      "key": "A",
+      "mode": "locrian",
+      "bytes": 51048,
+      "sha256": "9482431834ca23a361ccb2d269747499887e3c90e08a38b8f5b0f7b0820580d6"
+    },
+    {
+      "name": "finale",
+      "file": "audio/music_finale.json",
+      "bpm": 84,
+      "bars": 16,
+      "beats_per_bar": 4,
+      "key": "D",
+      "mode": "ionian",
+      "bytes": 19203,
+      "sha256": "f27313421407837cc7ba9d9fc2c9f54e605ed07602b48334f8a2f414015c57d8"
     }
   ],
-  "total_bytes": 5745124
+  "total_bytes": 5903685
 }
