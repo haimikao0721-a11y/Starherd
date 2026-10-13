@@ -907,6 +907,11 @@ export class Menu {
         <p>${esc(sb.fidelityNote || '守恒量审计未返回评语')}</p>
         <p class="lc-mono">ΔE/E = ${esc(fmtSci(sb.energyDrift, 2))}    ΔL/L = ${esc(fmtSci(sb.angularDrift, 2))}    连击 ×${fmtInt(sb.combo)}    难度 ${sb.difficulty}</p>
       </div>
+      ${sb.legsTotal && sb.legsTotal > 1
+        ? `<div class="lc-note"><span class="lc-note-k">航段 / LEGS</span><p>${
+            (sb.legsDone ?? 0) >= sb.legsTotal - 1 && sb.delivered > 0
+              ? `${sb.legsTotal}/${sb.legsTotal} · 全部泊位已交付`
+              : `${(sb.legsDone ?? 0) + 1}/${sb.legsTotal}`}</p></div>` : ''}
       ${this.contactBlock()}
       <nav class="lc-nav lc-nav-row">
         ${sb.success ? btn('next', '下一关', { cls: 'lc-primary' }) : ''}

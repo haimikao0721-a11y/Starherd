@@ -178,8 +178,9 @@ WebSocket：`ws://127.0.0.1:<port>/ws`（同端口，aiohttp）
 - `kind` ∈ `star|planet|blackhole|asteroid|station|debris`
 - `tint` 是配色索引 0..5，闭环到渲染调色板。
 - 必须满足：`pods` 至少 1 个、`dock.body` 必须存在于 `bodies`、所有 `orbit.a < bounds`。
-- 12 关 = 4 章 × 3 关；难度 1..12 递增；`par_time`/`par_fuel` 必须由真实公式估算（不得写死常数）。
+- 20 关 = 5 章（3+3+3+3+8）；`index` 与 `difficulty` 均为**连续唯一的 1..20**；`par_time`/`par_fuel` 必须由真实公式估算（不得写死常数）。
 - 第 4 章允许 `kind:"blackhole"`，需额外字段 `"rs":0.03`（史瓦西半径）。
+- 可选字段：`events`（随机事件）、`objectives`（多段航段，>1 时 HUD 与结算页显示航段）、`fuel_scale`（预算系数，只改预算不改物理）、`difficulty_label`（探针实测档位）。
 
 ## 4. `assets/data/manifest.json` schema（W-assets 产出）
 

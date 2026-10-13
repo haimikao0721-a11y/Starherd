@@ -48,6 +48,9 @@ export function computeScore(world: World, verdict: VerdictLike | null, newBest:
     fidelityGrade: verdict?.grade ?? lv.fidelityGrade,
     fidelityNote: verdict?.note ?? lv.fidelityNote,
     energyDrift: verdict?.energy_drift ?? world.stats.energyDrift,
+    // 多段航程：结算页要交代清楚（目标第 4 项要求的结算支持）
+    legsDone: world.level.objectiveIndex ?? 0,
+    legsTotal: world.level.objectivesTotal ?? 1,
     angularDrift: verdict?.angular_drift ?? world.stats.angularDrift,
     difficulty: lv.difficulty, newBest, success,
     title: success ? '任务完成' : '任务失败',

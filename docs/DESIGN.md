@@ -89,7 +89,7 @@
 `简报 → 布货 → 机动 → 对接 → 结算`。目标：把 N 个货舱送入空间站对接环，
 在**燃料预算**与**限时**内完成；货舱自身脆弱（撞击/潮汐/星风/恒星都会毁掉它）。
 
-### 4.2 章节循环（4 章 = 4 个 "LOOP"）
+### 4.2 章节循环（5 章 = 5 个 LOOP；第 5 章复用 loop3 调色板）
 - **LOOP I 双星摇篮**：单恒星 + 2 行星，教学（对接、慢动作、燃料概念）
 - **LOOP II 碎石带**：小行星带 + 星风脉冲 + 星云（气动刹车必修课）
 - **LOOP III 双星共振**：双星系统，`L4/L5` 稳定岛，混沌轨道
@@ -145,7 +145,7 @@
 | `sfx_manifest.json` | 名称、时长、峰值、sha256 |
 
 ### 6.2 音乐 `assets/audio/music_*.json`
-4 章各一首：小节、和弦进行、琶音型、BPM、调式（Phrygian/Aeolian/Lydian/Dorian）。
+每章一首（共 8 首：5 章主题 + 风暴 / 救援 / 终章）：小节、和弦进行、琶音型、BPM、调式（Phrygian/Aeolian/Lydian/Dorian）。
 Python 生成**谱面 JSON**，TS 用 WebAudio 合成器实时演奏（pad + bass + arp + 打击），
 并随游戏强度（`intensity`）叠加声部 —— 生成式自适应配乐。
 
@@ -156,7 +156,7 @@ Python 生成**谱面 JSON**，TS 用 WebAudio 合成器实时演奏（pad + bas
 **避免 `shadowBlur`**（性能杀手），保证 60 fps。
 
 ### 6.4 数据 `assets/data/`
-`systems.json`（12 关，含轨道六要素、拉格朗日点、par_time/par_fuel、配色、提示）、
+`systems.json`（20 关，含轨道六要素、拉格朗日点、par_time/par_fuel、配色、提示）、
 `manifest.json`（全量素材 sha256 + 尺寸，供宿主校验）。
 
 ---
@@ -176,7 +176,7 @@ Python 生成**谱面 JSON**，TS 用 WebAudio 合成器实时演奏（pad + bas
 
 1. `python python/mission_control.py --web` 起服务，浏览器可完整通关第一章
 2. `Starherd.exe` 双击开原生窗口，鼠标拖动有惯性手感，60 fps（1600×900）
-3. 12 关数据由 `levelgen.py` 生成，`physics_ref.py` 能独立复核守恒量并给出评级
+3. 20 关数据由 `levelgen.py` 生成，`physics_ref.py` 能独立复核守恒量并给出评级
 4. `assets/audio` 与 `assets/art` 中每个文件都是真实可播放/可解码的素材（Python 生成）
 5. `python python/selftest.py` 全自动：起服务 → 无头浏览器跑 `?autotest=1` → 断言通过
 6. 无 JS 报错；`tsc --noEmit` 与 `esbuild` 构建零错误

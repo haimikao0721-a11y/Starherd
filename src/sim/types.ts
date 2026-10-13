@@ -588,6 +588,9 @@ export interface ScoreBreakdown {
   fidelityGrade: string; fidelityNote: string;
   energyDrift: number; angularDrift: number;
   difficulty: number;
+  /** 多段航程：已完成航段数与总航段数（>1 时结算页会显示「航段」一行） */
+  legsDone?: number;
+  legsTotal?: number;
   /** 难度档位（由 tools/difficulty_probe.py 用 AI 探针实测写入）：普通/困难/挑战 */
   difficulty_label?: string;
   /** 燃料预算系数（可选）：fuelCapacity = (40 + 6*difficulty) × 该值。

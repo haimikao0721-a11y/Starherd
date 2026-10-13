@@ -61,7 +61,7 @@
 
 ## 内容
 
-**12 关 · 4 章 · 5 类多体系统**：单恒星 → 行星系·双卫星 → 双星 + L4/L5 稳定岛 → 黑洞 + 恒星 → 层级三合星。
+**20 关 · 5 章 · 6 类多体系统**：单恒星 → 行星系·双卫星 → 双星 + L4/L5 稳定岛 → 黑洞 + 恒星 → 层级三合星。
 4 种货舱变体（标准 / 重型 / 易碎 / 光帆），质量、半径、结构强度与受辐射压截面各不相同。
 
 <details>
@@ -72,11 +72,11 @@
   星云二次阻力、引力时间膨胀、霍曼转移、齐奥尔科夫斯基方程
 * **公式库自带自检**：`python/physics_ref.py --selftest` → **123 项全部通过**
 * **关卡校验器**：9 类判据（对接窗口、自动对接余量、生成间隙、轨道走廊、层级稳定性、
-  Mardling & Aarseth 三体判据、章节内容规则…），并对 12 关给出**构造性可行性证明**
+  Mardling & Aarseth 三体判据、章节内容规则…），并对 20 关给出**构造性可行性证明**
 * **三合星的真实教训**：Mardling 判据只是层级稳定的**必要**条件 —— 边缘配置会被 Kozai-Lidov
   机制抽干、伴星被甩出系统。本作把层级比拉到 6:1 才让关卡真正可玩
 * **自动驾驶能力下限探针**：内置 AI 会自己玩，用于验证"关卡确实能被通过"；
-  12 关中 6 关有 AI 自动通关记录，全部 12 关有构造性可行性证明
+  20 关中 6 关有 AI 自动通关记录，全部 20 关有构造性可行性证明
 * **性能**：自适应渲染分辨率（以目标帧率为预算动态伸缩），物理固定 120 Hz 步长，
   渲染随帧预算伸缩 —— 60 Hz 与 120 Hz 屏都能落在各自目标上
 * **零第三方素材**：17 张美术 + 17 个音效 + 5 首音乐全部由本仓库的 Python 程序化生成/合成
@@ -106,7 +106,7 @@ python python/mission_control.py --dev --port 8801     # 然后浏览器打开 1
 ```bash
 python python/levelgen.py --validate        # 关卡校验器（须 PASS 0 问题）
 python python/physics_ref.py --selftest     # 公式库自检（123/123）
-python python/levelgen.py --analyze         # 12 关可行性分析（须 12/12 可行）
+python python/levelgen.py --analyze         # 20 关可行性分析（须 20/20 可行）
 node tools/build.mjs && node tools/simtest.mjs assets/data/systems.json 150   # 自动通关回归
 python tools/verify_ui.py                   # 无头浏览器端到端 UI 验收
 python tools/verify_offline.py              # 离线单文件版验收
@@ -118,7 +118,7 @@ python tools/make_gifs.py                   # 重新录制本文档里的演示 
 ```
 src/            TypeScript：sim（物理/世界/步进）、render（渲染与后处理）、game（状态机/自动驾驶）、ui（HUD/菜单）
 python/         宿主（HTTP+WebSocket）、关卡生成与校验、公式库、素材/音乐生成、打包脚本
-assets/         程序化生成的素材与 12 关关卡数据（systems.json）
+assets/         程序化生成的素材与 20 关关卡数据（systems.json）
 tools/          构建、无头验收、GIF 录制
 docs/           工程记录 / 设计文档 / 接口契约 / 使用条款 / 演示动画
 web/            页面外壳与样式
