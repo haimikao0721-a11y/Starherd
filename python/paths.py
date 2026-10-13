@@ -60,6 +60,17 @@ def data_root() -> Path:
     若该位置不可写（罕见：只读环境变量指向了只读卷），回退到系统临时目录下的同名目录，
     以保证宿主永远能拿到一个可写目录，而不是直接崩溃。
     """
+    # **数据目录重定向**：设置 STARHERD_DATA_DIR 可把存档/日志写到别处。
+    # 用途：自动化验收（tools/verify_ui.py 会像真人一样点关卡、打关卡）绝不能写进
+    # 玩家的真实存档——实测过一次"验证脚本替玩家解锁了前 6 关"的事故。
+    override = os.environ.get("STARHERD_DATA_DIR", "").strip()
+    if override:
+        d = Path(override)
+        try:
+            d.mkdir(parents=True, exist_ok=True)
+        except OSError:
+            pass
+        return d
     target = _local_appdata() / APP_NAME
     try:
         target.mkdir(parents=True, exist_ok=True)

@@ -417,6 +417,15 @@ def main(argv: list[str] | None = None) -> int:
     if extra and not args.selftest:
         parser.error("unrecognized arguments: " + " ".join(extra))
 
+    # **--dev 默认隔离存档目录**（开发 / 自动化验收专用）。
+    # 起因：tools/verify_ui.py 会像真人一样点关卡、打通关，而它连的是同一个宿主；
+    # 实测发生过"验收脚本替玩家把前 6 关解锁了"的事故。开发模式下把数据目录切到临时目录，
+    # 玩家真实存档（%LOCALAPPDATA%\Starherd）就不会被任何自动化流程碰到。
+    if getattr(args, "dev", False) and not os.environ.get("STARHERD_DATA_DIR"):
+        import tempfile as _tf
+        os.environ["STARHERD_DATA_DIR"] = str(Path(_tf.gettempdir()) / "starherd_dev")
+        print(f"[dev] 数据目录已隔离到 {os.environ['STARHERD_DATA_DIR']}（不触碰玩家存档）", flush=True)
+
     if args.selftest:
         return do_selftest(args, raw, extra)
 
