@@ -1027,3 +1027,10 @@ html, body {
   font-family: ui-monospace, Consolas, monospace; font-size: 12.5px;
   user-select: all; -webkit-user-select: all; word-break: break-all; }
 .lc-nav-about { flex-wrap: wrap; gap: 8px; }
+
+/* ---- 难度档位标签（tools/difficulty_probe.py 用 AI 探针实测得出；勿与结算页 .lc-grade 混用）---- */
+.lc-gradetag { display: inline-block; margin-left: 6px; padding: 1px 6px; border-radius: 999px;
+  font-size: 10px; letter-spacing: .06em; border: 1px solid rgba(140,180,255,.35); color: rgba(190,215,255,.9); }
+.lc-gradetag[data-grade="普通"] { border-color: rgba(110,220,170,.55); color: rgba(150,240,200,.95); }
+.lc-gradetag[data-grade="困难"] { border-color: rgba(255,200,110,.55); color: rgba(255,220,150,.95); }
+.lc-gradetag[data-grade="挑战"] { border-color: rgba(255,130,130,.55); color: rgba(255,170,170,.95); }

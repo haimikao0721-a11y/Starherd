@@ -637,6 +637,7 @@ export class Menu {
           <span class="lc-card-en">${esc(lv.name_en)}</span>
           <span class="lc-card-foot">
             ${difficultyDots(lv.difficulty)}
+              ${lv.difficulty_label ? `<span class="lc-gradetag" data-grade="${esc(lv.difficulty_label)}">${esc(lv.difficulty_label)}</span>` : ''}
             ${best
               ? `<span class="lc-best ${gradeClass(best.grade)}">${fmtInt(best.score)} ${esc(best.grade)}</span>`
               : '<span class="lc-best g-none">未通关</span>'}
