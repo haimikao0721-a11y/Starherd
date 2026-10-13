@@ -20,8 +20,7 @@ import { worldToScreen } from '../engine/view';
 import {
   STRESS_WARN, WELL_MASS_MAX, WELL_MASS_MIN,
   circularVelocity, escapeVelocity, hillSphere, keplerPeriod, lagrangePoints,
-  rocheLimit, sphereDensity, timeDilation, visViva,
-} from '../sim/constants';
+  rocheLimit, sphereDensity, timeDilation, visViva, WELL_RANGE } from '../sim/constants';
 import { stateToElements } from '../sim/physics';
 import {
   clamp, clamp01, fmtDv, fmtFixed, fmtPct, fmtSci, fmtDrift, fmtSig, fmtTime,
@@ -547,6 +546,7 @@ export class Hud {
     this.drawResources(f, pal, 0, 0);
     this.drawFieldCard(f, pal, 0, 0);
 
+    this.drawSling(f, pal);
     // 6) 屏幕世界的危险叠加（潮汐应力环 / 货舱标记 / 实体名牌 / 目标指示）
     this.drawPodMarkers(f, pal);
     this.drawObjective(f, pal);
@@ -1015,6 +1015,57 @@ export class Hud {
   }
 
   /** 迷你滚动曲线（自动缩放 + 中轴 + 端点标记）*/
+  /**
+   * 引力井甩摆：捕获判定 + 相对轨道。
+   *
+   * 井是**软化 1/r² 场**（a = M_w/r²，带核心软化与外截止，见 physics.wellAccel），
+   * 所以能用**能量判据**严格判定是否被捕获（不是启发式）：
+   *   |v_rel| < v_esc = sqrt(2·M_w/r)  →  束缚轨道
+   * 半长轴由活力公式 a = 1/(2/r − v²/μ) 给出，周期 Kepler 第三定律 T = 2π√(a³/μ)。
+   * 玩家据此判断"什么时候松手能把它甩出去"——这正是甩摆玩法的核心信息。
+   */
+  private drawSling(f: HudFrame, pal: Palette): void {
+    const wl = f.world.well;
+    const ix = f.world.level ? 0 : 0;
+    void ix;
+    const W = 430;
+    const x = (this.w - W) / 2;
+    const y = 118;
+    let line1 = '待机';
+    let col = pal.uiDim;
+    let line2 = '把货舱甩进井的轨道即可捕获（相对速度 < 该处逃逸速度）';
+    if (f.world.fieldEnabled && wl.mass > 0) {
+      for (const p of f.world.pods) {
+        if (!p.alive || p.delivered) continue;
+        const dx = p.x - wl.x;
+        const dy = p.y - wl.y;
+        const r = Math.hypot(dx, dy);
+        if (r < 1e-4 || r > WELL_RANGE * 2.2) continue;   // 2.2×range 是 wellAccel 的硬截断
+        const vx = p.vx - wl.vx;
+        const vy = p.vy - wl.vy;
+        const v = Math.hypot(vx, vy);
+        // 与 physics.wellAccel 完全一致的外截止因子，否则远处会误判为捕获
+      const cut = 1 / (1 + Math.pow(r / WELL_RANGE, 6));
+      const mu = wl.mass * cut;
+        const vEsc = Math.sqrt(2 * mu / r);
+        if (v >= vEsc) continue;                     // 会逃逸 → 未捕获
+        const a = 1 / Math.max(1e-9, (2 / r) - (v * v) / mu);
+        if (!(a > 0)) continue;
+        const T = 2 * Math.PI * Math.sqrt((a * a * a) / Math.max(1e-9, mu));
+        const ecc = Math.sqrt(Math.max(0, 1 - (r * v * v) / mu));
+        const peri = a * (1 - ecc);
+        line1 = `已捕获 · 周期 ${T.toFixed(1)}s`;
+        col = pal.station;
+        line2 = `相对速度 ${v.toFixed(3)} / 逃逸 ${vEsc.toFixed(3)} · 近井点 ${peri.toFixed(2)} RU · 松手即沿当前速度方向甩出`;
+        break;
+      }
+    }
+    this.panel(x, y, W, 54, pal);
+    this.txt('甩摆捕获 / SLING', x + 12, y + 17, pal.uiDim, 10);
+    this.txt(line1, x + 12, y + 36, col, 12, 'left', '600');
+    this.txt(line2, x + 12, y + 48, pal.uiDim, 10);
+  }
+
   private drawCurve(
     x: number, y: number, w: number, h: number, data: number[], color: string, pal: Palette,
   ): void {
