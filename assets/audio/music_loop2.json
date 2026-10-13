@@ -1,7 +1,7 @@
 {
   "name": "loop2",
   "bpm": 110,
-  "bars": 16,
+  "bars": 32,
   "beats_per_bar": 4,
   "key": "D",
   "mode": "dorian",
@@ -18,28 +18,33 @@
     {
       "start_bar": 0,
       "name": "intro",
-      "intensity": 0.2
-    },
-    {
-      "start_bar": 4,
-      "name": "build",
-      "intensity": 0.45
+      "intensity": 0.22
     },
     {
       "start_bar": 8,
-      "name": "main",
-      "intensity": 0.8
+      "name": "verse",
+      "intensity": 0.48
     },
     {
-      "start_bar": 14,
-      "name": "outro",
-      "intensity": 0.35
+      "start_bar": 16,
+      "name": "lift",
+      "intensity": 0.7
+    },
+    {
+      "start_bar": 24,
+      "name": "chorus",
+      "intensity": 0.9
+    },
+    {
+      "start_bar": 30,
+      "name": "release",
+      "intensity": 0.36
     }
   ],
   "notes": [
     {
       "t": 0.0,
-      "dur": 8.0,
+      "dur": 16.0,
       "midi": 50,
       "vel": 0.657,
       "track": "pad",
@@ -47,7 +52,7 @@
     },
     {
       "t": 0.0,
-      "dur": 8.0,
+      "dur": 16.0,
       "midi": 53,
       "vel": 0.655,
       "track": "pad",
@@ -55,48 +60,40 @@
     },
     {
       "t": 0.0,
-      "dur": 8.0,
+      "dur": 16.0,
       "midi": 57,
       "vel": 0.65,
       "track": "pad",
       "intensity": 0.1
     },
     {
+      "t": 0.0,
+      "dur": 16.0,
+      "midi": 64,
+      "vel": 0.4,
+      "track": "pad",
+      "intensity": 0.32
+    },
+    {
       "t": 8.0,
       "dur": 1.0,
-      "midi": 43,
+      "midi": 38,
       "vel": 0.894,
       "track": "bass",
       "intensity": 0.3
     },
     {
-      "t": 8.0,
-      "dur": 8.0,
-      "midi": 55,
-      "vel": 0.663,
-      "track": "pad",
-      "intensity": 0.1
-    },
-    {
-      "t": 8.0,
-      "dur": 8.0,
-      "midi": 59,
-      "vel": 0.677,
-      "track": "pad",
-      "intensity": 0.1
-    },
-    {
-      "t": 8.0,
-      "dur": 8.0,
-      "midi": 62,
-      "vel": 0.656,
-      "track": "pad",
-      "intensity": 0.1
+      "t": 8.5,
+      "dur": 0.85,
+      "midi": 65,
+      "vel": 0.356,
+      "track": "arp",
+      "intensity": 0.26
     },
     {
       "t": 9.5,
       "dur": 0.5,
-      "midi": 43,
+      "midi": 38,
       "vel": 0.857,
       "track": "bass",
       "intensity": 0.3
@@ -104,15 +101,23 @@
     {
       "t": 10.0,
       "dur": 1.0,
-      "midi": 50,
+      "midi": 45,
       "vel": 0.906,
       "track": "bass",
       "intensity": 0.3
     },
     {
+      "t": 10.5,
+      "dur": 0.85,
+      "midi": 69,
+      "vel": 0.283,
+      "track": "arp",
+      "intensity": 0.26
+    },
+    {
       "t": 11.5,
       "dur": 0.5,
-      "midi": 41,
+      "midi": 48,
       "vel": 0.901,
       "track": "bass",
       "intensity": 0.3
@@ -120,15 +125,23 @@
     {
       "t": 12.0,
       "dur": 1.0,
-      "midi": 43,
+      "midi": 38,
       "vel": 0.889,
       "track": "bass",
       "intensity": 0.3
     },
     {
+      "t": 12.5,
+      "dur": 0.85,
+      "midi": 65,
+      "vel": 0.365,
+      "track": "arp",
+      "intensity": 0.26
+    },
+    {
       "t": 13.5,
       "dur": 0.5,
-      "midi": 43,
+      "midi": 38,
       "vel": 0.897,
       "track": "bass",
       "intensity": 0.3
@@ -136,15 +149,23 @@
     {
       "t": 14.0,
       "dur": 1.0,
-      "midi": 50,
+      "midi": 45,
       "vel": 0.866,
       "track": "bass",
       "intensity": 0.3
     },
     {
+      "t": 14.5,
+      "dur": 0.85,
+      "midi": 69,
+      "vel": 0.301,
+      "track": "arp",
+      "intensity": 0.26
+    },
+    {
       "t": 15.5,
       "dur": 0.5,
-      "midi": 41,
+      "midi": 48,
       "vel": 0.885,
       "track": "bass",
       "intensity": 0.3
@@ -152,55 +173,103 @@
     {
       "t": 16.0,
       "dur": 1.0,
-      "midi": 47,
+      "midi": 43,
       "vel": 0.875,
       "track": "bass",
       "intensity": 0.3
     },
     {
       "t": 16.0,
-      "dur": 8.0,
+      "dur": 0.5,
+      "midi": 67,
+      "vel": 0.757,
+      "track": "lead",
+      "intensity": 0.4
+    },
+    {
+      "t": 16.0,
+      "dur": 16.0,
+      "midi": 43,
+      "vel": 0.48,
+      "track": "pad",
+      "intensity": 0.5
+    },
+    {
+      "t": 16.0,
+      "dur": 16.0,
+      "midi": 55,
+      "vel": 0.663,
+      "track": "pad",
+      "intensity": 0.1
+    },
+    {
+      "t": 16.0,
+      "dur": 16.0,
       "midi": 59,
-      "vel": 0.651,
+      "vel": 0.677,
       "track": "pad",
       "intensity": 0.1
     },
     {
       "t": 16.0,
-      "dur": 8.0,
+      "dur": 16.0,
       "midi": 62,
-      "vel": 0.669,
+      "vel": 0.656,
       "track": "pad",
       "intensity": 0.1
     },
     {
       "t": 16.0,
-      "dur": 8.0,
-      "midi": 65,
-      "vel": 0.673,
+      "dur": 16.0,
+      "midi": 69,
+      "vel": 0.4,
       "track": "pad",
-      "intensity": 0.1
+      "intensity": 0.32
     },
     {
       "t": 16.0,
       "dur": 0.25,
       "midi": 36,
-      "vel": 0.95,
+      "vel": 0.962,
       "track": "perc",
       "intensity": 0.3
+    },
+    {
+      "t": 16.5,
+      "dur": 0.85,
+      "midi": 71,
+      "vel": 0.353,
+      "track": "arp",
+      "intensity": 0.26
+    },
+    {
+      "t": 16.5,
+      "dur": 0.5,
+      "midi": 69,
+      "vel": 0.754,
+      "track": "lead",
+      "intensity": 0.4
+    },
+    {
+      "t": 17.0,
+      "dur": 1.0,
+      "midi": 71,
+      "vel": 0.775,
+      "track": "lead",
+      "intensity": 0.4
     },
     {
       "t": 17.0,
       "dur": 0.25,
       "midi": 38,
-      "vel": 0.654,
+      "vel": 0.632,
       "track": "perc",
       "intensity": 0.5
     },
     {
       "t": 17.5,
       "dur": 0.5,
-      "midi": 47,
+      "midi": 43,
       "vel": 0.873,
       "track": "bass",
       "intensity": 0.3
@@ -209,23 +278,39 @@
       "t": 17.5,
       "dur": 0.25,
       "midi": 36,
-      "vel": 0.621,
+      "vel": 0.586,
       "track": "perc",
       "intensity": 0.3
     },
     {
       "t": 18.0,
       "dur": 1.0,
-      "midi": 41,
+      "midi": 50,
       "vel": 0.85,
       "track": "bass",
       "intensity": 0.3
     },
     {
+      "t": 18.0,
+      "dur": 2.0,
+      "midi": 74,
+      "vel": 0.789,
+      "track": "lead",
+      "intensity": 0.4
+    },
+    {
+      "t": 18.5,
+      "dur": 0.85,
+      "midi": 74,
+      "vel": 0.294,
+      "track": "arp",
+      "intensity": 0.26
+    },
+    {
       "t": 18.5,
       "dur": 0.25,
       "midi": 36,
-      "vel": 0.727,
+      "vel": 0.728,
       "track": "perc",
       "intensity": 0.3
     },
@@ -233,14 +318,14 @@
       "t": 19.0,
       "dur": 0.25,
       "midi": 38,
-      "vel": 0.76,
+      "vel": 0.715,
       "track": "perc",
       "intensity": 0.5
     },
     {
       "t": 19.5,
       "dur": 0.5,
-      "midi": 45,
+      "midi": 41,
       "vel": 0.885,
       "track": "bass",
       "intensity": 0.3
@@ -248,16 +333,24 @@
     {
       "t": 20.0,
       "dur": 1.0,
-      "midi": 47,
+      "midi": 43,
       "vel": 0.861,
       "track": "bass",
       "intensity": 0.3
     },
     {
       "t": 20.0,
+      "dur": 1.0,
+      "midi": 71,
+      "vel": 0.772,
+      "track": "lead",
+      "intensity": 0.4
+    },
+    {
+      "t": 20.0,
       "dur": 0.25,
       "midi": 36,
-      "vel": 0.933,
+      "vel": 0.94,
       "track": "perc",
       "intensity": 0.3
     },
@@ -265,23 +358,39 @@
       "t": 20.0,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.424,
+      "vel": 0.422,
       "track": "perc",
       "intensity": 0.4
     },
     {
       "t": 20.5,
+      "dur": 0.85,
+      "midi": 71,
+      "vel": 0.389,
+      "track": "arp",
+      "intensity": 0.26
+    },
+    {
+      "t": 20.5,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.299,
+      "vel": 0.304,
       "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 21.0,
+      "dur": 0.5,
+      "midi": 67,
+      "vel": 0.755,
+      "track": "lead",
       "intensity": 0.4
     },
     {
       "t": 21.0,
       "dur": 0.25,
       "midi": 38,
-      "vel": 0.633,
+      "vel": 0.637,
       "track": "perc",
       "intensity": 0.5
     },
@@ -289,14 +398,14 @@
       "t": 21.0,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.392,
+      "vel": 0.444,
       "track": "perc",
       "intensity": 0.4
     },
     {
       "t": 21.5,
       "dur": 0.5,
-      "midi": 47,
+      "midi": 43,
       "vel": 0.853,
       "track": "bass",
       "intensity": 0.3
@@ -305,7 +414,7 @@
       "t": 21.5,
       "dur": 0.25,
       "midi": 36,
-      "vel": 0.624,
+      "vel": 0.602,
       "track": "perc",
       "intensity": 0.3
     },
@@ -313,31 +422,47 @@
       "t": 21.5,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.287,
+      "vel": 0.262,
       "track": "perc",
       "intensity": 0.4
     },
     {
       "t": 22.0,
       "dur": 1.0,
-      "midi": 41,
+      "midi": 50,
       "vel": 0.879,
       "track": "bass",
       "intensity": 0.3
     },
     {
       "t": 22.0,
+      "dur": 2.0,
+      "midi": 71,
+      "vel": 0.765,
+      "track": "lead",
+      "intensity": 0.4
+    },
+    {
+      "t": 22.0,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.437,
+      "vel": 0.393,
       "track": "perc",
       "intensity": 0.4
     },
     {
       "t": 22.5,
+      "dur": 0.85,
+      "midi": 74,
+      "vel": 0.3,
+      "track": "arp",
+      "intensity": 0.26
+    },
+    {
+      "t": 22.5,
       "dur": 0.25,
       "midi": 36,
-      "vel": 0.735,
+      "vel": 0.747,
       "track": "perc",
       "intensity": 0.3
     },
@@ -345,7 +470,7 @@
       "t": 22.5,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.262,
+      "vel": 0.276,
       "track": "perc",
       "intensity": 0.4
     },
@@ -353,7 +478,7 @@
       "t": 23.0,
       "dur": 0.25,
       "midi": 38,
-      "vel": 0.751,
+      "vel": 0.753,
       "track": "perc",
       "intensity": 0.5
     },
@@ -361,14 +486,14 @@
       "t": 23.0,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.431,
+      "vel": 0.403,
       "track": "perc",
       "intensity": 0.4
     },
     {
       "t": 23.5,
       "dur": 0.5,
-      "midi": 45,
+      "midi": 41,
       "vel": 0.882,
       "track": "bass",
       "intensity": 0.3
@@ -377,47 +502,23 @@
       "t": 23.5,
       "dur": 0.8,
       "midi": 42,
-      "vel": 0.201,
+      "vel": 0.235,
       "track": "perc",
       "intensity": 0.4
     },
     {
       "t": 24.0,
       "dur": 1.0,
-      "midi": 48,
+      "midi": 43,
       "vel": 0.899,
       "track": "bass",
       "intensity": 0.3
     },
     {
       "t": 24.0,
-      "dur": 8.0,
-      "midi": 60,
-      "vel": 0.673,
-      "track": "pad",
-      "intensity": 0.1
-    },
-    {
-      "t": 24.0,
-      "dur": 8.0,
-      "midi": 64,
-      "vel": 0.662,
-      "track": "pad",
-      "intensity": 0.1
-    },
-    {
-      "t": 24.0,
-      "dur": 8.0,
-      "midi": 67,
-      "vel": 0.646,
-      "track": "pad",
-      "intensity": 0.1
-    },
-    {
-      "t": 24.0,
       "dur": 0.25,
       "midi": 36,
-      "vel": 0.942,
+      "vel": 0.925,
       "track": "perc",
       "intensity": 0.3
     },
@@ -425,15 +526,23 @@
       "t": 24.0,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.387,
+      "vel": 0.421,
       "track": "perc",
       "intensity": 0.4
     },
     {
       "t": 24.5,
+      "dur": 0.85,
+      "midi": 71,
+      "vel": 0.383,
+      "track": "arp",
+      "intensity": 0.26
+    },
+    {
+      "t": 24.5,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.267,
+      "vel": 0.297,
       "track": "perc",
       "intensity": 0.4
     },
@@ -441,7 +550,7 @@
       "t": 25.0,
       "dur": 0.25,
       "midi": 38,
-      "vel": 0.635,
+      "vel": 0.656,
       "track": "perc",
       "intensity": 0.5
     },
@@ -449,14 +558,14 @@
       "t": 25.0,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.422,
+      "vel": 0.423,
       "track": "perc",
       "intensity": 0.4
     },
     {
       "t": 25.5,
       "dur": 0.5,
-      "midi": 48,
+      "midi": 43,
       "vel": 0.887,
       "track": "bass",
       "intensity": 0.3
@@ -465,7 +574,7 @@
       "t": 25.5,
       "dur": 0.25,
       "midi": 36,
-      "vel": 0.595,
+      "vel": 0.58,
       "track": "perc",
       "intensity": 0.3
     },
@@ -473,14 +582,14 @@
       "t": 25.5,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.316,
+      "vel": 0.248,
       "track": "perc",
       "intensity": 0.4
     },
     {
       "t": 26.0,
       "dur": 1.0,
-      "midi": 43,
+      "midi": 50,
       "vel": 0.896,
       "track": "bass",
       "intensity": 0.3
@@ -489,15 +598,23 @@
       "t": 26.0,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.389,
+      "vel": 0.393,
       "track": "perc",
       "intensity": 0.4
     },
     {
       "t": 26.5,
+      "dur": 0.85,
+      "midi": 74,
+      "vel": 0.272,
+      "track": "arp",
+      "intensity": 0.26
+    },
+    {
+      "t": 26.5,
       "dur": 0.25,
       "midi": 36,
-      "vel": 0.741,
+      "vel": 0.735,
       "track": "perc",
       "intensity": 0.3
     },
@@ -505,7 +622,7 @@
       "t": 26.5,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.298,
+      "vel": 0.282,
       "track": "perc",
       "intensity": 0.4
     },
@@ -513,7 +630,7 @@
       "t": 27.0,
       "dur": 0.25,
       "midi": 38,
-      "vel": 0.754,
+      "vel": 0.715,
       "track": "perc",
       "intensity": 0.5
     },
@@ -521,14 +638,14 @@
       "t": 27.0,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.386,
+      "vel": 0.38,
       "track": "perc",
       "intensity": 0.4
     },
     {
       "t": 27.5,
       "dur": 0.5,
-      "midi": 47,
+      "midi": 41,
       "vel": 0.872,
       "track": "bass",
       "intensity": 0.3
@@ -537,14 +654,14 @@
       "t": 27.5,
       "dur": 0.8,
       "midi": 42,
-      "vel": 0.212,
+      "vel": 0.238,
       "track": "perc",
       "intensity": 0.4
     },
     {
       "t": 28.0,
       "dur": 1.0,
-      "midi": 48,
+      "midi": 43,
       "vel": 0.893,
       "track": "bass",
       "intensity": 0.3
@@ -553,7 +670,7 @@
       "t": 28.0,
       "dur": 0.25,
       "midi": 36,
-      "vel": 0.968,
+      "vel": 0.977,
       "track": "perc",
       "intensity": 0.3
     },
@@ -561,15 +678,23 @@
       "t": 28.0,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.439,
+      "vel": 0.395,
       "track": "perc",
       "intensity": 0.4
     },
     {
       "t": 28.5,
+      "dur": 0.85,
+      "midi": 71,
+      "vel": 0.377,
+      "track": "arp",
+      "intensity": 0.26
+    },
+    {
+      "t": 28.5,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.274,
+      "vel": 0.298,
       "track": "perc",
       "intensity": 0.4
     },
@@ -577,7 +702,7 @@
       "t": 29.0,
       "dur": 0.25,
       "midi": 38,
-      "vel": 0.655,
+      "vel": 0.659,
       "track": "perc",
       "intensity": 0.5
     },
@@ -585,14 +710,14 @@
       "t": 29.0,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.387,
+      "vel": 0.445,
       "track": "perc",
       "intensity": 0.4
     },
     {
       "t": 29.5,
       "dur": 0.5,
-      "midi": 48,
+      "midi": 43,
       "vel": 0.878,
       "track": "bass",
       "intensity": 0.3
@@ -601,7 +726,7 @@
       "t": 29.5,
       "dur": 0.25,
       "midi": 36,
-      "vel": 0.601,
+      "vel": 0.608,
       "track": "perc",
       "intensity": 0.3
     },
@@ -609,14 +734,14 @@
       "t": 29.5,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.317,
+      "vel": 0.315,
       "track": "perc",
       "intensity": 0.4
     },
     {
       "t": 30.0,
       "dur": 1.0,
-      "midi": 43,
+      "midi": 50,
       "vel": 0.876,
       "track": "bass",
       "intensity": 0.3
@@ -625,15 +750,23 @@
       "t": 30.0,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.43,
+      "vel": 0.455,
       "track": "perc",
       "intensity": 0.4
     },
     {
       "t": 30.5,
+      "dur": 0.85,
+      "midi": 74,
+      "vel": 0.312,
+      "track": "arp",
+      "intensity": 0.26
+    },
+    {
+      "t": 30.5,
       "dur": 0.25,
       "midi": 36,
-      "vel": 0.74,
+      "vel": 0.739,
       "track": "perc",
       "intensity": 0.3
     },
@@ -641,7 +774,7 @@
       "t": 30.5,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.305,
+      "vel": 0.273,
       "track": "perc",
       "intensity": 0.4
     },
@@ -649,7 +782,7 @@
       "t": 31.0,
       "dur": 0.25,
       "midi": 38,
-      "vel": 0.747,
+      "vel": 0.725,
       "track": "perc",
       "intensity": 0.5
     },
@@ -657,38 +790,54 @@
       "t": 31.0,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.419,
+      "vel": 0.383,
       "track": "perc",
       "intensity": 0.4
     },
     {
       "t": 31.5,
       "dur": 0.5,
-      "midi": 47,
+      "midi": 41,
       "vel": 0.89,
       "track": "bass",
       "intensity": 0.3
     },
     {
       "t": 31.5,
+      "dur": 0.18,
+      "midi": 36,
+      "vel": 0.645,
+      "track": "perc",
+      "intensity": 0.72
+    },
+    {
+      "t": 31.5,
       "dur": 0.8,
       "midi": 42,
-      "vel": 0.218,
+      "vel": 0.214,
       "track": "perc",
       "intensity": 0.4
     },
     {
+      "t": 31.75,
+      "dur": 0.16,
+      "midi": 38,
+      "vel": 0.511,
+      "track": "perc",
+      "intensity": 0.72
+    },
+    {
       "t": 32.0,
       "dur": 0.25,
-      "midi": 62,
-      "vel": 0.59,
+      "midi": 69,
+      "vel": 0.573,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 32.0,
       "dur": 1.0,
-      "midi": 38,
+      "midi": 45,
       "vel": 0.853,
       "track": "bass",
       "intensity": 0.3
@@ -696,48 +845,56 @@
     {
       "t": 32.0,
       "dur": 0.5,
-      "midi": 62,
-      "vel": 0.805,
+      "midi": 69,
+      "vel": 0.767,
       "track": "lead",
-      "intensity": 0.75
+      "intensity": 0.4
     },
     {
       "t": 32.0,
-      "dur": 8.0,
-      "midi": 50,
-      "vel": 0.52,
+      "dur": 16.0,
+      "midi": 45,
+      "vel": 0.48,
       "track": "pad",
       "intensity": 0.5
     },
     {
       "t": 32.0,
-      "dur": 8.0,
-      "midi": 62,
-      "vel": 0.643,
+      "dur": 16.0,
+      "midi": 57,
+      "vel": 0.651,
       "track": "pad",
       "intensity": 0.1
     },
     {
       "t": 32.0,
-      "dur": 8.0,
-      "midi": 65,
-      "vel": 0.661,
+      "dur": 16.0,
+      "midi": 60,
+      "vel": 0.669,
       "track": "pad",
       "intensity": 0.1
     },
     {
       "t": 32.0,
-      "dur": 8.0,
-      "midi": 69,
-      "vel": 0.668,
+      "dur": 16.0,
+      "midi": 64,
+      "vel": 0.673,
       "track": "pad",
       "intensity": 0.1
+    },
+    {
+      "t": 32.0,
+      "dur": 16.0,
+      "midi": 71,
+      "vel": 0.4,
+      "track": "pad",
+      "intensity": 0.32
     },
     {
       "t": 32.0,
       "dur": 0.25,
       "midi": 36,
-      "vel": 0.941,
+      "vel": 0.974,
       "track": "perc",
       "intensity": 0.3
     },
@@ -745,71 +902,79 @@
       "t": 32.0,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.389,
+      "vel": 0.414,
       "track": "perc",
       "intensity": 0.4
     },
     {
       "t": 32.25,
       "dur": 0.25,
-      "midi": 65,
-      "vel": 0.64,
+      "midi": 72,
+      "vel": 0.633,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
+    },
+    {
+      "t": 32.5,
+      "dur": 0.85,
+      "midi": 72,
+      "vel": 0.352,
+      "track": "arp",
+      "intensity": 0.26
     },
     {
       "t": 32.5,
       "dur": 0.25,
-      "midi": 69,
-      "vel": 0.663,
+      "midi": 76,
+      "vel": 0.603,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 32.5,
       "dur": 0.5,
-      "midi": 64,
-      "vel": 0.813,
+      "midi": 71,
+      "vel": 0.79,
       "track": "lead",
-      "intensity": 0.75
+      "intensity": 0.4
     },
     {
       "t": 32.5,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.261,
+      "vel": 0.309,
       "track": "perc",
       "intensity": 0.4
     },
     {
       "t": 32.75,
       "dur": 0.25,
-      "midi": 72,
-      "vel": 0.587,
+      "midi": 79,
+      "vel": 0.659,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 33.0,
       "dur": 0.25,
-      "midi": 69,
-      "vel": 0.645,
+      "midi": 76,
+      "vel": 0.63,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 33.0,
       "dur": 1.0,
-      "midi": 65,
-      "vel": 0.773,
+      "midi": 72,
+      "vel": 0.759,
       "track": "lead",
-      "intensity": 0.75
+      "intensity": 0.4
     },
     {
       "t": 33.0,
       "dur": 0.25,
       "midi": 38,
-      "vel": 0.648,
+      "vel": 0.655,
       "track": "perc",
       "intensity": 0.5
     },
@@ -817,30 +982,30 @@
       "t": 33.0,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.452,
+      "vel": 0.432,
       "track": "perc",
       "intensity": 0.4
     },
     {
       "t": 33.25,
       "dur": 0.25,
-      "midi": 65,
-      "vel": 0.63,
+      "midi": 72,
+      "vel": 0.583,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 33.5,
       "dur": 0.25,
-      "midi": 69,
-      "vel": 0.636,
+      "midi": 76,
+      "vel": 0.656,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 33.5,
       "dur": 0.5,
-      "midi": 38,
+      "midi": 45,
       "vel": 0.858,
       "track": "bass",
       "intensity": 0.3
@@ -849,7 +1014,7 @@
       "t": 33.5,
       "dur": 0.25,
       "midi": 36,
-      "vel": 0.587,
+      "vel": 0.58,
       "track": "perc",
       "intensity": 0.3
     },
@@ -857,30 +1022,30 @@
       "t": 33.5,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.253,
+      "vel": 0.299,
       "track": "perc",
       "intensity": 0.4
     },
     {
       "t": 33.75,
       "dur": 0.25,
-      "midi": 72,
-      "vel": 0.578,
+      "midi": 79,
+      "vel": 0.612,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 34.0,
       "dur": 0.25,
-      "midi": 62,
-      "vel": 0.639,
+      "midi": 69,
+      "vel": 0.572,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 34.0,
       "dur": 1.0,
-      "midi": 45,
+      "midi": 40,
       "vel": 0.909,
       "track": "bass",
       "intensity": 0.3
@@ -888,40 +1053,48 @@
     {
       "t": 34.0,
       "dur": 2.0,
-      "midi": 69,
-      "vel": 0.764,
+      "midi": 76,
+      "vel": 0.772,
       "track": "lead",
-      "intensity": 0.75
+      "intensity": 0.4
     },
     {
       "t": 34.0,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.417,
+      "vel": 0.406,
       "track": "perc",
       "intensity": 0.4
     },
     {
       "t": 34.25,
       "dur": 0.25,
-      "midi": 65,
-      "vel": 0.616,
+      "midi": 72,
+      "vel": 0.666,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 34.5,
       "dur": 0.25,
-      "midi": 69,
-      "vel": 0.612,
+      "midi": 76,
+      "vel": 0.643,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
+    },
+    {
+      "t": 34.5,
+      "dur": 0.85,
+      "midi": 76,
+      "vel": 0.313,
+      "track": "arp",
+      "intensity": 0.26
     },
     {
       "t": 34.5,
       "dur": 0.25,
       "midi": 36,
-      "vel": 0.721,
+      "vel": 0.718,
       "track": "perc",
       "intensity": 0.3
     },
@@ -929,31 +1102,31 @@
       "t": 34.5,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.274,
+      "vel": 0.29,
       "track": "perc",
       "intensity": 0.4
     },
     {
       "t": 34.75,
       "dur": 0.25,
-      "midi": 72,
-      "vel": 0.638,
+      "midi": 79,
+      "vel": 0.639,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 35.0,
       "dur": 0.25,
-      "midi": 69,
-      "vel": 0.669,
+      "midi": 76,
+      "vel": 0.624,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 35.0,
       "dur": 0.25,
       "midi": 38,
-      "vel": 0.72,
+      "vel": 0.729,
       "track": "perc",
       "intensity": 0.5
     },
@@ -961,30 +1134,30 @@
       "t": 35.0,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.405,
+      "vel": 0.435,
       "track": "perc",
       "intensity": 0.4
     },
     {
       "t": 35.25,
       "dur": 0.25,
-      "midi": 65,
-      "vel": 0.659,
+      "midi": 72,
+      "vel": 0.628,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 35.5,
       "dur": 0.25,
-      "midi": 69,
-      "vel": 0.601,
+      "midi": 76,
+      "vel": 0.592,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 35.5,
       "dur": 0.5,
-      "midi": 48,
+      "midi": 43,
       "vel": 0.86,
       "track": "bass",
       "intensity": 0.3
@@ -993,30 +1166,30 @@
       "t": 35.5,
       "dur": 0.8,
       "midi": 42,
-      "vel": 0.26,
+      "vel": 0.228,
       "track": "perc",
       "intensity": 0.4
     },
     {
       "t": 35.75,
       "dur": 0.25,
-      "midi": 72,
-      "vel": 0.591,
+      "midi": 79,
+      "vel": 0.648,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 36.0,
       "dur": 0.25,
-      "midi": 62,
-      "vel": 0.577,
+      "midi": 69,
+      "vel": 0.62,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 36.0,
       "dur": 1.0,
-      "midi": 38,
+      "midi": 45,
       "vel": 0.873,
       "track": "bass",
       "intensity": 0.3
@@ -1024,16 +1197,16 @@
     {
       "t": 36.0,
       "dur": 1.0,
-      "midi": 65,
-      "vel": 0.815,
+      "midi": 72,
+      "vel": 0.762,
       "track": "lead",
-      "intensity": 0.75
+      "intensity": 0.4
     },
     {
       "t": 36.0,
       "dur": 0.25,
       "midi": 36,
-      "vel": 0.972,
+      "vel": 0.967,
       "track": "perc",
       "intensity": 0.3
     },
@@ -1041,63 +1214,71 @@
       "t": 36.0,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.456,
+      "vel": 0.425,
       "track": "perc",
       "intensity": 0.4
     },
     {
       "t": 36.25,
       "dur": 0.25,
-      "midi": 65,
-      "vel": 0.632,
+      "midi": 72,
+      "vel": 0.604,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
+    },
+    {
+      "t": 36.5,
+      "dur": 0.85,
+      "midi": 72,
+      "vel": 0.386,
+      "track": "arp",
+      "intensity": 0.26
     },
     {
       "t": 36.5,
       "dur": 0.25,
-      "midi": 69,
-      "vel": 0.649,
+      "midi": 76,
+      "vel": 0.603,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 36.5,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.281,
+      "vel": 0.293,
       "track": "perc",
       "intensity": 0.4
     },
     {
       "t": 36.75,
       "dur": 0.25,
-      "midi": 72,
-      "vel": 0.63,
+      "midi": 79,
+      "vel": 0.589,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 37.0,
       "dur": 0.25,
-      "midi": 69,
-      "vel": 0.603,
+      "midi": 76,
+      "vel": 0.652,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 37.0,
       "dur": 0.5,
-      "midi": 62,
-      "vel": 0.77,
+      "midi": 69,
+      "vel": 0.787,
       "track": "lead",
-      "intensity": 0.75
+      "intensity": 0.4
     },
     {
       "t": 37.0,
       "dur": 0.25,
       "midi": 38,
-      "vel": 0.631,
+      "vel": 0.663,
       "track": "perc",
       "intensity": 0.5
     },
@@ -1105,30 +1286,30 @@
       "t": 37.0,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.424,
+      "vel": 0.393,
       "track": "perc",
       "intensity": 0.4
     },
     {
       "t": 37.25,
       "dur": 0.25,
-      "midi": 65,
-      "vel": 0.669,
+      "midi": 72,
+      "vel": 0.613,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 37.5,
       "dur": 0.25,
-      "midi": 69,
-      "vel": 0.596,
+      "midi": 76,
+      "vel": 0.593,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 37.5,
       "dur": 0.5,
-      "midi": 38,
+      "midi": 45,
       "vel": 0.909,
       "track": "bass",
       "intensity": 0.3
@@ -1137,7 +1318,7 @@
       "t": 37.5,
       "dur": 0.25,
       "midi": 36,
-      "vel": 0.579,
+      "vel": 0.627,
       "track": "perc",
       "intensity": 0.3
     },
@@ -1145,30 +1326,30 @@
       "t": 37.5,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.319,
+      "vel": 0.244,
       "track": "perc",
       "intensity": 0.4
     },
     {
       "t": 37.75,
       "dur": 0.25,
-      "midi": 72,
-      "vel": 0.653,
+      "midi": 79,
+      "vel": 0.626,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 38.0,
       "dur": 0.25,
-      "midi": 62,
-      "vel": 0.67,
+      "midi": 69,
+      "vel": 0.663,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 38.0,
       "dur": 1.0,
-      "midi": 45,
+      "midi": 40,
       "vel": 0.88,
       "track": "bass",
       "intensity": 0.3
@@ -1176,40 +1357,48 @@
     {
       "t": 38.0,
       "dur": 2.0,
-      "midi": 65,
-      "vel": 0.775,
+      "midi": 72,
+      "vel": 0.798,
       "track": "lead",
-      "intensity": 0.75
+      "intensity": 0.4
     },
     {
       "t": 38.0,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.438,
+      "vel": 0.435,
       "track": "perc",
       "intensity": 0.4
     },
     {
       "t": 38.25,
       "dur": 0.25,
-      "midi": 65,
-      "vel": 0.593,
+      "midi": 72,
+      "vel": 0.648,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 38.5,
       "dur": 0.25,
-      "midi": 69,
-      "vel": 0.597,
+      "midi": 76,
+      "vel": 0.637,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
+    },
+    {
+      "t": 38.5,
+      "dur": 0.85,
+      "midi": 76,
+      "vel": 0.312,
+      "track": "arp",
+      "intensity": 0.26
     },
     {
       "t": 38.5,
       "dur": 0.25,
       "midi": 36,
-      "vel": 0.724,
+      "vel": 0.72,
       "track": "perc",
       "intensity": 0.3
     },
@@ -1217,31 +1406,31 @@
       "t": 38.5,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.265,
+      "vel": 0.25,
       "track": "perc",
       "intensity": 0.4
     },
     {
       "t": 38.75,
       "dur": 0.25,
-      "midi": 72,
-      "vel": 0.642,
+      "midi": 79,
+      "vel": 0.665,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 39.0,
       "dur": 0.25,
-      "midi": 69,
-      "vel": 0.648,
+      "midi": 76,
+      "vel": 0.573,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 39.0,
       "dur": 0.25,
       "midi": 38,
-      "vel": 0.766,
+      "vel": 0.769,
       "track": "perc",
       "intensity": 0.5
     },
@@ -1249,30 +1438,30 @@
       "t": 39.0,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.392,
+      "vel": 0.395,
       "track": "perc",
       "intensity": 0.4
     },
     {
       "t": 39.25,
       "dur": 0.25,
-      "midi": 65,
-      "vel": 0.587,
+      "midi": 72,
+      "vel": 0.617,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 39.5,
       "dur": 0.25,
-      "midi": 69,
-      "vel": 0.593,
+      "midi": 76,
+      "vel": 0.656,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 39.5,
       "dur": 0.5,
-      "midi": 48,
+      "midi": 43,
       "vel": 0.89,
       "track": "bass",
       "intensity": 0.3
@@ -1281,79 +1470,39 @@
       "t": 39.5,
       "dur": 0.8,
       "midi": 42,
-      "vel": 0.251,
+      "vel": 0.258,
       "track": "perc",
       "intensity": 0.4
     },
     {
       "t": 39.75,
       "dur": 0.25,
-      "midi": 72,
-      "vel": 0.639,
+      "midi": 79,
+      "vel": 0.641,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 40.0,
       "dur": 0.25,
-      "midi": 67,
-      "vel": 0.645,
+      "midi": 69,
+      "vel": 0.606,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 40.0,
       "dur": 1.0,
-      "midi": 43,
+      "midi": 45,
       "vel": 0.866,
       "track": "bass",
       "intensity": 0.3
     },
     {
       "t": 40.0,
-      "dur": 0.5,
-      "midi": 67,
-      "vel": 0.82,
-      "track": "lead",
-      "intensity": 0.75
-    },
-    {
-      "t": 40.0,
-      "dur": 8.0,
-      "midi": 43,
-      "vel": 0.52,
-      "track": "pad",
-      "intensity": 0.5
-    },
-    {
-      "t": 40.0,
-      "dur": 8.0,
-      "midi": 55,
-      "vel": 0.642,
-      "track": "pad",
-      "intensity": 0.1
-    },
-    {
-      "t": 40.0,
-      "dur": 8.0,
-      "midi": 59,
-      "vel": 0.675,
-      "track": "pad",
-      "intensity": 0.1
-    },
-    {
-      "t": 40.0,
-      "dur": 8.0,
-      "midi": 62,
-      "vel": 0.648,
-      "track": "pad",
-      "intensity": 0.1
-    },
-    {
-      "t": 40.0,
       "dur": 0.25,
       "midi": 36,
-      "vel": 0.962,
+      "vel": 0.964,
       "track": "perc",
       "intensity": 0.3
     },
@@ -1361,76 +1510,140 @@
       "t": 40.0,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.443,
+      "vel": 0.41,
       "track": "perc",
       "intensity": 0.4
     },
     {
       "t": 40.25,
       "dur": 0.25,
-      "midi": 71,
-      "vel": 0.578,
+      "midi": 72,
+      "vel": 0.648,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
+    },
+    {
+      "t": 40.5,
+      "dur": 0.85,
+      "midi": 72,
+      "vel": 0.331,
+      "track": "arp",
+      "intensity": 0.26
     },
     {
       "t": 40.5,
       "dur": 0.25,
-      "midi": 74,
-      "vel": 0.598,
+      "midi": 76,
+      "vel": 0.618,
       "track": "arp",
-      "intensity": 0.6
-    },
-    {
-      "t": 40.5,
-      "dur": 0.5,
-      "midi": 69,
-      "vel": 0.79,
-      "track": "lead",
-      "intensity": 0.75
+      "intensity": 0.55
     },
     {
       "t": 40.5,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.275,
+      "vel": 0.279,
       "track": "perc",
       "intensity": 0.4
     },
     {
       "t": 40.75,
       "dur": 0.25,
-      "midi": 77,
-      "vel": 0.639,
+      "midi": 79,
+      "vel": 0.635,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 41.0,
       "dur": 0.25,
-      "midi": 74,
-      "vel": 0.63,
+      "midi": 76,
+      "vel": 0.625,
       "track": "arp",
-      "intensity": 0.6
-    },
-    {
-      "t": 41.0,
-      "dur": 1.0,
-      "midi": 71,
-      "vel": 0.799,
-      "track": "lead",
-      "intensity": 0.75
+      "intensity": 0.55
     },
     {
       "t": 41.0,
       "dur": 0.25,
       "midi": 38,
-      "vel": 0.678,
+      "vel": 0.67,
       "track": "perc",
       "intensity": 0.5
     },
     {
       "t": 41.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.452,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 41.25,
+      "dur": 0.25,
+      "midi": 72,
+      "vel": 0.625,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 41.5,
+      "dur": 0.25,
+      "midi": 76,
+      "vel": 0.649,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 41.5,
+      "dur": 0.5,
+      "midi": 45,
+      "vel": 0.866,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 41.5,
+      "dur": 0.25,
+      "midi": 36,
+      "vel": 0.588,
+      "track": "perc",
+      "intensity": 0.3
+    },
+    {
+      "t": 41.5,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.283,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 41.75,
+      "dur": 0.25,
+      "midi": 79,
+      "vel": 0.663,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 42.0,
+      "dur": 0.25,
+      "midi": 69,
+      "vel": 0.658,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 42.0,
+      "dur": 1.0,
+      "midi": 40,
+      "vel": 0.878,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 42.0,
       "dur": 0.4,
       "midi": 42,
       "vel": 0.428,
@@ -1438,106 +1651,34 @@
       "intensity": 0.4
     },
     {
-      "t": 41.25,
-      "dur": 0.25,
-      "midi": 71,
-      "vel": 0.63,
-      "track": "arp",
-      "intensity": 0.6
-    },
-    {
-      "t": 41.5,
-      "dur": 0.25,
-      "midi": 74,
-      "vel": 0.627,
-      "track": "arp",
-      "intensity": 0.6
-    },
-    {
-      "t": 41.5,
-      "dur": 0.5,
-      "midi": 43,
-      "vel": 0.866,
-      "track": "bass",
-      "intensity": 0.3
-    },
-    {
-      "t": 41.5,
-      "dur": 0.25,
-      "midi": 36,
-      "vel": 0.595,
-      "track": "perc",
-      "intensity": 0.3
-    },
-    {
-      "t": 41.5,
-      "dur": 0.4,
-      "midi": 42,
-      "vel": 0.265,
-      "track": "perc",
-      "intensity": 0.4
-    },
-    {
-      "t": 41.75,
-      "dur": 0.25,
-      "midi": 77,
-      "vel": 0.607,
-      "track": "arp",
-      "intensity": 0.6
-    },
-    {
-      "t": 42.0,
-      "dur": 0.25,
-      "midi": 67,
-      "vel": 0.608,
-      "track": "arp",
-      "intensity": 0.6
-    },
-    {
-      "t": 42.0,
-      "dur": 1.0,
-      "midi": 50,
-      "vel": 0.878,
-      "track": "bass",
-      "intensity": 0.3
-    },
-    {
-      "t": 42.0,
-      "dur": 2.0,
-      "midi": 74,
-      "vel": 0.832,
-      "track": "lead",
-      "intensity": 0.75
-    },
-    {
-      "t": 42.0,
-      "dur": 0.4,
-      "midi": 42,
-      "vel": 0.423,
-      "track": "perc",
-      "intensity": 0.4
-    },
-    {
       "t": 42.25,
       "dur": 0.25,
-      "midi": 71,
-      "vel": 0.639,
+      "midi": 72,
+      "vel": 0.65,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 42.5,
       "dur": 0.25,
-      "midi": 74,
-      "vel": 0.581,
+      "midi": 76,
+      "vel": 0.617,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
+    },
+    {
+      "t": 42.5,
+      "dur": 0.85,
+      "midi": 76,
+      "vel": 0.296,
+      "track": "arp",
+      "intensity": 0.26
     },
     {
       "t": 42.5,
       "dur": 0.25,
       "midi": 36,
-      "vel": 0.72,
+      "vel": 0.699,
       "track": "perc",
       "intensity": 0.3
     },
@@ -1545,31 +1686,31 @@
       "t": 42.5,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.31,
+      "vel": 0.299,
       "track": "perc",
       "intensity": 0.4
     },
     {
       "t": 42.75,
       "dur": 0.25,
-      "midi": 77,
-      "vel": 0.643,
+      "midi": 79,
+      "vel": 0.611,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 43.0,
       "dur": 0.25,
-      "midi": 74,
-      "vel": 0.58,
+      "midi": 76,
+      "vel": 0.669,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 43.0,
       "dur": 0.25,
       "midi": 38,
-      "vel": 0.735,
+      "vel": 0.757,
       "track": "perc",
       "intensity": 0.5
     },
@@ -1577,30 +1718,30 @@
       "t": 43.0,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.387,
+      "vel": 0.44,
       "track": "perc",
       "intensity": 0.4
     },
     {
       "t": 43.25,
       "dur": 0.25,
-      "midi": 71,
-      "vel": 0.592,
+      "midi": 72,
+      "vel": 0.626,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 43.5,
       "dur": 0.25,
-      "midi": 74,
-      "vel": 0.631,
+      "midi": 76,
+      "vel": 0.608,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 43.5,
       "dur": 0.5,
-      "midi": 41,
+      "midi": 43,
       "vel": 0.868,
       "track": "bass",
       "intensity": 0.3
@@ -1609,47 +1750,39 @@
       "t": 43.5,
       "dur": 0.8,
       "midi": 42,
-      "vel": 0.262,
+      "vel": 0.232,
       "track": "perc",
       "intensity": 0.4
     },
     {
       "t": 43.75,
       "dur": 0.25,
-      "midi": 77,
-      "vel": 0.653,
+      "midi": 79,
+      "vel": 0.588,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 44.0,
       "dur": 0.25,
-      "midi": 67,
-      "vel": 0.666,
+      "midi": 69,
+      "vel": 0.636,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 44.0,
       "dur": 1.0,
-      "midi": 43,
+      "midi": 45,
       "vel": 0.864,
       "track": "bass",
       "intensity": 0.3
     },
     {
       "t": 44.0,
-      "dur": 1.0,
-      "midi": 71,
-      "vel": 0.803,
-      "track": "lead",
-      "intensity": 0.75
-    },
-    {
-      "t": 44.0,
       "dur": 0.25,
       "midi": 36,
-      "vel": 0.968,
+      "vel": 0.946,
       "track": "perc",
       "intensity": 0.3
     },
@@ -1657,63 +1790,63 @@
       "t": 44.0,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.412,
+      "vel": 0.424,
       "track": "perc",
       "intensity": 0.4
     },
     {
       "t": 44.25,
       "dur": 0.25,
-      "midi": 71,
-      "vel": 0.572,
+      "midi": 72,
+      "vel": 0.665,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
+    },
+    {
+      "t": 44.5,
+      "dur": 0.85,
+      "midi": 72,
+      "vel": 0.361,
+      "track": "arp",
+      "intensity": 0.26
     },
     {
       "t": 44.5,
       "dur": 0.25,
-      "midi": 74,
-      "vel": 0.665,
+      "midi": 76,
+      "vel": 0.579,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 44.5,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.255,
+      "vel": 0.314,
       "track": "perc",
       "intensity": 0.4
     },
     {
       "t": 44.75,
       "dur": 0.25,
-      "midi": 77,
-      "vel": 0.657,
+      "midi": 79,
+      "vel": 0.586,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 45.0,
       "dur": 0.25,
-      "midi": 74,
-      "vel": 0.646,
+      "midi": 76,
+      "vel": 0.622,
       "track": "arp",
-      "intensity": 0.6
-    },
-    {
-      "t": 45.0,
-      "dur": 0.5,
-      "midi": 67,
-      "vel": 0.808,
-      "track": "lead",
-      "intensity": 0.75
+      "intensity": 0.55
     },
     {
       "t": 45.0,
       "dur": 0.25,
       "midi": 38,
-      "vel": 0.652,
+      "vel": 0.662,
       "track": "perc",
       "intensity": 0.5
     },
@@ -1721,30 +1854,30 @@
       "t": 45.0,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.44,
+      "vel": 0.446,
       "track": "perc",
       "intensity": 0.4
     },
     {
       "t": 45.25,
       "dur": 0.25,
-      "midi": 71,
-      "vel": 0.659,
+      "midi": 72,
+      "vel": 0.618,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 45.5,
       "dur": 0.25,
-      "midi": 74,
-      "vel": 0.585,
+      "midi": 76,
+      "vel": 0.583,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 45.5,
       "dur": 0.5,
-      "midi": 43,
+      "midi": 45,
       "vel": 0.893,
       "track": "bass",
       "intensity": 0.3
@@ -1753,7 +1886,7 @@
       "t": 45.5,
       "dur": 0.25,
       "midi": 36,
-      "vel": 0.609,
+      "vel": 0.606,
       "track": "perc",
       "intensity": 0.3
     },
@@ -1761,71 +1894,71 @@
       "t": 45.5,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.267,
+      "vel": 0.242,
       "track": "perc",
       "intensity": 0.4
     },
     {
       "t": 45.75,
       "dur": 0.25,
-      "midi": 77,
-      "vel": 0.585,
+      "midi": 79,
+      "vel": 0.623,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 46.0,
       "dur": 0.25,
-      "midi": 67,
-      "vel": 0.666,
+      "midi": 69,
+      "vel": 0.579,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 46.0,
       "dur": 1.0,
-      "midi": 50,
+      "midi": 40,
       "vel": 0.869,
       "track": "bass",
       "intensity": 0.3
     },
     {
       "t": 46.0,
-      "dur": 2.0,
-      "midi": 71,
-      "vel": 0.819,
-      "track": "lead",
-      "intensity": 0.75
-    },
-    {
-      "t": 46.0,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.442,
+      "vel": 0.412,
       "track": "perc",
       "intensity": 0.4
     },
     {
       "t": 46.25,
       "dur": 0.25,
-      "midi": 71,
-      "vel": 0.593,
+      "midi": 72,
+      "vel": 0.591,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 46.5,
       "dur": 0.25,
-      "midi": 74,
-      "vel": 0.648,
+      "midi": 76,
+      "vel": 0.661,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
+    },
+    {
+      "t": 46.5,
+      "dur": 0.85,
+      "midi": 76,
+      "vel": 0.329,
+      "track": "arp",
+      "intensity": 0.26
     },
     {
       "t": 46.5,
       "dur": 0.25,
       "midi": 36,
-      "vel": 0.727,
+      "vel": 0.709,
       "track": "perc",
       "intensity": 0.3
     },
@@ -1833,31 +1966,31 @@
       "t": 46.5,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.311,
+      "vel": 0.306,
       "track": "perc",
       "intensity": 0.4
     },
     {
       "t": 46.75,
       "dur": 0.25,
-      "midi": 77,
-      "vel": 0.616,
+      "midi": 79,
+      "vel": 0.594,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 47.0,
       "dur": 0.25,
-      "midi": 74,
-      "vel": 0.591,
+      "midi": 76,
+      "vel": 0.579,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 47.0,
       "dur": 0.25,
       "midi": 38,
-      "vel": 0.724,
+      "vel": 0.762,
       "track": "perc",
       "intensity": 0.5
     },
@@ -1865,30 +1998,30 @@
       "t": 47.0,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.44,
+      "vel": 0.427,
       "track": "perc",
       "intensity": 0.4
     },
     {
       "t": 47.25,
       "dur": 0.25,
-      "midi": 71,
-      "vel": 0.591,
+      "midi": 72,
+      "vel": 0.597,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 47.5,
       "dur": 0.25,
-      "midi": 74,
-      "vel": 0.667,
+      "midi": 76,
+      "vel": 0.637,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 47.5,
       "dur": 0.5,
-      "midi": 41,
+      "midi": 43,
       "vel": 0.872,
       "track": "bass",
       "intensity": 0.3
@@ -1897,71 +2030,87 @@
       "t": 47.5,
       "dur": 0.8,
       "midi": 42,
-      "vel": 0.264,
+      "vel": 0.275,
       "track": "perc",
       "intensity": 0.4
     },
     {
       "t": 47.75,
       "dur": 0.25,
-      "midi": 77,
-      "vel": 0.64,
+      "midi": 79,
+      "vel": 0.638,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 48.0,
       "dur": 0.25,
-      "midi": 71,
-      "vel": 0.623,
+      "midi": 72,
+      "vel": 0.647,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 48.0,
       "dur": 1.0,
-      "midi": 47,
+      "midi": 48,
       "vel": 0.873,
       "track": "bass",
       "intensity": 0.3
     },
     {
       "t": 48.0,
-      "dur": 8.0,
-      "midi": 47,
-      "vel": 0.52,
+      "dur": 0.5,
+      "midi": 72,
+      "vel": 0.789,
+      "track": "lead",
+      "intensity": 0.4
+    },
+    {
+      "t": 48.0,
+      "dur": 16.0,
+      "midi": 48,
+      "vel": 0.48,
       "track": "pad",
       "intensity": 0.5
     },
     {
       "t": 48.0,
-      "dur": 8.0,
-      "midi": 59,
-      "vel": 0.667,
+      "dur": 16.0,
+      "midi": 60,
+      "vel": 0.673,
       "track": "pad",
       "intensity": 0.1
     },
     {
       "t": 48.0,
-      "dur": 8.0,
-      "midi": 62,
-      "vel": 0.679,
+      "dur": 16.0,
+      "midi": 64,
+      "vel": 0.662,
       "track": "pad",
       "intensity": 0.1
     },
     {
       "t": 48.0,
-      "dur": 8.0,
-      "midi": 65,
-      "vel": 0.643,
+      "dur": 16.0,
+      "midi": 67,
+      "vel": 0.646,
       "track": "pad",
       "intensity": 0.1
+    },
+    {
+      "t": 48.0,
+      "dur": 16.0,
+      "midi": 74,
+      "vel": 0.4,
+      "track": "pad",
+      "intensity": 0.32
     },
     {
       "t": 48.0,
       "dur": 0.25,
       "midi": 36,
-      "vel": 0.938,
+      "vel": 0.925,
       "track": "perc",
       "intensity": 0.3
     },
@@ -1969,55 +2118,79 @@
       "t": 48.0,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.45,
+      "vel": 0.409,
       "track": "perc",
       "intensity": 0.4
     },
     {
       "t": 48.25,
       "dur": 0.25,
-      "midi": 74,
-      "vel": 0.649,
+      "midi": 76,
+      "vel": 0.619,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
+    },
+    {
+      "t": 48.5,
+      "dur": 0.85,
+      "midi": 76,
+      "vel": 0.349,
+      "track": "arp",
+      "intensity": 0.26
     },
     {
       "t": 48.5,
       "dur": 0.25,
-      "midi": 77,
-      "vel": 0.649,
+      "midi": 79,
+      "vel": 0.604,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
+    },
+    {
+      "t": 48.5,
+      "dur": 0.5,
+      "midi": 74,
+      "vel": 0.775,
+      "track": "lead",
+      "intensity": 0.4
     },
     {
       "t": 48.5,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.313,
+      "vel": 0.241,
       "track": "perc",
       "intensity": 0.4
     },
     {
       "t": 48.75,
       "dur": 0.25,
-      "midi": 81,
-      "vel": 0.598,
+      "midi": 83,
+      "vel": 0.616,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 49.0,
       "dur": 0.25,
-      "midi": 77,
-      "vel": 0.586,
+      "midi": 79,
+      "vel": 0.66,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
+    },
+    {
+      "t": 49.0,
+      "dur": 1.0,
+      "midi": 76,
+      "vel": 0.771,
+      "track": "lead",
+      "intensity": 0.4
     },
     {
       "t": 49.0,
       "dur": 0.25,
       "midi": 38,
-      "vel": 0.64,
+      "vel": 0.641,
       "track": "perc",
       "intensity": 0.5
     },
@@ -2025,30 +2198,30 @@
       "t": 49.0,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.455,
+      "vel": 0.425,
       "track": "perc",
       "intensity": 0.4
     },
     {
       "t": 49.25,
       "dur": 0.25,
-      "midi": 74,
-      "vel": 0.615,
+      "midi": 76,
+      "vel": 0.606,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 49.5,
       "dur": 0.25,
-      "midi": 77,
-      "vel": 0.599,
+      "midi": 79,
+      "vel": 0.591,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 49.5,
       "dur": 0.5,
-      "midi": 47,
+      "midi": 48,
       "vel": 0.903,
       "track": "bass",
       "intensity": 0.3
@@ -2057,7 +2230,7 @@
       "t": 49.5,
       "dur": 0.25,
       "midi": 36,
-      "vel": 0.628,
+      "vel": 0.618,
       "track": "perc",
       "intensity": 0.3
     },
@@ -2065,63 +2238,79 @@
       "t": 49.5,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.312,
+      "vel": 0.275,
       "track": "perc",
       "intensity": 0.4
     },
     {
       "t": 49.75,
       "dur": 0.25,
-      "midi": 81,
-      "vel": 0.617,
+      "midi": 83,
+      "vel": 0.663,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 50.0,
       "dur": 0.25,
-      "midi": 71,
-      "vel": 0.622,
+      "midi": 72,
+      "vel": 0.627,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 50.0,
       "dur": 1.0,
-      "midi": 41,
+      "midi": 43,
       "vel": 0.87,
       "track": "bass",
       "intensity": 0.3
     },
     {
       "t": 50.0,
+      "dur": 2.0,
+      "midi": 79,
+      "vel": 0.804,
+      "track": "lead",
+      "intensity": 0.4
+    },
+    {
+      "t": 50.0,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.454,
+      "vel": 0.424,
       "track": "perc",
       "intensity": 0.4
     },
     {
       "t": 50.25,
       "dur": 0.25,
-      "midi": 74,
-      "vel": 0.642,
+      "midi": 76,
+      "vel": 0.636,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 50.5,
       "dur": 0.25,
-      "midi": 77,
-      "vel": 0.624,
+      "midi": 79,
+      "vel": 0.659,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
+    },
+    {
+      "t": 50.5,
+      "dur": 0.85,
+      "midi": 79,
+      "vel": 0.306,
+      "track": "arp",
+      "intensity": 0.26
     },
     {
       "t": 50.5,
       "dur": 0.25,
       "midi": 36,
-      "vel": 0.707,
+      "vel": 0.714,
       "track": "perc",
       "intensity": 0.3
     },
@@ -2129,31 +2318,31 @@
       "t": 50.5,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.288,
+      "vel": 0.305,
       "track": "perc",
       "intensity": 0.4
     },
     {
       "t": 50.75,
       "dur": 0.25,
-      "midi": 81,
-      "vel": 0.58,
+      "midi": 83,
+      "vel": 0.65,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 51.0,
       "dur": 0.25,
-      "midi": 77,
-      "vel": 0.586,
+      "midi": 79,
+      "vel": 0.636,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 51.0,
       "dur": 0.25,
       "midi": 38,
-      "vel": 0.765,
+      "vel": 0.755,
       "track": "perc",
       "intensity": 0.5
     },
@@ -2161,30 +2350,30 @@
       "t": 51.0,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.406,
+      "vel": 0.451,
       "track": "perc",
       "intensity": 0.4
     },
     {
       "t": 51.25,
       "dur": 0.25,
-      "midi": 74,
-      "vel": 0.622,
+      "midi": 76,
+      "vel": 0.668,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 51.5,
       "dur": 0.25,
-      "midi": 77,
-      "vel": 0.57,
+      "midi": 79,
+      "vel": 0.661,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 51.5,
       "dur": 0.5,
-      "midi": 45,
+      "midi": 47,
       "vel": 0.876,
       "track": "bass",
       "intensity": 0.3
@@ -2193,39 +2382,47 @@
       "t": 51.5,
       "dur": 0.8,
       "midi": 42,
-      "vel": 0.261,
+      "vel": 0.223,
       "track": "perc",
       "intensity": 0.4
     },
     {
       "t": 51.75,
       "dur": 0.25,
-      "midi": 81,
-      "vel": 0.619,
+      "midi": 83,
+      "vel": 0.601,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 52.0,
       "dur": 0.25,
-      "midi": 71,
-      "vel": 0.589,
+      "midi": 72,
+      "vel": 0.611,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 52.0,
       "dur": 1.0,
-      "midi": 47,
+      "midi": 48,
       "vel": 0.9,
       "track": "bass",
       "intensity": 0.3
     },
     {
       "t": 52.0,
+      "dur": 1.0,
+      "midi": 76,
+      "vel": 0.784,
+      "track": "lead",
+      "intensity": 0.4
+    },
+    {
+      "t": 52.0,
       "dur": 0.25,
       "midi": 36,
-      "vel": 0.948,
+      "vel": 0.94,
       "track": "perc",
       "intensity": 0.3
     },
@@ -2233,55 +2430,71 @@
       "t": 52.0,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.399,
+      "vel": 0.439,
       "track": "perc",
       "intensity": 0.4
     },
     {
       "t": 52.25,
       "dur": 0.25,
-      "midi": 74,
-      "vel": 0.643,
+      "midi": 76,
+      "vel": 0.659,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
+    },
+    {
+      "t": 52.5,
+      "dur": 0.85,
+      "midi": 76,
+      "vel": 0.339,
+      "track": "arp",
+      "intensity": 0.26
     },
     {
       "t": 52.5,
       "dur": 0.25,
-      "midi": 77,
-      "vel": 0.652,
+      "midi": 79,
+      "vel": 0.63,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 52.5,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.277,
+      "vel": 0.294,
       "track": "perc",
       "intensity": 0.4
     },
     {
       "t": 52.75,
       "dur": 0.25,
-      "midi": 81,
-      "vel": 0.664,
+      "midi": 83,
+      "vel": 0.591,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 53.0,
       "dur": 0.25,
-      "midi": 77,
-      "vel": 0.664,
+      "midi": 79,
+      "vel": 0.659,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
+    },
+    {
+      "t": 53.0,
+      "dur": 0.5,
+      "midi": 72,
+      "vel": 0.782,
+      "track": "lead",
+      "intensity": 0.4
     },
     {
       "t": 53.0,
       "dur": 0.25,
       "midi": 38,
-      "vel": 0.688,
+      "vel": 0.675,
       "track": "perc",
       "intensity": 0.5
     },
@@ -2289,30 +2502,30 @@
       "t": 53.0,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.42,
+      "vel": 0.392,
       "track": "perc",
       "intensity": 0.4
     },
     {
       "t": 53.25,
       "dur": 0.25,
-      "midi": 74,
-      "vel": 0.611,
+      "midi": 76,
+      "vel": 0.633,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 53.5,
       "dur": 0.25,
-      "midi": 77,
-      "vel": 0.573,
+      "midi": 79,
+      "vel": 0.641,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 53.5,
       "dur": 0.5,
-      "midi": 47,
+      "midi": 48,
       "vel": 0.904,
       "track": "bass",
       "intensity": 0.3
@@ -2321,7 +2534,7 @@
       "t": 53.5,
       "dur": 0.25,
       "midi": 36,
-      "vel": 0.581,
+      "vel": 0.617,
       "track": "perc",
       "intensity": 0.3
     },
@@ -2329,63 +2542,79 @@
       "t": 53.5,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.244,
+      "vel": 0.293,
       "track": "perc",
       "intensity": 0.4
     },
     {
       "t": 53.75,
       "dur": 0.25,
-      "midi": 81,
-      "vel": 0.59,
+      "midi": 83,
+      "vel": 0.576,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 54.0,
       "dur": 0.25,
-      "midi": 71,
-      "vel": 0.613,
+      "midi": 72,
+      "vel": 0.574,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 54.0,
       "dur": 1.0,
-      "midi": 41,
+      "midi": 43,
       "vel": 0.898,
       "track": "bass",
       "intensity": 0.3
     },
     {
       "t": 54.0,
+      "dur": 2.0,
+      "midi": 76,
+      "vel": 0.761,
+      "track": "lead",
+      "intensity": 0.4
+    },
+    {
+      "t": 54.0,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.45,
+      "vel": 0.441,
       "track": "perc",
       "intensity": 0.4
     },
     {
       "t": 54.25,
       "dur": 0.25,
-      "midi": 74,
-      "vel": 0.656,
+      "midi": 76,
+      "vel": 0.65,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 54.5,
       "dur": 0.25,
-      "midi": 77,
-      "vel": 0.635,
+      "midi": 79,
+      "vel": 0.607,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
+    },
+    {
+      "t": 54.5,
+      "dur": 0.85,
+      "midi": 79,
+      "vel": 0.324,
+      "track": "arp",
+      "intensity": 0.26
     },
     {
       "t": 54.5,
       "dur": 0.25,
       "midi": 36,
-      "vel": 0.717,
+      "vel": 0.744,
       "track": "perc",
       "intensity": 0.3
     },
@@ -2393,31 +2622,31 @@
       "t": 54.5,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.282,
+      "vel": 0.316,
       "track": "perc",
       "intensity": 0.4
     },
     {
       "t": 54.75,
       "dur": 0.25,
-      "midi": 81,
-      "vel": 0.644,
+      "midi": 83,
+      "vel": 0.646,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 55.0,
       "dur": 0.25,
-      "midi": 77,
-      "vel": 0.603,
+      "midi": 79,
+      "vel": 0.664,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 55.0,
       "dur": 0.25,
       "midi": 38,
-      "vel": 0.715,
+      "vel": 0.76,
       "track": "perc",
       "intensity": 0.5
     },
@@ -2425,30 +2654,30 @@
       "t": 55.0,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.397,
+      "vel": 0.392,
       "track": "perc",
       "intensity": 0.4
     },
     {
       "t": 55.25,
       "dur": 0.25,
-      "midi": 74,
-      "vel": 0.633,
+      "midi": 76,
+      "vel": 0.582,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 55.5,
       "dur": 0.25,
-      "midi": 77,
-      "vel": 0.639,
+      "midi": 79,
+      "vel": 0.617,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 55.5,
       "dur": 0.5,
-      "midi": 45,
+      "midi": 47,
       "vel": 0.894,
       "track": "bass",
       "intensity": 0.3
@@ -2457,17 +2686,25 @@
       "t": 55.5,
       "dur": 0.8,
       "midi": 42,
-      "vel": 0.272,
+      "vel": 0.242,
       "track": "perc",
       "intensity": 0.4
     },
     {
       "t": 55.75,
       "dur": 0.25,
-      "midi": 81,
+      "midi": 83,
+      "vel": 0.661,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 56.0,
+      "dur": 0.25,
+      "midi": 72,
       "vel": 0.607,
       "track": "arp",
-      "intensity": 0.6
+      "intensity": 0.55
     },
     {
       "t": 56.0,
@@ -2479,41 +2716,9 @@
     },
     {
       "t": 56.0,
-      "dur": 8.0,
-      "midi": 48,
-      "vel": 0.52,
-      "track": "pad",
-      "intensity": 0.5
-    },
-    {
-      "t": 56.0,
-      "dur": 8.0,
-      "midi": 60,
-      "vel": 0.665,
-      "track": "pad",
-      "intensity": 0.1
-    },
-    {
-      "t": 56.0,
-      "dur": 8.0,
-      "midi": 64,
-      "vel": 0.676,
-      "track": "pad",
-      "intensity": 0.1
-    },
-    {
-      "t": 56.0,
-      "dur": 8.0,
-      "midi": 67,
-      "vel": 0.644,
-      "track": "pad",
-      "intensity": 0.1
-    },
-    {
-      "t": 56.0,
       "dur": 0.25,
       "midi": 36,
-      "vel": 0.952,
+      "vel": 0.973,
       "track": "perc",
       "intensity": 0.3
     },
@@ -2521,23 +2726,63 @@
       "t": 56.0,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.409,
+      "vel": 0.395,
       "track": "perc",
       "intensity": 0.4
+    },
+    {
+      "t": 56.25,
+      "dur": 0.25,
+      "midi": 76,
+      "vel": 0.666,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 56.5,
+      "dur": 0.85,
+      "midi": 76,
+      "vel": 0.362,
+      "track": "arp",
+      "intensity": 0.26
+    },
+    {
+      "t": 56.5,
+      "dur": 0.25,
+      "midi": 79,
+      "vel": 0.58,
+      "track": "arp",
+      "intensity": 0.55
     },
     {
       "t": 56.5,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.268,
+      "vel": 0.287,
       "track": "perc",
       "intensity": 0.4
+    },
+    {
+      "t": 56.75,
+      "dur": 0.25,
+      "midi": 83,
+      "vel": 0.606,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 57.0,
+      "dur": 0.25,
+      "midi": 79,
+      "vel": 0.589,
+      "track": "arp",
+      "intensity": 0.55
     },
     {
       "t": 57.0,
       "dur": 0.25,
       "midi": 38,
-      "vel": 0.632,
+      "vel": 0.684,
       "track": "perc",
       "intensity": 0.5
     },
@@ -2545,9 +2790,25 @@
       "t": 57.0,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.443,
+      "vel": 0.456,
       "track": "perc",
       "intensity": 0.4
+    },
+    {
+      "t": 57.25,
+      "dur": 0.25,
+      "midi": 76,
+      "vel": 0.625,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 57.5,
+      "dur": 0.25,
+      "midi": 79,
+      "vel": 0.647,
+      "track": "arp",
+      "intensity": 0.55
     },
     {
       "t": 57.5,
@@ -2561,7 +2822,7 @@
       "t": 57.5,
       "dur": 0.25,
       "midi": 36,
-      "vel": 0.572,
+      "vel": 0.625,
       "track": "perc",
       "intensity": 0.3
     },
@@ -2569,9 +2830,25 @@
       "t": 57.5,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.299,
+      "vel": 0.304,
       "track": "perc",
       "intensity": 0.4
+    },
+    {
+      "t": 57.75,
+      "dur": 0.25,
+      "midi": 83,
+      "vel": 0.652,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 58.0,
+      "dur": 0.25,
+      "midi": 72,
+      "vel": 0.596,
+      "track": "arp",
+      "intensity": 0.55
     },
     {
       "t": 58.0,
@@ -2585,15 +2862,39 @@
       "t": 58.0,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.417,
+      "vel": 0.386,
       "track": "perc",
       "intensity": 0.4
+    },
+    {
+      "t": 58.25,
+      "dur": 0.25,
+      "midi": 76,
+      "vel": 0.582,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 58.5,
+      "dur": 0.25,
+      "midi": 79,
+      "vel": 0.6,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 58.5,
+      "dur": 0.85,
+      "midi": 79,
+      "vel": 0.325,
+      "track": "arp",
+      "intensity": 0.26
     },
     {
       "t": 58.5,
       "dur": 0.25,
       "midi": 36,
-      "vel": 0.734,
+      "vel": 0.746,
       "track": "perc",
       "intensity": 0.3
     },
@@ -2601,15 +2902,31 @@
       "t": 58.5,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.252,
+      "vel": 0.317,
       "track": "perc",
       "intensity": 0.4
+    },
+    {
+      "t": 58.75,
+      "dur": 0.25,
+      "midi": 83,
+      "vel": 0.611,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 59.0,
+      "dur": 0.25,
+      "midi": 79,
+      "vel": 0.64,
+      "track": "arp",
+      "intensity": 0.55
     },
     {
       "t": 59.0,
       "dur": 0.25,
       "midi": 38,
-      "vel": 0.747,
+      "vel": 0.765,
       "track": "perc",
       "intensity": 0.5
     },
@@ -2617,9 +2934,25 @@
       "t": 59.0,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.437,
+      "vel": 0.381,
       "track": "perc",
       "intensity": 0.4
+    },
+    {
+      "t": 59.25,
+      "dur": 0.25,
+      "midi": 76,
+      "vel": 0.596,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 59.5,
+      "dur": 0.25,
+      "midi": 79,
+      "vel": 0.592,
+      "track": "arp",
+      "intensity": 0.55
     },
     {
       "t": 59.5,
@@ -2633,9 +2966,25 @@
       "t": 59.5,
       "dur": 0.8,
       "midi": 42,
-      "vel": 0.232,
+      "vel": 0.204,
       "track": "perc",
       "intensity": 0.4
+    },
+    {
+      "t": 59.75,
+      "dur": 0.25,
+      "midi": 83,
+      "vel": 0.641,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 60.0,
+      "dur": 0.25,
+      "midi": 72,
+      "vel": 0.594,
+      "track": "arp",
+      "intensity": 0.55
     },
     {
       "t": 60.0,
@@ -2649,7 +2998,7 @@
       "t": 60.0,
       "dur": 0.25,
       "midi": 36,
-      "vel": 0.933,
+      "vel": 0.956,
       "track": "perc",
       "intensity": 0.3
     },
@@ -2657,23 +3006,63 @@
       "t": 60.0,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.382,
+      "vel": 0.388,
       "track": "perc",
       "intensity": 0.4
+    },
+    {
+      "t": 60.25,
+      "dur": 0.25,
+      "midi": 76,
+      "vel": 0.662,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 60.5,
+      "dur": 0.85,
+      "midi": 76,
+      "vel": 0.383,
+      "track": "arp",
+      "intensity": 0.26
+    },
+    {
+      "t": 60.5,
+      "dur": 0.25,
+      "midi": 79,
+      "vel": 0.662,
+      "track": "arp",
+      "intensity": 0.55
     },
     {
       "t": 60.5,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.28,
+      "vel": 0.243,
       "track": "perc",
       "intensity": 0.4
+    },
+    {
+      "t": 60.75,
+      "dur": 0.25,
+      "midi": 83,
+      "vel": 0.637,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 61.0,
+      "dur": 0.25,
+      "midi": 79,
+      "vel": 0.654,
+      "track": "arp",
+      "intensity": 0.55
     },
     {
       "t": 61.0,
       "dur": 0.25,
       "midi": 38,
-      "vel": 0.676,
+      "vel": 0.644,
       "track": "perc",
       "intensity": 0.5
     },
@@ -2681,9 +3070,25 @@
       "t": 61.0,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.386,
+      "vel": 0.414,
       "track": "perc",
       "intensity": 0.4
+    },
+    {
+      "t": 61.25,
+      "dur": 0.25,
+      "midi": 76,
+      "vel": 0.589,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 61.5,
+      "dur": 0.25,
+      "midi": 79,
+      "vel": 0.623,
+      "track": "arp",
+      "intensity": 0.55
     },
     {
       "t": 61.5,
@@ -2697,7 +3102,7 @@
       "t": 61.5,
       "dur": 0.25,
       "midi": 36,
-      "vel": 0.619,
+      "vel": 0.59,
       "track": "perc",
       "intensity": 0.3
     },
@@ -2705,9 +3110,25 @@
       "t": 61.5,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.312,
+      "vel": 0.272,
       "track": "perc",
       "intensity": 0.4
+    },
+    {
+      "t": 61.75,
+      "dur": 0.25,
+      "midi": 83,
+      "vel": 0.67,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 62.0,
+      "dur": 0.25,
+      "midi": 72,
+      "vel": 0.584,
+      "track": "arp",
+      "intensity": 0.55
     },
     {
       "t": 62.0,
@@ -2721,15 +3142,39 @@
       "t": 62.0,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.434,
+      "vel": 0.444,
       "track": "perc",
       "intensity": 0.4
+    },
+    {
+      "t": 62.25,
+      "dur": 0.25,
+      "midi": 76,
+      "vel": 0.622,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 62.5,
+      "dur": 0.25,
+      "midi": 79,
+      "vel": 0.591,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 62.5,
+      "dur": 0.85,
+      "midi": 79,
+      "vel": 0.308,
+      "track": "arp",
+      "intensity": 0.26
     },
     {
       "t": 62.5,
       "dur": 0.25,
       "midi": 36,
-      "vel": 0.692,
+      "vel": 0.737,
       "track": "perc",
       "intensity": 0.3
     },
@@ -2737,15 +3182,31 @@
       "t": 62.5,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.277,
+      "vel": 0.289,
       "track": "perc",
       "intensity": 0.4
+    },
+    {
+      "t": 62.75,
+      "dur": 0.25,
+      "midi": 83,
+      "vel": 0.662,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 63.0,
+      "dur": 0.25,
+      "midi": 79,
+      "vel": 0.624,
+      "track": "arp",
+      "intensity": 0.55
     },
     {
       "t": 63.0,
       "dur": 0.25,
       "midi": 38,
-      "vel": 0.724,
+      "vel": 0.738,
       "track": "perc",
       "intensity": 0.5
     },
@@ -2753,9 +3214,25 @@
       "t": 63.0,
       "dur": 0.4,
       "midi": 42,
-      "vel": 0.417,
+      "vel": 0.392,
       "track": "perc",
       "intensity": 0.4
+    },
+    {
+      "t": 63.25,
+      "dur": 0.25,
+      "midi": 76,
+      "vel": 0.665,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 63.5,
+      "dur": 0.25,
+      "midi": 79,
+      "vel": 0.606,
+      "track": "arp",
+      "intensity": 0.55
     },
     {
       "t": 63.5,
@@ -2767,11 +3244,4787 @@
     },
     {
       "t": 63.5,
+      "dur": 0.18,
+      "midi": 36,
+      "vel": 0.66,
+      "track": "perc",
+      "intensity": 0.72
+    },
+    {
+      "t": 63.5,
+      "dur": 0.8,
+      "midi": 42,
+      "vel": 0.243,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 63.75,
+      "dur": 0.25,
+      "midi": 83,
+      "vel": 0.601,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 63.75,
+      "dur": 0.16,
+      "midi": 38,
+      "vel": 0.502,
+      "track": "perc",
+      "intensity": 0.72
+    },
+    {
+      "t": 64.0,
+      "dur": 0.25,
+      "midi": 67,
+      "vel": 0.574,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 64.0,
+      "dur": 1.0,
+      "midi": 43,
+      "vel": 0.88,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 64.0,
       "dur": 0.5,
+      "midi": 67,
+      "vel": 0.783,
+      "track": "lead",
+      "intensity": 0.4
+    },
+    {
+      "t": 64.0,
+      "dur": 0.4,
+      "midi": 79,
+      "vel": 0.452,
+      "track": "lead",
+      "intensity": 0.78
+    },
+    {
+      "t": 64.0,
+      "dur": 16.0,
+      "midi": 43,
+      "vel": 0.48,
+      "track": "pad",
+      "intensity": 0.5
+    },
+    {
+      "t": 64.0,
+      "dur": 16.0,
+      "midi": 55,
+      "vel": 0.643,
+      "track": "pad",
+      "intensity": 0.1
+    },
+    {
+      "t": 64.0,
+      "dur": 16.0,
+      "midi": 59,
+      "vel": 0.661,
+      "track": "pad",
+      "intensity": 0.1
+    },
+    {
+      "t": 64.0,
+      "dur": 16.0,
+      "midi": 62,
+      "vel": 0.668,
+      "track": "pad",
+      "intensity": 0.1
+    },
+    {
+      "t": 64.0,
+      "dur": 16.0,
+      "midi": 69,
+      "vel": 0.4,
+      "track": "pad",
+      "intensity": 0.32
+    },
+    {
+      "t": 64.0,
+      "dur": 0.25,
+      "midi": 36,
+      "vel": 0.972,
+      "track": "perc",
+      "intensity": 0.3
+    },
+    {
+      "t": 64.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.449,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 64.25,
+      "dur": 0.25,
+      "midi": 71,
+      "vel": 0.643,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 64.5,
+      "dur": 0.85,
+      "midi": 71,
+      "vel": 0.341,
+      "track": "arp",
+      "intensity": 0.26
+    },
+    {
+      "t": 64.5,
+      "dur": 0.25,
+      "midi": 74,
+      "vel": 0.586,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 64.5,
+      "dur": 0.5,
+      "midi": 69,
+      "vel": 0.782,
+      "track": "lead",
+      "intensity": 0.4
+    },
+    {
+      "t": 64.5,
+      "dur": 0.4,
+      "midi": 81,
+      "vel": 0.477,
+      "track": "lead",
+      "intensity": 0.78
+    },
+    {
+      "t": 64.5,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.248,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 64.75,
+      "dur": 0.25,
+      "midi": 77,
+      "vel": 0.576,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 65.0,
+      "dur": 0.25,
+      "midi": 74,
+      "vel": 0.641,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 65.0,
+      "dur": 1.0,
+      "midi": 71,
+      "vel": 0.751,
+      "track": "lead",
+      "intensity": 0.4
+    },
+    {
+      "t": 65.0,
+      "dur": 0.8,
+      "midi": 83,
+      "vel": 0.475,
+      "track": "lead",
+      "intensity": 0.78
+    },
+    {
+      "t": 65.0,
+      "dur": 0.25,
+      "midi": 38,
+      "vel": 0.686,
+      "track": "perc",
+      "intensity": 0.5
+    },
+    {
+      "t": 65.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.455,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 65.25,
+      "dur": 0.25,
+      "midi": 71,
+      "vel": 0.666,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 65.5,
+      "dur": 0.25,
+      "midi": 74,
+      "vel": 0.58,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 65.5,
+      "dur": 0.5,
+      "midi": 43,
+      "vel": 0.901,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 65.5,
+      "dur": 0.25,
+      "midi": 36,
+      "vel": 0.601,
+      "track": "perc",
+      "intensity": 0.3
+    },
+    {
+      "t": 65.5,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.249,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 65.75,
+      "dur": 0.25,
+      "midi": 77,
+      "vel": 0.573,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 66.0,
+      "dur": 0.25,
+      "midi": 67,
+      "vel": 0.663,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 66.0,
+      "dur": 1.0,
+      "midi": 50,
+      "vel": 0.887,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 66.0,
+      "dur": 2.0,
+      "midi": 74,
+      "vel": 0.8,
+      "track": "lead",
+      "intensity": 0.4
+    },
+    {
+      "t": 66.0,
+      "dur": 1.6,
+      "midi": 86,
+      "vel": 0.47,
+      "track": "lead",
+      "intensity": 0.78
+    },
+    {
+      "t": 66.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.431,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 66.25,
+      "dur": 0.25,
+      "midi": 71,
+      "vel": 0.666,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 66.5,
+      "dur": 0.25,
+      "midi": 74,
+      "vel": 0.66,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 66.5,
+      "dur": 0.85,
+      "midi": 74,
+      "vel": 0.28,
+      "track": "arp",
+      "intensity": 0.26
+    },
+    {
+      "t": 66.5,
+      "dur": 0.25,
+      "midi": 36,
+      "vel": 0.702,
+      "track": "perc",
+      "intensity": 0.3
+    },
+    {
+      "t": 66.5,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.289,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 66.75,
+      "dur": 0.25,
+      "midi": 77,
+      "vel": 0.645,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 67.0,
+      "dur": 0.25,
+      "midi": 74,
+      "vel": 0.615,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 67.0,
+      "dur": 0.25,
+      "midi": 38,
+      "vel": 0.732,
+      "track": "perc",
+      "intensity": 0.5
+    },
+    {
+      "t": 67.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.443,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 67.25,
+      "dur": 0.25,
+      "midi": 71,
+      "vel": 0.646,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 67.5,
+      "dur": 0.25,
+      "midi": 74,
+      "vel": 0.589,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 67.5,
+      "dur": 0.5,
+      "midi": 41,
+      "vel": 0.874,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 67.5,
+      "dur": 0.8,
+      "midi": 42,
+      "vel": 0.239,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 67.75,
+      "dur": 0.25,
+      "midi": 77,
+      "vel": 0.66,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 68.0,
+      "dur": 0.25,
+      "midi": 67,
+      "vel": 0.652,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 68.0,
+      "dur": 1.0,
+      "midi": 43,
+      "vel": 0.9,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 68.0,
+      "dur": 1.0,
+      "midi": 71,
+      "vel": 0.808,
+      "track": "lead",
+      "intensity": 0.4
+    },
+    {
+      "t": 68.0,
+      "dur": 0.8,
+      "midi": 83,
+      "vel": 0.447,
+      "track": "lead",
+      "intensity": 0.78
+    },
+    {
+      "t": 68.0,
+      "dur": 0.25,
+      "midi": 36,
+      "vel": 0.941,
+      "track": "perc",
+      "intensity": 0.3
+    },
+    {
+      "t": 68.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.46,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 68.25,
+      "dur": 0.25,
+      "midi": 71,
+      "vel": 0.611,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 68.5,
+      "dur": 0.85,
+      "midi": 71,
+      "vel": 0.366,
+      "track": "arp",
+      "intensity": 0.26
+    },
+    {
+      "t": 68.5,
+      "dur": 0.25,
+      "midi": 74,
+      "vel": 0.655,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 68.5,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.298,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 68.75,
+      "dur": 0.25,
+      "midi": 77,
+      "vel": 0.632,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 69.0,
+      "dur": 0.25,
+      "midi": 74,
+      "vel": 0.604,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 69.0,
+      "dur": 0.5,
+      "midi": 67,
+      "vel": 0.791,
+      "track": "lead",
+      "intensity": 0.4
+    },
+    {
+      "t": 69.0,
+      "dur": 0.4,
+      "midi": 79,
+      "vel": 0.464,
+      "track": "lead",
+      "intensity": 0.78
+    },
+    {
+      "t": 69.0,
+      "dur": 0.25,
+      "midi": 38,
+      "vel": 0.658,
+      "track": "perc",
+      "intensity": 0.5
+    },
+    {
+      "t": 69.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.422,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 69.25,
+      "dur": 0.25,
+      "midi": 71,
+      "vel": 0.635,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 69.5,
+      "dur": 0.25,
+      "midi": 74,
+      "vel": 0.654,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 69.5,
+      "dur": 0.5,
+      "midi": 43,
+      "vel": 0.863,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 69.5,
+      "dur": 0.25,
+      "midi": 36,
+      "vel": 0.617,
+      "track": "perc",
+      "intensity": 0.3
+    },
+    {
+      "t": 69.5,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.244,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 69.75,
+      "dur": 0.25,
+      "midi": 77,
+      "vel": 0.665,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 70.0,
+      "dur": 0.25,
+      "midi": 67,
+      "vel": 0.656,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 70.0,
+      "dur": 1.0,
+      "midi": 50,
+      "vel": 0.904,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 70.0,
+      "dur": 2.0,
+      "midi": 71,
+      "vel": 0.781,
+      "track": "lead",
+      "intensity": 0.4
+    },
+    {
+      "t": 70.0,
+      "dur": 1.6,
+      "midi": 83,
+      "vel": 0.449,
+      "track": "lead",
+      "intensity": 0.78
+    },
+    {
+      "t": 70.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.459,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 70.25,
+      "dur": 0.25,
+      "midi": 71,
+      "vel": 0.668,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 70.5,
+      "dur": 0.25,
+      "midi": 74,
+      "vel": 0.606,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 70.5,
+      "dur": 0.85,
+      "midi": 74,
+      "vel": 0.28,
+      "track": "arp",
+      "intensity": 0.26
+    },
+    {
+      "t": 70.5,
+      "dur": 0.25,
+      "midi": 36,
+      "vel": 0.735,
+      "track": "perc",
+      "intensity": 0.3
+    },
+    {
+      "t": 70.5,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.309,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 70.75,
+      "dur": 0.25,
+      "midi": 77,
+      "vel": 0.651,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 71.0,
+      "dur": 0.25,
+      "midi": 74,
+      "vel": 0.583,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 71.0,
+      "dur": 0.25,
+      "midi": 38,
+      "vel": 0.719,
+      "track": "perc",
+      "intensity": 0.5
+    },
+    {
+      "t": 71.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.437,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 71.25,
+      "dur": 0.25,
+      "midi": 71,
+      "vel": 0.614,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 71.5,
+      "dur": 0.25,
+      "midi": 74,
+      "vel": 0.622,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 71.5,
+      "dur": 0.5,
+      "midi": 41,
+      "vel": 0.895,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 71.5,
+      "dur": 0.8,
+      "midi": 42,
+      "vel": 0.21,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 71.75,
+      "dur": 0.25,
+      "midi": 77,
+      "vel": 0.582,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 72.0,
+      "dur": 0.25,
+      "midi": 67,
+      "vel": 0.664,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 72.0,
+      "dur": 1.0,
+      "midi": 43,
+      "vel": 0.853,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 72.0,
+      "dur": 0.25,
+      "midi": 36,
+      "vel": 0.963,
+      "track": "perc",
+      "intensity": 0.3
+    },
+    {
+      "t": 72.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.425,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 72.25,
+      "dur": 0.25,
+      "midi": 71,
+      "vel": 0.624,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 72.5,
+      "dur": 0.85,
+      "midi": 71,
+      "vel": 0.377,
+      "track": "arp",
+      "intensity": 0.26
+    },
+    {
+      "t": 72.5,
+      "dur": 0.25,
+      "midi": 74,
+      "vel": 0.572,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 72.5,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.247,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 72.75,
+      "dur": 0.25,
+      "midi": 77,
+      "vel": 0.616,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 73.0,
+      "dur": 0.25,
+      "midi": 74,
+      "vel": 0.577,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 73.0,
+      "dur": 0.25,
+      "midi": 38,
+      "vel": 0.66,
+      "track": "perc",
+      "intensity": 0.5
+    },
+    {
+      "t": 73.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.386,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 73.25,
+      "dur": 0.25,
+      "midi": 71,
+      "vel": 0.598,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 73.5,
+      "dur": 0.25,
+      "midi": 74,
+      "vel": 0.609,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 73.5,
+      "dur": 0.5,
+      "midi": 43,
+      "vel": 0.891,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 73.5,
+      "dur": 0.25,
+      "midi": 36,
+      "vel": 0.595,
+      "track": "perc",
+      "intensity": 0.3
+    },
+    {
+      "t": 73.5,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.291,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 73.75,
+      "dur": 0.25,
+      "midi": 77,
+      "vel": 0.59,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 74.0,
+      "dur": 0.25,
+      "midi": 67,
+      "vel": 0.598,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 74.0,
+      "dur": 1.0,
+      "midi": 50,
+      "vel": 0.872,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 74.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.395,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 74.25,
+      "dur": 0.25,
+      "midi": 71,
+      "vel": 0.578,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 74.5,
+      "dur": 0.25,
+      "midi": 74,
+      "vel": 0.632,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 74.5,
+      "dur": 0.85,
+      "midi": 74,
+      "vel": 0.287,
+      "track": "arp",
+      "intensity": 0.26
+    },
+    {
+      "t": 74.5,
+      "dur": 0.25,
+      "midi": 36,
+      "vel": 0.691,
+      "track": "perc",
+      "intensity": 0.3
+    },
+    {
+      "t": 74.5,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.301,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 74.75,
+      "dur": 0.25,
+      "midi": 77,
+      "vel": 0.576,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 75.0,
+      "dur": 0.25,
+      "midi": 74,
+      "vel": 0.659,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 75.0,
+      "dur": 0.25,
+      "midi": 38,
+      "vel": 0.715,
+      "track": "perc",
+      "intensity": 0.5
+    },
+    {
+      "t": 75.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.424,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 75.25,
+      "dur": 0.25,
+      "midi": 71,
+      "vel": 0.573,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 75.5,
+      "dur": 0.25,
+      "midi": 74,
+      "vel": 0.615,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 75.5,
+      "dur": 0.5,
+      "midi": 41,
+      "vel": 0.875,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 75.5,
+      "dur": 0.8,
+      "midi": 42,
+      "vel": 0.277,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 75.75,
+      "dur": 0.25,
+      "midi": 77,
+      "vel": 0.633,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 76.0,
+      "dur": 0.25,
+      "midi": 67,
+      "vel": 0.634,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 76.0,
+      "dur": 1.0,
+      "midi": 43,
+      "vel": 0.901,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 76.0,
+      "dur": 0.25,
+      "midi": 36,
+      "vel": 0.974,
+      "track": "perc",
+      "intensity": 0.3
+    },
+    {
+      "t": 76.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.451,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 76.25,
+      "dur": 0.25,
+      "midi": 71,
+      "vel": 0.642,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 76.5,
+      "dur": 0.85,
+      "midi": 71,
+      "vel": 0.355,
+      "track": "arp",
+      "intensity": 0.26
+    },
+    {
+      "t": 76.5,
+      "dur": 0.25,
+      "midi": 74,
+      "vel": 0.626,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 76.5,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.318,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 76.75,
+      "dur": 0.25,
+      "midi": 77,
+      "vel": 0.584,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 77.0,
+      "dur": 0.25,
+      "midi": 74,
+      "vel": 0.629,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 77.0,
+      "dur": 0.25,
+      "midi": 38,
+      "vel": 0.658,
+      "track": "perc",
+      "intensity": 0.5
+    },
+    {
+      "t": 77.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.453,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 77.25,
+      "dur": 0.25,
+      "midi": 71,
+      "vel": 0.65,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 77.5,
+      "dur": 0.25,
+      "midi": 74,
+      "vel": 0.626,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 77.5,
+      "dur": 0.5,
+      "midi": 43,
+      "vel": 0.855,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 77.5,
+      "dur": 0.25,
+      "midi": 36,
+      "vel": 0.61,
+      "track": "perc",
+      "intensity": 0.3
+    },
+    {
+      "t": 77.5,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.273,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 77.75,
+      "dur": 0.25,
+      "midi": 77,
+      "vel": 0.634,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 78.0,
+      "dur": 0.25,
+      "midi": 67,
+      "vel": 0.635,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 78.0,
+      "dur": 1.0,
+      "midi": 50,
+      "vel": 0.894,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 78.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.431,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 78.25,
+      "dur": 0.25,
+      "midi": 71,
+      "vel": 0.629,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 78.5,
+      "dur": 0.25,
+      "midi": 74,
+      "vel": 0.609,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 78.5,
+      "dur": 0.85,
+      "midi": 74,
+      "vel": 0.317,
+      "track": "arp",
+      "intensity": 0.26
+    },
+    {
+      "t": 78.5,
+      "dur": 0.25,
+      "midi": 36,
+      "vel": 0.717,
+      "track": "perc",
+      "intensity": 0.3
+    },
+    {
+      "t": 78.5,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.25,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 78.75,
+      "dur": 0.25,
+      "midi": 77,
+      "vel": 0.662,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 79.0,
+      "dur": 0.25,
+      "midi": 74,
+      "vel": 0.638,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 79.0,
+      "dur": 0.25,
+      "midi": 38,
+      "vel": 0.749,
+      "track": "perc",
+      "intensity": 0.5
+    },
+    {
+      "t": 79.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.431,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 79.25,
+      "dur": 0.25,
+      "midi": 71,
+      "vel": 0.605,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 79.5,
+      "dur": 0.25,
+      "midi": 74,
+      "vel": 0.602,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 79.5,
+      "dur": 0.5,
+      "midi": 41,
+      "vel": 0.898,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 79.5,
+      "dur": 0.8,
+      "midi": 42,
+      "vel": 0.265,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 79.75,
+      "dur": 0.25,
+      "midi": 77,
+      "vel": 0.595,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 80.0,
+      "dur": 0.25,
+      "midi": 62,
+      "vel": 0.606,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 80.0,
+      "dur": 1.0,
+      "midi": 38,
+      "vel": 0.881,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 80.0,
+      "dur": 0.5,
+      "midi": 62,
+      "vel": 0.78,
+      "track": "lead",
+      "intensity": 0.4
+    },
+    {
+      "t": 80.0,
+      "dur": 0.4,
+      "midi": 74,
+      "vel": 0.455,
+      "track": "lead",
+      "intensity": 0.78
+    },
+    {
+      "t": 80.0,
+      "dur": 16.0,
+      "midi": 38,
+      "vel": 0.48,
+      "track": "pad",
+      "intensity": 0.5
+    },
+    {
+      "t": 80.0,
+      "dur": 16.0,
+      "midi": 50,
+      "vel": 0.642,
+      "track": "pad",
+      "intensity": 0.1
+    },
+    {
+      "t": 80.0,
+      "dur": 16.0,
+      "midi": 53,
+      "vel": 0.675,
+      "track": "pad",
+      "intensity": 0.1
+    },
+    {
+      "t": 80.0,
+      "dur": 16.0,
+      "midi": 57,
+      "vel": 0.648,
+      "track": "pad",
+      "intensity": 0.1
+    },
+    {
+      "t": 80.0,
+      "dur": 16.0,
+      "midi": 64,
+      "vel": 0.4,
+      "track": "pad",
+      "intensity": 0.32
+    },
+    {
+      "t": 80.0,
+      "dur": 0.25,
+      "midi": 36,
+      "vel": 0.932,
+      "track": "perc",
+      "intensity": 0.3
+    },
+    {
+      "t": 80.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.395,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 80.25,
+      "dur": 0.25,
+      "midi": 65,
+      "vel": 0.593,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 80.5,
+      "dur": 0.85,
+      "midi": 65,
+      "vel": 0.365,
+      "track": "arp",
+      "intensity": 0.26
+    },
+    {
+      "t": 80.5,
+      "dur": 0.25,
+      "midi": 69,
+      "vel": 0.619,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 80.5,
+      "dur": 0.5,
+      "midi": 64,
+      "vel": 0.782,
+      "track": "lead",
+      "intensity": 0.4
+    },
+    {
+      "t": 80.5,
+      "dur": 0.4,
+      "midi": 76,
+      "vel": 0.446,
+      "track": "lead",
+      "intensity": 0.78
+    },
+    {
+      "t": 80.5,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.298,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 80.75,
+      "dur": 0.25,
+      "midi": 72,
+      "vel": 0.638,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 81.0,
+      "dur": 0.25,
+      "midi": 69,
+      "vel": 0.638,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 81.0,
+      "dur": 1.0,
+      "midi": 65,
+      "vel": 0.785,
+      "track": "lead",
+      "intensity": 0.4
+    },
+    {
+      "t": 81.0,
+      "dur": 0.8,
+      "midi": 77,
+      "vel": 0.465,
+      "track": "lead",
+      "intensity": 0.78
+    },
+    {
+      "t": 81.0,
+      "dur": 0.25,
+      "midi": 38,
+      "vel": 0.64,
+      "track": "perc",
+      "intensity": 0.5
+    },
+    {
+      "t": 81.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.449,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 81.25,
+      "dur": 0.25,
+      "midi": 65,
+      "vel": 0.609,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 81.5,
+      "dur": 0.25,
+      "midi": 69,
+      "vel": 0.604,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 81.5,
+      "dur": 0.5,
+      "midi": 38,
+      "vel": 0.9,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 81.5,
+      "dur": 0.25,
+      "midi": 36,
+      "vel": 0.612,
+      "track": "perc",
+      "intensity": 0.3
+    },
+    {
+      "t": 81.5,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.276,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 81.75,
+      "dur": 0.25,
+      "midi": 72,
+      "vel": 0.648,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 82.0,
+      "dur": 0.25,
+      "midi": 62,
+      "vel": 0.614,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 82.0,
+      "dur": 1.0,
+      "midi": 45,
+      "vel": 0.875,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 82.0,
+      "dur": 2.0,
+      "midi": 69,
+      "vel": 0.797,
+      "track": "lead",
+      "intensity": 0.4
+    },
+    {
+      "t": 82.0,
+      "dur": 1.6,
+      "midi": 81,
+      "vel": 0.451,
+      "track": "lead",
+      "intensity": 0.78
+    },
+    {
+      "t": 82.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.428,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 82.25,
+      "dur": 0.25,
+      "midi": 65,
+      "vel": 0.67,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 82.5,
+      "dur": 0.25,
+      "midi": 69,
+      "vel": 0.573,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 82.5,
+      "dur": 0.85,
+      "midi": 69,
+      "vel": 0.286,
+      "track": "arp",
+      "intensity": 0.26
+    },
+    {
+      "t": 82.5,
+      "dur": 0.25,
+      "midi": 36,
+      "vel": 0.746,
+      "track": "perc",
+      "intensity": 0.3
+    },
+    {
+      "t": 82.5,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.246,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 82.75,
+      "dur": 0.25,
+      "midi": 72,
+      "vel": 0.648,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 83.0,
+      "dur": 0.25,
+      "midi": 69,
+      "vel": 0.665,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 83.0,
+      "dur": 0.25,
+      "midi": 38,
+      "vel": 0.755,
+      "track": "perc",
+      "intensity": 0.5
+    },
+    {
+      "t": 83.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.412,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 83.25,
+      "dur": 0.25,
+      "midi": 65,
+      "vel": 0.571,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 83.5,
+      "dur": 0.25,
+      "midi": 69,
+      "vel": 0.669,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 83.5,
+      "dur": 0.5,
+      "midi": 48,
+      "vel": 0.887,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 83.5,
+      "dur": 0.8,
+      "midi": 42,
+      "vel": 0.256,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 83.75,
+      "dur": 0.25,
+      "midi": 72,
+      "vel": 0.669,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 84.0,
+      "dur": 0.25,
+      "midi": 62,
+      "vel": 0.654,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 84.0,
+      "dur": 1.0,
+      "midi": 38,
+      "vel": 0.871,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 84.0,
+      "dur": 1.0,
+      "midi": 65,
+      "vel": 0.803,
+      "track": "lead",
+      "intensity": 0.4
+    },
+    {
+      "t": 84.0,
+      "dur": 0.8,
+      "midi": 77,
+      "vel": 0.449,
+      "track": "lead",
+      "intensity": 0.78
+    },
+    {
+      "t": 84.0,
+      "dur": 0.25,
+      "midi": 36,
+      "vel": 0.956,
+      "track": "perc",
+      "intensity": 0.3
+    },
+    {
+      "t": 84.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.444,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 84.25,
+      "dur": 0.25,
+      "midi": 65,
+      "vel": 0.581,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 84.5,
+      "dur": 0.85,
+      "midi": 65,
+      "vel": 0.389,
+      "track": "arp",
+      "intensity": 0.26
+    },
+    {
+      "t": 84.5,
+      "dur": 0.25,
+      "midi": 69,
+      "vel": 0.643,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 84.5,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.281,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 84.75,
+      "dur": 0.25,
+      "midi": 72,
+      "vel": 0.664,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 85.0,
+      "dur": 0.25,
+      "midi": 69,
+      "vel": 0.6,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 85.0,
+      "dur": 0.5,
+      "midi": 62,
+      "vel": 0.803,
+      "track": "lead",
+      "intensity": 0.4
+    },
+    {
+      "t": 85.0,
+      "dur": 0.4,
+      "midi": 74,
+      "vel": 0.448,
+      "track": "lead",
+      "intensity": 0.78
+    },
+    {
+      "t": 85.0,
+      "dur": 0.25,
+      "midi": 38,
+      "vel": 0.671,
+      "track": "perc",
+      "intensity": 0.5
+    },
+    {
+      "t": 85.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.409,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 85.25,
+      "dur": 0.25,
+      "midi": 65,
+      "vel": 0.592,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 85.5,
+      "dur": 0.25,
+      "midi": 69,
+      "vel": 0.589,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 85.5,
+      "dur": 0.5,
+      "midi": 38,
+      "vel": 0.867,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 85.5,
+      "dur": 0.25,
+      "midi": 36,
+      "vel": 0.61,
+      "track": "perc",
+      "intensity": 0.3
+    },
+    {
+      "t": 85.5,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.302,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 85.75,
+      "dur": 0.25,
+      "midi": 72,
+      "vel": 0.655,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 86.0,
+      "dur": 0.25,
+      "midi": 62,
+      "vel": 0.601,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 86.0,
+      "dur": 1.0,
+      "midi": 45,
+      "vel": 0.881,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 86.0,
+      "dur": 2.0,
+      "midi": 65,
+      "vel": 0.772,
+      "track": "lead",
+      "intensity": 0.4
+    },
+    {
+      "t": 86.0,
+      "dur": 1.6,
+      "midi": 77,
+      "vel": 0.468,
+      "track": "lead",
+      "intensity": 0.78
+    },
+    {
+      "t": 86.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.402,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 86.25,
+      "dur": 0.25,
+      "midi": 65,
+      "vel": 0.607,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 86.5,
+      "dur": 0.25,
+      "midi": 69,
+      "vel": 0.604,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 86.5,
+      "dur": 0.85,
+      "midi": 69,
+      "vel": 0.279,
+      "track": "arp",
+      "intensity": 0.26
+    },
+    {
+      "t": 86.5,
+      "dur": 0.25,
+      "midi": 36,
+      "vel": 0.695,
+      "track": "perc",
+      "intensity": 0.3
+    },
+    {
+      "t": 86.5,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.245,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 86.75,
+      "dur": 0.25,
+      "midi": 72,
+      "vel": 0.589,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 87.0,
+      "dur": 0.25,
+      "midi": 69,
+      "vel": 0.605,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 87.0,
+      "dur": 0.25,
+      "midi": 38,
+      "vel": 0.738,
+      "track": "perc",
+      "intensity": 0.5
+    },
+    {
+      "t": 87.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.456,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 87.25,
+      "dur": 0.25,
+      "midi": 65,
+      "vel": 0.648,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 87.5,
+      "dur": 0.25,
+      "midi": 69,
+      "vel": 0.65,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 87.5,
+      "dur": 0.5,
+      "midi": 48,
+      "vel": 0.868,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 87.5,
+      "dur": 0.8,
+      "midi": 42,
+      "vel": 0.218,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 87.75,
+      "dur": 0.25,
+      "midi": 72,
+      "vel": 0.637,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 88.0,
+      "dur": 0.25,
+      "midi": 62,
+      "vel": 0.629,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 88.0,
+      "dur": 1.0,
+      "midi": 38,
+      "vel": 0.86,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 88.0,
+      "dur": 0.25,
+      "midi": 36,
+      "vel": 0.945,
+      "track": "perc",
+      "intensity": 0.3
+    },
+    {
+      "t": 88.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.455,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 88.25,
+      "dur": 0.25,
+      "midi": 65,
+      "vel": 0.59,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 88.5,
+      "dur": 0.85,
+      "midi": 65,
+      "vel": 0.388,
+      "track": "arp",
+      "intensity": 0.26
+    },
+    {
+      "t": 88.5,
+      "dur": 0.25,
+      "midi": 69,
+      "vel": 0.662,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 88.5,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.259,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 88.75,
+      "dur": 0.25,
+      "midi": 72,
+      "vel": 0.58,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 89.0,
+      "dur": 0.25,
+      "midi": 69,
+      "vel": 0.593,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 89.0,
+      "dur": 0.25,
+      "midi": 38,
+      "vel": 0.683,
+      "track": "perc",
+      "intensity": 0.5
+    },
+    {
+      "t": 89.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.4,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 89.25,
+      "dur": 0.25,
+      "midi": 65,
+      "vel": 0.626,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 89.5,
+      "dur": 0.25,
+      "midi": 69,
+      "vel": 0.607,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 89.5,
+      "dur": 0.5,
+      "midi": 38,
+      "vel": 0.902,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 89.5,
+      "dur": 0.25,
+      "midi": 36,
+      "vel": 0.611,
+      "track": "perc",
+      "intensity": 0.3
+    },
+    {
+      "t": 89.5,
+      "dur": 0.4,
       "midi": 42,
       "vel": 0.251,
       "track": "perc",
       "intensity": 0.4
+    },
+    {
+      "t": 89.75,
+      "dur": 0.25,
+      "midi": 72,
+      "vel": 0.622,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 90.0,
+      "dur": 0.25,
+      "midi": 62,
+      "vel": 0.606,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 90.0,
+      "dur": 1.0,
+      "midi": 45,
+      "vel": 0.859,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 90.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.444,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 90.25,
+      "dur": 0.25,
+      "midi": 65,
+      "vel": 0.573,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 90.5,
+      "dur": 0.25,
+      "midi": 69,
+      "vel": 0.586,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 90.5,
+      "dur": 0.85,
+      "midi": 69,
+      "vel": 0.311,
+      "track": "arp",
+      "intensity": 0.26
+    },
+    {
+      "t": 90.5,
+      "dur": 0.25,
+      "midi": 36,
+      "vel": 0.749,
+      "track": "perc",
+      "intensity": 0.3
+    },
+    {
+      "t": 90.5,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.286,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 90.75,
+      "dur": 0.25,
+      "midi": 72,
+      "vel": 0.599,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 91.0,
+      "dur": 0.25,
+      "midi": 69,
+      "vel": 0.627,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 91.0,
+      "dur": 0.25,
+      "midi": 38,
+      "vel": 0.729,
+      "track": "perc",
+      "intensity": 0.5
+    },
+    {
+      "t": 91.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.433,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 91.25,
+      "dur": 0.25,
+      "midi": 65,
+      "vel": 0.591,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 91.5,
+      "dur": 0.25,
+      "midi": 69,
+      "vel": 0.637,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 91.5,
+      "dur": 0.5,
+      "midi": 48,
+      "vel": 0.884,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 91.5,
+      "dur": 0.8,
+      "midi": 42,
+      "vel": 0.267,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 91.75,
+      "dur": 0.25,
+      "midi": 72,
+      "vel": 0.6,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 92.0,
+      "dur": 0.25,
+      "midi": 62,
+      "vel": 0.613,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 92.0,
+      "dur": 1.0,
+      "midi": 38,
+      "vel": 0.851,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 92.0,
+      "dur": 0.25,
+      "midi": 36,
+      "vel": 0.933,
+      "track": "perc",
+      "intensity": 0.3
+    },
+    {
+      "t": 92.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.441,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 92.25,
+      "dur": 0.25,
+      "midi": 65,
+      "vel": 0.622,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 92.5,
+      "dur": 0.85,
+      "midi": 65,
+      "vel": 0.387,
+      "track": "arp",
+      "intensity": 0.26
+    },
+    {
+      "t": 92.5,
+      "dur": 0.25,
+      "midi": 69,
+      "vel": 0.573,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 92.5,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.3,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 92.75,
+      "dur": 0.25,
+      "midi": 72,
+      "vel": 0.662,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 93.0,
+      "dur": 0.25,
+      "midi": 69,
+      "vel": 0.604,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 93.0,
+      "dur": 0.25,
+      "midi": 38,
+      "vel": 0.677,
+      "track": "perc",
+      "intensity": 0.5
+    },
+    {
+      "t": 93.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.431,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 93.25,
+      "dur": 0.25,
+      "midi": 65,
+      "vel": 0.625,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 93.5,
+      "dur": 0.25,
+      "midi": 69,
+      "vel": 0.643,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 93.5,
+      "dur": 0.5,
+      "midi": 38,
+      "vel": 0.906,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 93.5,
+      "dur": 0.25,
+      "midi": 36,
+      "vel": 0.574,
+      "track": "perc",
+      "intensity": 0.3
+    },
+    {
+      "t": 93.5,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.264,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 93.75,
+      "dur": 0.25,
+      "midi": 72,
+      "vel": 0.651,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 94.0,
+      "dur": 0.25,
+      "midi": 62,
+      "vel": 0.581,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 94.0,
+      "dur": 1.0,
+      "midi": 45,
+      "vel": 0.892,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 94.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.442,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 94.25,
+      "dur": 0.25,
+      "midi": 65,
+      "vel": 0.61,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 94.5,
+      "dur": 0.25,
+      "midi": 69,
+      "vel": 0.621,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 94.5,
+      "dur": 0.85,
+      "midi": 69,
+      "vel": 0.306,
+      "track": "arp",
+      "intensity": 0.26
+    },
+    {
+      "t": 94.5,
+      "dur": 0.25,
+      "midi": 36,
+      "vel": 0.727,
+      "track": "perc",
+      "intensity": 0.3
+    },
+    {
+      "t": 94.5,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.265,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 94.75,
+      "dur": 0.25,
+      "midi": 72,
+      "vel": 0.662,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 95.0,
+      "dur": 0.25,
+      "midi": 69,
+      "vel": 0.644,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 95.0,
+      "dur": 0.25,
+      "midi": 38,
+      "vel": 0.746,
+      "track": "perc",
+      "intensity": 0.5
+    },
+    {
+      "t": 95.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.456,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 95.25,
+      "dur": 0.25,
+      "midi": 65,
+      "vel": 0.605,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 95.5,
+      "dur": 0.25,
+      "midi": 69,
+      "vel": 0.576,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 95.5,
+      "dur": 0.5,
+      "midi": 48,
+      "vel": 0.875,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 95.5,
+      "dur": 0.18,
+      "midi": 36,
+      "vel": 0.653,
+      "track": "perc",
+      "intensity": 0.72
+    },
+    {
+      "t": 95.5,
+      "dur": 0.8,
+      "midi": 42,
+      "vel": 0.228,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 95.75,
+      "dur": 0.25,
+      "midi": 72,
+      "vel": 0.577,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 95.75,
+      "dur": 0.16,
+      "midi": 38,
+      "vel": 0.54,
+      "track": "perc",
+      "intensity": 0.72
+    },
+    {
+      "t": 96.0,
+      "dur": 0.25,
+      "midi": 69,
+      "vel": 0.596,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 96.0,
+      "dur": 1.0,
+      "midi": 45,
+      "vel": 0.88,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 96.0,
+      "dur": 0.5,
+      "midi": 69,
+      "vel": 0.799,
+      "track": "lead",
+      "intensity": 0.4
+    },
+    {
+      "t": 96.0,
+      "dur": 0.4,
+      "midi": 81,
+      "vel": 0.449,
+      "track": "lead",
+      "intensity": 0.78
+    },
+    {
+      "t": 96.0,
+      "dur": 16.0,
+      "midi": 45,
+      "vel": 0.48,
+      "track": "pad",
+      "intensity": 0.5
+    },
+    {
+      "t": 96.0,
+      "dur": 16.0,
+      "midi": 57,
+      "vel": 0.667,
+      "track": "pad",
+      "intensity": 0.1
+    },
+    {
+      "t": 96.0,
+      "dur": 16.0,
+      "midi": 60,
+      "vel": 0.679,
+      "track": "pad",
+      "intensity": 0.1
+    },
+    {
+      "t": 96.0,
+      "dur": 16.0,
+      "midi": 64,
+      "vel": 0.643,
+      "track": "pad",
+      "intensity": 0.1
+    },
+    {
+      "t": 96.0,
+      "dur": 16.0,
+      "midi": 71,
+      "vel": 0.4,
+      "track": "pad",
+      "intensity": 0.32
+    },
+    {
+      "t": 96.0,
+      "dur": 0.25,
+      "midi": 36,
+      "vel": 0.935,
+      "track": "perc",
+      "intensity": 0.3
+    },
+    {
+      "t": 96.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.435,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 96.25,
+      "dur": 0.25,
+      "midi": 72,
+      "vel": 0.643,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 96.5,
+      "dur": 0.85,
+      "midi": 72,
+      "vel": 0.331,
+      "track": "arp",
+      "intensity": 0.26
+    },
+    {
+      "t": 96.5,
+      "dur": 0.25,
+      "midi": 76,
+      "vel": 0.611,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 96.5,
+      "dur": 0.5,
+      "midi": 71,
+      "vel": 0.808,
+      "track": "lead",
+      "intensity": 0.4
+    },
+    {
+      "t": 96.5,
+      "dur": 0.4,
+      "midi": 83,
+      "vel": 0.459,
+      "track": "lead",
+      "intensity": 0.78
+    },
+    {
+      "t": 96.5,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.265,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 96.75,
+      "dur": 0.25,
+      "midi": 79,
+      "vel": 0.655,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 97.0,
+      "dur": 0.25,
+      "midi": 76,
+      "vel": 0.578,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 97.0,
+      "dur": 1.0,
+      "midi": 72,
+      "vel": 0.777,
+      "track": "lead",
+      "intensity": 0.4
+    },
+    {
+      "t": 97.0,
+      "dur": 0.8,
+      "midi": 84,
+      "vel": 0.451,
+      "track": "lead",
+      "intensity": 0.78
+    },
+    {
+      "t": 97.0,
+      "dur": 0.25,
+      "midi": 38,
+      "vel": 0.644,
+      "track": "perc",
+      "intensity": 0.5
+    },
+    {
+      "t": 97.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.425,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 97.25,
+      "dur": 0.25,
+      "midi": 72,
+      "vel": 0.632,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 97.5,
+      "dur": 0.25,
+      "midi": 76,
+      "vel": 0.654,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 97.5,
+      "dur": 0.5,
+      "midi": 45,
+      "vel": 0.898,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 97.5,
+      "dur": 0.25,
+      "midi": 36,
+      "vel": 0.62,
+      "track": "perc",
+      "intensity": 0.3
+    },
+    {
+      "t": 97.5,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.256,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 97.75,
+      "dur": 0.25,
+      "midi": 79,
+      "vel": 0.599,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 98.0,
+      "dur": 0.25,
+      "midi": 69,
+      "vel": 0.636,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 98.0,
+      "dur": 1.0,
+      "midi": 40,
+      "vel": 0.875,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 98.0,
+      "dur": 2.0,
+      "midi": 76,
+      "vel": 0.757,
+      "track": "lead",
+      "intensity": 0.4
+    },
+    {
+      "t": 98.0,
+      "dur": 1.6,
+      "midi": 88,
+      "vel": 0.443,
+      "track": "lead",
+      "intensity": 0.78
+    },
+    {
+      "t": 98.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.421,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 98.25,
+      "dur": 0.25,
+      "midi": 72,
+      "vel": 0.631,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 98.5,
+      "dur": 0.25,
+      "midi": 76,
+      "vel": 0.589,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 98.5,
+      "dur": 0.85,
+      "midi": 76,
+      "vel": 0.299,
+      "track": "arp",
+      "intensity": 0.26
+    },
+    {
+      "t": 98.5,
+      "dur": 0.25,
+      "midi": 36,
+      "vel": 0.75,
+      "track": "perc",
+      "intensity": 0.3
+    },
+    {
+      "t": 98.5,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.298,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 98.75,
+      "dur": 0.25,
+      "midi": 79,
+      "vel": 0.573,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 99.0,
+      "dur": 0.25,
+      "midi": 76,
+      "vel": 0.588,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 99.0,
+      "dur": 0.25,
+      "midi": 38,
+      "vel": 0.726,
+      "track": "perc",
+      "intensity": 0.5
+    },
+    {
+      "t": 99.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.422,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 99.25,
+      "dur": 0.25,
+      "midi": 72,
+      "vel": 0.649,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 99.5,
+      "dur": 0.25,
+      "midi": 76,
+      "vel": 0.591,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 99.5,
+      "dur": 0.5,
+      "midi": 43,
+      "vel": 0.898,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 99.5,
+      "dur": 0.8,
+      "midi": 42,
+      "vel": 0.23,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 99.75,
+      "dur": 0.25,
+      "midi": 79,
+      "vel": 0.656,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 100.0,
+      "dur": 0.25,
+      "midi": 69,
+      "vel": 0.58,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 100.0,
+      "dur": 1.0,
+      "midi": 45,
+      "vel": 0.889,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 100.0,
+      "dur": 1.0,
+      "midi": 72,
+      "vel": 0.794,
+      "track": "lead",
+      "intensity": 0.4
+    },
+    {
+      "t": 100.0,
+      "dur": 0.8,
+      "midi": 84,
+      "vel": 0.478,
+      "track": "lead",
+      "intensity": 0.78
+    },
+    {
+      "t": 100.0,
+      "dur": 0.25,
+      "midi": 36,
+      "vel": 0.963,
+      "track": "perc",
+      "intensity": 0.3
+    },
+    {
+      "t": 100.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.39,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 100.25,
+      "dur": 0.25,
+      "midi": 72,
+      "vel": 0.653,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 100.5,
+      "dur": 0.85,
+      "midi": 72,
+      "vel": 0.347,
+      "track": "arp",
+      "intensity": 0.26
+    },
+    {
+      "t": 100.5,
+      "dur": 0.25,
+      "midi": 76,
+      "vel": 0.621,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 100.5,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.248,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 100.75,
+      "dur": 0.25,
+      "midi": 79,
+      "vel": 0.608,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 101.0,
+      "dur": 0.25,
+      "midi": 76,
+      "vel": 0.578,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 101.0,
+      "dur": 0.5,
+      "midi": 69,
+      "vel": 0.777,
+      "track": "lead",
+      "intensity": 0.4
+    },
+    {
+      "t": 101.0,
+      "dur": 0.4,
+      "midi": 81,
+      "vel": 0.458,
+      "track": "lead",
+      "intensity": 0.78
+    },
+    {
+      "t": 101.0,
+      "dur": 0.25,
+      "midi": 38,
+      "vel": 0.644,
+      "track": "perc",
+      "intensity": 0.5
+    },
+    {
+      "t": 101.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.445,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 101.25,
+      "dur": 0.25,
+      "midi": 72,
+      "vel": 0.614,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 101.5,
+      "dur": 0.25,
+      "midi": 76,
+      "vel": 0.626,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 101.5,
+      "dur": 0.5,
+      "midi": 45,
+      "vel": 0.887,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 101.5,
+      "dur": 0.25,
+      "midi": 36,
+      "vel": 0.617,
+      "track": "perc",
+      "intensity": 0.3
+    },
+    {
+      "t": 101.5,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.301,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 101.75,
+      "dur": 0.25,
+      "midi": 79,
+      "vel": 0.607,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 102.0,
+      "dur": 0.25,
+      "midi": 69,
+      "vel": 0.63,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 102.0,
+      "dur": 1.0,
+      "midi": 40,
+      "vel": 0.872,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 102.0,
+      "dur": 2.0,
+      "midi": 72,
+      "vel": 0.768,
+      "track": "lead",
+      "intensity": 0.4
+    },
+    {
+      "t": 102.0,
+      "dur": 1.6,
+      "midi": 84,
+      "vel": 0.455,
+      "track": "lead",
+      "intensity": 0.78
+    },
+    {
+      "t": 102.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.45,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 102.25,
+      "dur": 0.25,
+      "midi": 72,
+      "vel": 0.669,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 102.5,
+      "dur": 0.25,
+      "midi": 76,
+      "vel": 0.63,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 102.5,
+      "dur": 0.85,
+      "midi": 76,
+      "vel": 0.28,
+      "track": "arp",
+      "intensity": 0.26
+    },
+    {
+      "t": 102.5,
+      "dur": 0.25,
+      "midi": 36,
+      "vel": 0.7,
+      "track": "perc",
+      "intensity": 0.3
+    },
+    {
+      "t": 102.5,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.24,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 102.75,
+      "dur": 0.25,
+      "midi": 79,
+      "vel": 0.647,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 103.0,
+      "dur": 0.25,
+      "midi": 76,
+      "vel": 0.636,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 103.0,
+      "dur": 0.25,
+      "midi": 38,
+      "vel": 0.751,
+      "track": "perc",
+      "intensity": 0.5
+    },
+    {
+      "t": 103.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.438,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 103.25,
+      "dur": 0.25,
+      "midi": 72,
+      "vel": 0.572,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 103.5,
+      "dur": 0.25,
+      "midi": 76,
+      "vel": 0.658,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 103.5,
+      "dur": 0.5,
+      "midi": 43,
+      "vel": 0.864,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 103.5,
+      "dur": 0.8,
+      "midi": 42,
+      "vel": 0.217,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 103.75,
+      "dur": 0.25,
+      "midi": 79,
+      "vel": 0.651,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 104.0,
+      "dur": 0.25,
+      "midi": 69,
+      "vel": 0.622,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 104.0,
+      "dur": 1.0,
+      "midi": 45,
+      "vel": 0.868,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 104.0,
+      "dur": 0.25,
+      "midi": 36,
+      "vel": 0.965,
+      "track": "perc",
+      "intensity": 0.3
+    },
+    {
+      "t": 104.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.436,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 104.25,
+      "dur": 0.25,
+      "midi": 72,
+      "vel": 0.579,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 104.5,
+      "dur": 0.85,
+      "midi": 72,
+      "vel": 0.385,
+      "track": "arp",
+      "intensity": 0.26
+    },
+    {
+      "t": 104.5,
+      "dur": 0.25,
+      "midi": 76,
+      "vel": 0.578,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 104.5,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.24,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 104.75,
+      "dur": 0.25,
+      "midi": 79,
+      "vel": 0.573,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 105.0,
+      "dur": 0.25,
+      "midi": 76,
+      "vel": 0.601,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 105.0,
+      "dur": 0.25,
+      "midi": 38,
+      "vel": 0.671,
+      "track": "perc",
+      "intensity": 0.5
+    },
+    {
+      "t": 105.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.459,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 105.25,
+      "dur": 0.25,
+      "midi": 72,
+      "vel": 0.573,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 105.5,
+      "dur": 0.25,
+      "midi": 76,
+      "vel": 0.606,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 105.5,
+      "dur": 0.5,
+      "midi": 45,
+      "vel": 0.908,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 105.5,
+      "dur": 0.25,
+      "midi": 36,
+      "vel": 0.575,
+      "track": "perc",
+      "intensity": 0.3
+    },
+    {
+      "t": 105.5,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.258,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 105.75,
+      "dur": 0.25,
+      "midi": 79,
+      "vel": 0.59,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 106.0,
+      "dur": 0.25,
+      "midi": 69,
+      "vel": 0.661,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 106.0,
+      "dur": 1.0,
+      "midi": 40,
+      "vel": 0.867,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 106.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.452,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 106.25,
+      "dur": 0.25,
+      "midi": 72,
+      "vel": 0.617,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 106.5,
+      "dur": 0.25,
+      "midi": 76,
+      "vel": 0.639,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 106.5,
+      "dur": 0.85,
+      "midi": 76,
+      "vel": 0.325,
+      "track": "arp",
+      "intensity": 0.26
+    },
+    {
+      "t": 106.5,
+      "dur": 0.25,
+      "midi": 36,
+      "vel": 0.707,
+      "track": "perc",
+      "intensity": 0.3
+    },
+    {
+      "t": 106.5,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.296,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 106.75,
+      "dur": 0.25,
+      "midi": 79,
+      "vel": 0.593,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 107.0,
+      "dur": 0.25,
+      "midi": 76,
+      "vel": 0.633,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 107.0,
+      "dur": 0.25,
+      "midi": 38,
+      "vel": 0.746,
+      "track": "perc",
+      "intensity": 0.5
+    },
+    {
+      "t": 107.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.451,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 107.25,
+      "dur": 0.25,
+      "midi": 72,
+      "vel": 0.641,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 107.5,
+      "dur": 0.25,
+      "midi": 76,
+      "vel": 0.63,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 107.5,
+      "dur": 0.5,
+      "midi": 43,
+      "vel": 0.86,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 107.5,
+      "dur": 0.8,
+      "midi": 42,
+      "vel": 0.236,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 107.75,
+      "dur": 0.25,
+      "midi": 79,
+      "vel": 0.628,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 108.0,
+      "dur": 0.25,
+      "midi": 69,
+      "vel": 0.658,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 108.0,
+      "dur": 1.0,
+      "midi": 45,
+      "vel": 0.905,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 108.0,
+      "dur": 0.25,
+      "midi": 36,
+      "vel": 0.956,
+      "track": "perc",
+      "intensity": 0.3
+    },
+    {
+      "t": 108.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.38,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 108.25,
+      "dur": 0.25,
+      "midi": 72,
+      "vel": 0.63,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 108.5,
+      "dur": 0.85,
+      "midi": 72,
+      "vel": 0.338,
+      "track": "arp",
+      "intensity": 0.26
+    },
+    {
+      "t": 108.5,
+      "dur": 0.25,
+      "midi": 76,
+      "vel": 0.582,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 108.5,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.313,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 108.75,
+      "dur": 0.25,
+      "midi": 79,
+      "vel": 0.669,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 109.0,
+      "dur": 0.25,
+      "midi": 76,
+      "vel": 0.664,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 109.0,
+      "dur": 0.25,
+      "midi": 38,
+      "vel": 0.653,
+      "track": "perc",
+      "intensity": 0.5
+    },
+    {
+      "t": 109.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.384,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 109.25,
+      "dur": 0.25,
+      "midi": 72,
+      "vel": 0.629,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 109.5,
+      "dur": 0.25,
+      "midi": 76,
+      "vel": 0.597,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 109.5,
+      "dur": 0.5,
+      "midi": 45,
+      "vel": 0.878,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 109.5,
+      "dur": 0.25,
+      "midi": 36,
+      "vel": 0.604,
+      "track": "perc",
+      "intensity": 0.3
+    },
+    {
+      "t": 109.5,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.252,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 109.75,
+      "dur": 0.25,
+      "midi": 79,
+      "vel": 0.668,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 110.0,
+      "dur": 0.25,
+      "midi": 69,
+      "vel": 0.637,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 110.0,
+      "dur": 1.0,
+      "midi": 40,
+      "vel": 0.861,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 110.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.41,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 110.25,
+      "dur": 0.25,
+      "midi": 72,
+      "vel": 0.578,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 110.5,
+      "dur": 0.25,
+      "midi": 76,
+      "vel": 0.654,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 110.5,
+      "dur": 0.85,
+      "midi": 76,
+      "vel": 0.282,
+      "track": "arp",
+      "intensity": 0.26
+    },
+    {
+      "t": 110.5,
+      "dur": 0.25,
+      "midi": 36,
+      "vel": 0.712,
+      "track": "perc",
+      "intensity": 0.3
+    },
+    {
+      "t": 110.5,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.286,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 110.75,
+      "dur": 0.25,
+      "midi": 79,
+      "vel": 0.609,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 111.0,
+      "dur": 0.25,
+      "midi": 76,
+      "vel": 0.604,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 111.0,
+      "dur": 0.25,
+      "midi": 38,
+      "vel": 0.752,
+      "track": "perc",
+      "intensity": 0.5
+    },
+    {
+      "t": 111.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.398,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 111.25,
+      "dur": 0.25,
+      "midi": 72,
+      "vel": 0.58,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 111.5,
+      "dur": 0.25,
+      "midi": 76,
+      "vel": 0.655,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 111.5,
+      "dur": 0.5,
+      "midi": 43,
+      "vel": 0.877,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 111.5,
+      "dur": 0.8,
+      "midi": 42,
+      "vel": 0.235,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 111.75,
+      "dur": 0.25,
+      "midi": 79,
+      "vel": 0.623,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 112.0,
+      "dur": 0.25,
+      "midi": 67,
+      "vel": 0.575,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 112.0,
+      "dur": 1.0,
+      "midi": 43,
+      "vel": 0.908,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 112.0,
+      "dur": 16.0,
+      "midi": 43,
+      "vel": 0.48,
+      "track": "pad",
+      "intensity": 0.5
+    },
+    {
+      "t": 112.0,
+      "dur": 16.0,
+      "midi": 55,
+      "vel": 0.665,
+      "track": "pad",
+      "intensity": 0.1
+    },
+    {
+      "t": 112.0,
+      "dur": 16.0,
+      "midi": 59,
+      "vel": 0.676,
+      "track": "pad",
+      "intensity": 0.1
+    },
+    {
+      "t": 112.0,
+      "dur": 16.0,
+      "midi": 62,
+      "vel": 0.644,
+      "track": "pad",
+      "intensity": 0.1
+    },
+    {
+      "t": 112.0,
+      "dur": 16.0,
+      "midi": 69,
+      "vel": 0.4,
+      "track": "pad",
+      "intensity": 0.32
+    },
+    {
+      "t": 112.0,
+      "dur": 0.25,
+      "midi": 36,
+      "vel": 0.926,
+      "track": "perc",
+      "intensity": 0.3
+    },
+    {
+      "t": 112.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.381,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 112.25,
+      "dur": 0.25,
+      "midi": 71,
+      "vel": 0.622,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 112.5,
+      "dur": 0.85,
+      "midi": 71,
+      "vel": 0.332,
+      "track": "arp",
+      "intensity": 0.26
+    },
+    {
+      "t": 112.5,
+      "dur": 0.25,
+      "midi": 74,
+      "vel": 0.611,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 112.5,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.264,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 112.75,
+      "dur": 0.25,
+      "midi": 77,
+      "vel": 0.594,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 113.0,
+      "dur": 0.25,
+      "midi": 74,
+      "vel": 0.574,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 113.0,
+      "dur": 0.25,
+      "midi": 38,
+      "vel": 0.643,
+      "track": "perc",
+      "intensity": 0.5
+    },
+    {
+      "t": 113.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.441,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 113.25,
+      "dur": 0.25,
+      "midi": 71,
+      "vel": 0.573,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 113.5,
+      "dur": 0.25,
+      "midi": 74,
+      "vel": 0.65,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 113.5,
+      "dur": 0.5,
+      "midi": 43,
+      "vel": 0.855,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 113.5,
+      "dur": 0.25,
+      "midi": 36,
+      "vel": 0.614,
+      "track": "perc",
+      "intensity": 0.3
+    },
+    {
+      "t": 113.5,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.314,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 113.75,
+      "dur": 0.25,
+      "midi": 77,
+      "vel": 0.667,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 114.0,
+      "dur": 0.25,
+      "midi": 67,
+      "vel": 0.647,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 114.0,
+      "dur": 1.0,
+      "midi": 50,
+      "vel": 0.882,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 114.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.402,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 114.25,
+      "dur": 0.25,
+      "midi": 71,
+      "vel": 0.64,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 114.5,
+      "dur": 0.25,
+      "midi": 74,
+      "vel": 0.644,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 114.5,
+      "dur": 0.85,
+      "midi": 74,
+      "vel": 0.297,
+      "track": "arp",
+      "intensity": 0.26
+    },
+    {
+      "t": 114.5,
+      "dur": 0.25,
+      "midi": 36,
+      "vel": 0.696,
+      "track": "perc",
+      "intensity": 0.3
+    },
+    {
+      "t": 114.5,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.261,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 114.75,
+      "dur": 0.25,
+      "midi": 77,
+      "vel": 0.574,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 115.0,
+      "dur": 0.25,
+      "midi": 74,
+      "vel": 0.588,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 115.0,
+      "dur": 0.25,
+      "midi": 38,
+      "vel": 0.746,
+      "track": "perc",
+      "intensity": 0.5
+    },
+    {
+      "t": 115.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.391,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 115.25,
+      "dur": 0.25,
+      "midi": 71,
+      "vel": 0.616,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 115.5,
+      "dur": 0.25,
+      "midi": 74,
+      "vel": 0.656,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 115.5,
+      "dur": 0.5,
+      "midi": 41,
+      "vel": 0.852,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 115.5,
+      "dur": 0.8,
+      "midi": 42,
+      "vel": 0.202,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 115.75,
+      "dur": 0.25,
+      "midi": 77,
+      "vel": 0.642,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 116.0,
+      "dur": 0.25,
+      "midi": 67,
+      "vel": 0.629,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 116.0,
+      "dur": 1.0,
+      "midi": 43,
+      "vel": 0.894,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 116.0,
+      "dur": 0.25,
+      "midi": 36,
+      "vel": 0.97,
+      "track": "perc",
+      "intensity": 0.3
+    },
+    {
+      "t": 116.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.452,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 116.25,
+      "dur": 0.25,
+      "midi": 71,
+      "vel": 0.583,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 116.5,
+      "dur": 0.85,
+      "midi": 71,
+      "vel": 0.363,
+      "track": "arp",
+      "intensity": 0.26
+    },
+    {
+      "t": 116.5,
+      "dur": 0.25,
+      "midi": 74,
+      "vel": 0.623,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 116.5,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.288,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 116.75,
+      "dur": 0.25,
+      "midi": 77,
+      "vel": 0.636,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 117.0,
+      "dur": 0.25,
+      "midi": 74,
+      "vel": 0.576,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 117.0,
+      "dur": 0.25,
+      "midi": 38,
+      "vel": 0.687,
+      "track": "perc",
+      "intensity": 0.5
+    },
+    {
+      "t": 117.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.439,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 117.25,
+      "dur": 0.25,
+      "midi": 71,
+      "vel": 0.634,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 117.5,
+      "dur": 0.25,
+      "midi": 74,
+      "vel": 0.613,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 117.5,
+      "dur": 0.5,
+      "midi": 43,
+      "vel": 0.852,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 117.5,
+      "dur": 0.25,
+      "midi": 36,
+      "vel": 0.628,
+      "track": "perc",
+      "intensity": 0.3
+    },
+    {
+      "t": 117.5,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.306,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 117.75,
+      "dur": 0.25,
+      "midi": 77,
+      "vel": 0.651,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 118.0,
+      "dur": 0.25,
+      "midi": 67,
+      "vel": 0.662,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 118.0,
+      "dur": 1.0,
+      "midi": 50,
+      "vel": 0.887,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 118.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.386,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 118.25,
+      "dur": 0.25,
+      "midi": 71,
+      "vel": 0.573,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 118.5,
+      "dur": 0.25,
+      "midi": 74,
+      "vel": 0.598,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 118.5,
+      "dur": 0.85,
+      "midi": 74,
+      "vel": 0.288,
+      "track": "arp",
+      "intensity": 0.26
+    },
+    {
+      "t": 118.5,
+      "dur": 0.25,
+      "midi": 36,
+      "vel": 0.691,
+      "track": "perc",
+      "intensity": 0.3
+    },
+    {
+      "t": 118.5,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.252,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 118.75,
+      "dur": 0.25,
+      "midi": 77,
+      "vel": 0.667,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 119.0,
+      "dur": 0.25,
+      "midi": 74,
+      "vel": 0.614,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 119.0,
+      "dur": 0.25,
+      "midi": 38,
+      "vel": 0.762,
+      "track": "perc",
+      "intensity": 0.5
+    },
+    {
+      "t": 119.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.413,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 119.25,
+      "dur": 0.25,
+      "midi": 71,
+      "vel": 0.641,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 119.5,
+      "dur": 0.25,
+      "midi": 74,
+      "vel": 0.594,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 119.5,
+      "dur": 0.5,
+      "midi": 41,
+      "vel": 0.863,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 119.5,
+      "dur": 0.8,
+      "midi": 42,
+      "vel": 0.261,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 119.75,
+      "dur": 0.25,
+      "midi": 77,
+      "vel": 0.661,
+      "track": "arp",
+      "intensity": 0.55
+    },
+    {
+      "t": 120.0,
+      "dur": 1.0,
+      "midi": 43,
+      "vel": 0.899,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 120.0,
+      "dur": 0.25,
+      "midi": 36,
+      "vel": 0.966,
+      "track": "perc",
+      "intensity": 0.3
+    },
+    {
+      "t": 120.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.42,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 120.5,
+      "dur": 0.85,
+      "midi": 71,
+      "vel": 0.359,
+      "track": "arp",
+      "intensity": 0.26
+    },
+    {
+      "t": 120.5,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.291,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 121.0,
+      "dur": 0.25,
+      "midi": 38,
+      "vel": 0.639,
+      "track": "perc",
+      "intensity": 0.5
+    },
+    {
+      "t": 121.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.438,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 121.5,
+      "dur": 0.5,
+      "midi": 43,
+      "vel": 0.852,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 121.5,
+      "dur": 0.25,
+      "midi": 36,
+      "vel": 0.623,
+      "track": "perc",
+      "intensity": 0.3
+    },
+    {
+      "t": 121.5,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.283,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 122.0,
+      "dur": 1.0,
+      "midi": 50,
+      "vel": 0.896,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 122.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.453,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 122.5,
+      "dur": 0.85,
+      "midi": 74,
+      "vel": 0.324,
+      "track": "arp",
+      "intensity": 0.26
+    },
+    {
+      "t": 122.5,
+      "dur": 0.25,
+      "midi": 36,
+      "vel": 0.699,
+      "track": "perc",
+      "intensity": 0.3
+    },
+    {
+      "t": 122.5,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.275,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 123.0,
+      "dur": 0.25,
+      "midi": 38,
+      "vel": 0.768,
+      "track": "perc",
+      "intensity": 0.5
+    },
+    {
+      "t": 123.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.442,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 123.5,
+      "dur": 0.5,
+      "midi": 41,
+      "vel": 0.864,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 123.5,
+      "dur": 0.8,
+      "midi": 42,
+      "vel": 0.201,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 124.0,
+      "dur": 1.0,
+      "midi": 43,
+      "vel": 0.883,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 124.0,
+      "dur": 0.25,
+      "midi": 36,
+      "vel": 0.934,
+      "track": "perc",
+      "intensity": 0.3
+    },
+    {
+      "t": 124.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.422,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 124.5,
+      "dur": 0.85,
+      "midi": 71,
+      "vel": 0.378,
+      "track": "arp",
+      "intensity": 0.26
+    },
+    {
+      "t": 124.5,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.305,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 125.0,
+      "dur": 0.25,
+      "midi": 38,
+      "vel": 0.643,
+      "track": "perc",
+      "intensity": 0.5
+    },
+    {
+      "t": 125.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.383,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 125.5,
+      "dur": 0.5,
+      "midi": 43,
+      "vel": 0.894,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 125.5,
+      "dur": 0.25,
+      "midi": 36,
+      "vel": 0.617,
+      "track": "perc",
+      "intensity": 0.3
+    },
+    {
+      "t": 125.5,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.306,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 126.0,
+      "dur": 1.0,
+      "midi": 50,
+      "vel": 0.859,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 126.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.405,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 126.5,
+      "dur": 0.85,
+      "midi": 74,
+      "vel": 0.312,
+      "track": "arp",
+      "intensity": 0.26
+    },
+    {
+      "t": 126.5,
+      "dur": 0.25,
+      "midi": 36,
+      "vel": 0.717,
+      "track": "perc",
+      "intensity": 0.3
+    },
+    {
+      "t": 126.5,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.306,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 127.0,
+      "dur": 0.25,
+      "midi": 38,
+      "vel": 0.723,
+      "track": "perc",
+      "intensity": 0.5
+    },
+    {
+      "t": 127.0,
+      "dur": 0.4,
+      "midi": 42,
+      "vel": 0.451,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 127.5,
+      "dur": 0.5,
+      "midi": 41,
+      "vel": 0.885,
+      "track": "bass",
+      "intensity": 0.3
+    },
+    {
+      "t": 127.5,
+      "dur": 0.18,
+      "midi": 36,
+      "vel": 0.679,
+      "track": "perc",
+      "intensity": 0.72
+    },
+    {
+      "t": 127.5,
+      "dur": 0.5,
+      "midi": 42,
+      "vel": 0.236,
+      "track": "perc",
+      "intensity": 0.4
+    },
+    {
+      "t": 127.75,
+      "dur": 0.16,
+      "midi": 38,
+      "vel": 0.528,
+      "track": "perc",
+      "intensity": 0.72
     }
   ]
 }

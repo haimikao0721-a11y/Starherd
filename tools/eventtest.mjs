@@ -123,6 +123,7 @@ var Rng = class {
 
 // src/sim/constants.ts
 var TIME_SCALE = 1.6;
+var SKILLED_TIME_FACTOR = 2.5;
 var PHYS_HZ = 120;
 var DT = 1 / (PHYS_HZ * TIME_SCALE);
 var SHIP_MASS = 6e-5;
@@ -367,8 +368,8 @@ function createWorld(level, doc2, attempt = 1) {
     pulse: 0
   };
   const nebulae = (level.nebulae ?? []).map((n) => ({ ...n }));
-  const fuelScale = Number(level.fuel_scale ?? 1) || 1;
-  const fuelCapacity = (40 + 6 * level.difficulty) * fuelScale;
+  const budget = missionBudget(level);
+  const fuelCapacity = budget.fuel;
   const eventState = (level.events ?? []).map((e) => ({
     kind: e.kind,
     x: 0,
@@ -413,9 +414,9 @@ function createWorld(level, doc2, attempt = 1) {
     objectives: level.objectives,
     objectiveIndex: 0,
     objectivesTotal: Math.max(1, level.objectives?.length ?? 1),
-    // 时限（秒）。第 1 章是教学章：给足 180 秒，让玩家能反复试错而不被计时器逼死。
-    // 注意时限不参与计分——时间分用的是 parTime（见 score.ts），所以放宽时限不会让分数虚高。
-    timeLimit: Math.max(90, level.par_time * 3.4, level.chapter === 1 ? 180 : 0),
+    // 时限与 world.time 同一单位。第 1 章教学关在 missionBudget 里给到至少 180。
+    // 时限不参与计分——时间分用的是 parTime（见 score.ts）。
+    timeLimit: budget.timeLimit,
     combo: 0,
     comboTimer: 0
   };
@@ -518,6 +519,27 @@ function createWorld(level, doc2, attempt = 1) {
   world2.well.lty = world2.well.y;
   world2.requiredPods = required;
   return world2;
+}
+function missionBudget(level) {
+  const nominalFuel = 40 + 6 * level.difficulty;
+  const margin = Number(level.margin);
+  const limit = Number.isFinite(margin) && margin > 0 && margin < 1;
+  if (limit) {
+    const skilled = Math.max(level.par_time * SKILLED_TIME_FACTOR, 12);
+    return {
+      fuel: nominalFuel * (1 + margin),
+      timeLimit: skilled * (1 + margin),
+      margin,
+      nominalFuel
+    };
+  }
+  const fuelScale = Number(level.fuel_scale ?? 1) || 1;
+  return {
+    fuel: nominalFuel * fuelScale,
+    timeLimit: Math.max(90, level.par_time * 3.4, level.chapter === 1 ? 180 : 0),
+    margin: 0,
+    nominalFuel
+  };
 }
 
 // src/sim/step.ts

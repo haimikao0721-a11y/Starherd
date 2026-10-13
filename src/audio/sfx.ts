@@ -211,7 +211,7 @@ export function renderFallbackSamples(name: string, sr: number): Float32Array {
     case 'thruster_loop': {
       const loopSec = 1.5;
       const b = new Buf(sr, loopSec + 0.08);
-      const lp = new OnePoleLP(sr, 950);
+      const lp = new OnePoleLP(sr, 720);
       const svf = new SVF(sr, 235, 3.4);
       const wob = new OnePoleLP(sr, 6);
       b.noise(
@@ -227,7 +227,7 @@ export function renderFallbackSamples(name: string, sr: number): Float32Array {
         rnd,
       );
       b.tone(() => 62, () => 0.16); // 低频体感
-      b.tone(() => 1860, () => 0.035); // 高频嘶声
+      b.tone(() => 1680, () => 0.012); // 高频嘶声压低，避免推进器盖过配乐
       return b.doneLoop(loopSec, 0.08, 0.72);
     }
 

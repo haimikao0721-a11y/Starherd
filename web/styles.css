@@ -1041,3 +1041,16 @@ html, body {
 .lc-contact-lead { margin: 0 0 6px; font-size: 12.5px; color: rgba(215,230,255,.92); }
 .lc-contact .lc-nav { justify-content: center; }
 .lc-contact .lc-hint { margin: 6px 0 0; font-size: 11px; }
+
+/* ---- 航线闭合（全通关结尾）---- */
+#lc-finale { position: fixed; inset: 0; z-index: 40; display: none; pointer-events: none; }
+#lc-finale.on { display: block; pointer-events: auto; }
+.lc-fin-card { position: absolute; left: 28px; bottom: 28px; max-width: 460px; padding: 16px 18px;
+  background: rgba(5,8,16,.78); border: 1px solid rgba(140,190,255,.35); border-radius: 10px;
+  color: #d5e4f5; font: 13px/1.6 ui-monospace, "Cascadia Mono", Consolas, monospace; }
+.lc-fin-kicker { letter-spacing: .18em; font-size: 11px; color: #8ef7d0; }
+.lc-fin-title { margin-top: 4px; font-size: 22px; letter-spacing: .08em; }
+.lc-fin-body { margin: 8px 0 0; color: #b7c6d6; }
+.lc-fin-hint { margin: 8px 0 0; font-size: 11px; color: #7f8ea3; }
+.lc-fin-back { margin-top: 8px; background: transparent; color: #9fb3c8; border: 1px solid rgba(140,180,255,.35);
+  border-radius: 6px; padding: 4px 10px; cursor: pointer; font: inherit; }

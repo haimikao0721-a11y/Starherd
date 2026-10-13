@@ -56,8 +56,8 @@ export class Renderer {
   private scene: HTMLCanvasElement;
   /** 场景渲染分辨率比例 */
   /** 渲染分辨率比例（自适应）：上限 1.0 原生、下限 0.35（再低画面太糊） */
-  private rs = 0.62;
-  private rsApplied = 0.62;
+  private rs = 0.5;
+  private rsApplied = 0.5;
   private adaptWarmup = 0;
   /** 是否由性能自动调节分辨率（false = 玩家用滑块固定） */
   private rsAuto = true;
@@ -200,7 +200,7 @@ export class Renderer {
 
   private adaptRenderScale(): void {
     if (!this.rsAuto) return;
-    if (this.adaptWarmup < 45) { this.adaptWarmup++; return; }
+    if (this.adaptWarmup < 20) { this.adaptWarmup++; return; }
     const target = clamp(this.q.targetFps || 60, 30, 144);
     const budget = 1000 / target;
     if (this.frameMs > budget * 1.12) {

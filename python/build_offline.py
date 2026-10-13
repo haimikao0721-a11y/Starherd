@@ -74,7 +74,7 @@ def build(out_path: Path) -> dict:
 
     welcome = {
         "t": "welcome",
-        "version": "1.2.2-offline",
+        "version": "1.3.0-offline",
         "mode": "offline",
         "backend": "static",
         "server_time": time.time(),

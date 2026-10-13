@@ -24,17 +24,24 @@ SOFTWARE.
 
 ## 关于游戏素材（重要说明）
 
-本项目**不包含任何第三方美术、音频或字体素材**，因此 MIT 许可覆盖仓库内的全部内容
-（源代码、关卡数据、美术、音效、音乐谱面）：
+MIT 许可覆盖本仓库里**作者自己写的**内容：源代码、关卡数据、程序化美术、程序化音效、
+以及由 `python/music_gen.py` 生成的音乐谱面。这些素材都可以随仓库再分发。
+
+**不在 MIT 之内：**
+
+| 内容 | 说明 |
+|---|---|
+| 《Hopes and Dreams》 | Toby Fox 为《Undertale》所写。版权归原作者。本仓库**不收录**录音文件，发布包也不附带。若你在本机 `assets/audio/third_party/` 自行放入，只供本地播放全通关结尾，不得再分发。 |
+| 游戏名称与图标 | 《牧星者 / STARHERD》的名称与图标归作者所有。fork 后二次分发请更换名称与图标。 |
+
+仓库内随包分发的素材来源：
 
 | 内容 | 来源 |
 |---|---|
-| 界面与天体贴图（17 个 PNG / ICO） | `python/assets_gen.py` **程序化生成**（纯标准库，固定随机种子） |
-| 音效（17 个 WAV） | `python/assets_gen.py` **程序化合成** |
-| 背景音乐（5 首） | `python/music_gen.py` 生成**谱面 JSON**，运行时由 `src/audio/music.ts` 用 WebAudio **实时合成**；下载用的 WAV 由 `python/music_render.py` 离线渲染 |
-| 字体 | 仅使用系统等宽字体（`ui-monospace` / Consolas），**未内嵌任何字体文件** |
+| 界面与天体贴图（PNG / ICO） | `python/assets_gen.py` 程序化生成（纯标准库，固定随机种子） |
+| 音效（WAV） | `python/assets_gen.py` 程序化合成 |
+| 背景音乐（8 首谱面） | `python/music_gen.py` 生成谱面 JSON，运行时由 `src/audio/music.ts` 用 WebAudio 实时合成；下载用的 WAV 由 `python/music_render.py` 离线渲染 |
+| 字体 | 仅使用系统等宽字体（`ui-monospace` / Consolas），未内嵌任何字体文件 |
 
-第三方依赖的许可证见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)；
+第三方软件组件的许可证见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)；
 面向玩家的使用条款与免责声明见 [docs/使用条款与免责声明.md](docs/使用条款与免责声明.md)。
-
-游戏名称《牧星者 / STARHERD》与图标归作者所有；若你fork 后二次分发，请更换名称与图标以免混淆。

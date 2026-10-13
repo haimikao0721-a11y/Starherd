@@ -276,12 +276,29 @@ def build_with_pyinstaller(args) -> int:
 
     for rel in DATA_DIRS:
         src = ROOT / rel
-        if src.is_dir():
+        if not src.is_dir():
+            warn(f"--add-data 跳过的缺失目录: {rel}/")
+            continue
+        if rel != "assets":
             if not any(src.iterdir()):
                 warn(f"--add-data 的 {rel}/ 目前是空目录（内容由其他 W-agent 负责）")
             argv += ["--add-data", f"{src}{os.pathsep}{rel}"]
-        else:
-            warn(f"--add-data 跳过的缺失目录: {rel}/")
+            continue
+        # 第三方录音（Toby Fox 等）只留在开发机，不打进发行包。
+        skipped = 0
+        for path in src.rglob("*"):
+            if not path.is_file():
+                continue
+            rel_posix = path.relative_to(ROOT).as_posix()
+            if "/third_party/" in f"/{rel_posix}" and path.suffix.lower() in {
+                ".m4a", ".mp3", ".ogg", ".wav", ".flac", ".aac",
+            }:
+                skipped += 1
+                continue
+            dest = path.parent.relative_to(ROOT).as_posix()
+            argv += ["--add-data", f"{path}{os.pathsep}{dest}"]
+        if skipped:
+            warn(f"已从安装包排除 {skipped} 个第三方录音（assets/audio/third_party）")
 
     for mod in HIDDEN_IMPORTS:
         argv += ["--hidden-import", mod]

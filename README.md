@@ -126,7 +126,8 @@ web/            页面外壳与样式
 
 ## 许可
 
-* 源码与素材：**MIT**（见 [LICENSE](LICENSE)；美术/音效/音乐均为程序化自产，**无第三方素材**）
+* 源码与本仓库内的程序化素材：**MIT**（见 [LICENSE](LICENSE)）
+* 《Hopes and Dreams》（Toby Fox / Undertale）**不是**本项目作品，**不**在 MIT 之内，仓库与安装包均不附带录音
 * 第三方组件：[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)（含 PyInstaller 的 Bootloader Exception 说明）
 * 玩家条款与免责声明：[docs/使用条款与免责声明.md](docs/使用条款与免责声明.md)
 * **版本历史**：[docs/CHANGELOG.md](docs/CHANGELOG.md)

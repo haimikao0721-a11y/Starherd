@@ -9,6 +9,11 @@ export const G = 1.0;
 export const EPS = 0.02;
 /** 1 TU = 1.6 秒实时 */
 export const TIME_SCALE = 1.6;
+/**
+ * 熟练标准解的用时倍数。物理 par 是霍曼时间，人贴不到；
+ * 计分满分放在 max(par × 此值, 12)。极限关的时限再在这之上留 margin。
+ */
+export const SKILLED_TIME_FACTOR = 2.5;
 /** 物理固定步长（Hz，实时） */
 export const PHYS_HZ = 120;
 /** 单个物理步的时间（TU）：(1/120 s) / 1.6 s·TU⁻¹ */

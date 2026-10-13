@@ -25,8 +25,28 @@ import { Menu, type MusicTrackInfo, type ScreenName } from '../ui/menu';
 import { Assets, installFallbackSprites } from './assets';
 import { autopilot, createPilot, type PilotState, type PilotTelemetry } from './autopilot';
 import { computeScore, type VerdictLike } from './score';
+import { ClipRecorder, applyClip, applySample, routeStanding, sampleAt, type LevelClip } from './clip';
 
-type Screen = ScreenName | 'play';
+const MAX_DPR = 1.25;
+
+/** 菜单背后的演示：关掉全屏后处理和等势线，避免人还没进关就觉得卡。 */
+const BACKDROP_QUALITY: Quality = {
+  maxParticles: 400, trails: false, bloom: false, chroma: false,
+  fieldContours: false, starLayers: 1, glowScale: 0.6, targetFps: 60,
+  renderScale: 0.45,
+};
+
+type Screen = ScreenName | 'play' | 'finale';
+
+/** 通关结尾播放的外来录音。不是本项目原创。 */
+const ENDING_RECORDING_ID = 'hopes-and-dreams';
+const ENDING_RECORDING_URL = '/assets/audio/third_party/hopes_and_dreams.m4a';
+
+type FinaleBeat =
+  | { kind: 'play'; index: number }
+  | { kind: 'card'; index: number }
+  | { kind: 'medal'; id: 'shepherd' | 'flawless' }
+  | { kind: 'credit' };
 
 export interface GameOptions {
   canvas: HTMLCanvasElement;
@@ -83,6 +103,9 @@ export class Game {
   private predictOn = false;
   /** 当前正在播放的曲目 id（事件驱动切换用；空串表示尚未设置） */
   private musicTrack = '';
+  private recorder = new ClipRecorder();
+  private finale: { beats: FinaleBeat[]; i: number; hold: number; clipEnd: number; songEnded: boolean } | null = null;
+  private finaleHold = false;
   private showHelp = false;
   private simAccum = 0;
   private frames = 0;
@@ -173,7 +196,7 @@ export class Game {
     this.applyQualityFromSave();
 
     this.view = {
-      w: window.innerWidth, h: window.innerHeight, dpr: Math.min(2, window.devicePixelRatio || 1),
+      w: window.innerWidth, h: window.innerHeight, dpr: Math.min(MAX_DPR, window.devicePixelRatio || 1),
       zoom: 1.15, targetZoom: 1.15, shake: 0, hitstop: 0, flash: 0, chroma: 0,
       showField: this.save.settings.showField, showVectors: false, showPredict: false, showOrbits: true,
       slowmo: 1, intensity: 0.2, fade: 1, uiAlpha: 1,
@@ -261,6 +284,7 @@ export class Game {
       onSelectChapter: () => { this.menu?.show('levels'); },
       onOpenUrl: (url) => this.openExternal(url),
       onTutorialSeen: () => this.markTutorialSeen(),
+      onFinale: () => this.startFinale(),
     });
     this.menu.setLevels(this.doc);
     this.menu.setSave(this.save);
@@ -280,6 +304,13 @@ export class Game {
     this.installUiAudio();
     // 菜单键盘导航：捕获阶段处理，避免被 engine/input 的冒泡监听先吃掉方向键/空格/Tab
     window.addEventListener('keydown', (e: KeyboardEvent) => {
+      if (this.screen === 'finale' && (e.code === 'Space' || e.code === 'Enter' || e.code === 'Escape')) {
+        e.preventDefault();
+        e.stopPropagation();
+        if (e.code === 'Escape') this.toMenu();
+        else this.advanceFinale();
+        return;
+      }
       if (this.menu && this.menu.handleKey(e)) { e.preventDefault(); e.stopPropagation(); }
     }, true);
 
@@ -360,7 +391,8 @@ export class Game {
 
   private simDt(dtReal: number): number {
     if (this.paused || this.screen === 'boot') return 0;
-    const live = this.screen === 'play' || this.attract;
+    if (this.screen === 'finale' && this.finaleHold) return 0;
+    const live = this.screen === 'play' || this.attract || this.screen === 'finale';
     if (!live) return 0;
     // 自动测试以 8× 时间流速跑，保证无头环境下也能在有限墙钟时间内完成任务
     const speed = this.autotest ? 8 : 1;
@@ -373,7 +405,7 @@ export class Game {
   private fixed(dtTU: number): void {
     const w = this.world;
     if (!w) return;
-    if (this.screen === 'play' || this.attract) {
+    if (this.screen === 'play' || this.attract || this.screen === 'finale') {
       stepOnce(w, dtTU);
       this.simAccum += dtTU;
     }
@@ -403,7 +435,8 @@ export class Game {
       const zs = this.input.snapshot.zoom;
       if (zs !== 0) this.adjustZoom(Math.pow(1.18, -zs));
       if (this.input.pressed('Digit0') || this.input.pressed('Numpad0')) this.adjustZoom(1 / this.zoomBias);
-      if (this.screen === 'play' || this.attract) this.driveControl(dtReal);
+      if (this.screen === 'play' || this.attract || this.screen === 'finale') this.driveControl(dtReal);
+      if (this.screen === 'finale') this.updateFinale(dtReal);
       this.updatePredict();
       this.syncEventMusic();
       this.drainFx();
@@ -480,16 +513,38 @@ export class Game {
     this.attract = s === 'menu' && !this.autotest;
     this.view.fade = 1;
     this.input.setEnabled(s === 'play');
-    this.menu?.show(s === 'play' ? 'none' : s);
-    if (s === 'play') this.menu?.show('none');
+    const menuScreen = s === 'play' || s === 'finale' ? 'none' : s;
+    this.menu?.show(menuScreen);
     if (prev === 'play' && s === 'pause') this.audio?.play('ui_back', { gain: 0.6 });
     if (s === 'play' && this.audio?.ready) this.audio.setMusic(this.assets.music(this.currentMusic()) ?? null);
-    if (s === 'menu') this.audio?.setMusic(this.assets.music('menu') ?? null);
+    if (s === 'menu') {
+      this.musicTrack = 'menu';
+      this.audio?.setMusic(this.assets.music('menu') ?? null);
+      this.clearFinaleOverlay();
+    }
+    if (s !== 'finale') this.finale = null;
     if (s === 'play') setTimeout(() => this.flushHint(), 400); // 本关战术提示此刻才显示
+    this.applyPresentation();
+  }
+
+  /** 对局用玩家画质和 120Hz；菜单/结算只用轻量背景，物理降到 60Hz。 */
+  private applyPresentation(): void {
+    const playing = this.screen === 'play';
+    this.view.quality = playing ? this.quality : BACKDROP_QUALITY;
+    if (!playing) this.view.showField = false;
+    else this.view.showField = this.save.settings.showField !== false;
+    this.applyPhysicsRate();
+  }
+
+  private applyPhysicsRate(): void {
+    const slow = this.screen !== 'play' || !!this.save.settings.physics60;
+    this.loop.setFixedDt(slow ? DT * 2 : DT);
   }
 
   /** 事件驱动选曲：风暴/救援/终章优先，其余用关卡自带曲目。 */
   private desiredMusic(): string {
+    if (this.screen === 'finale') return ENDING_RECORDING_ID;
+    if (this.screen === 'menu') return 'menu';
     if (this.screen === 'end') return 'finale';
     const w = this.world;
     if (this.screen === 'play' && w) {
@@ -514,6 +569,10 @@ export class Game {
   private syncEventMusic(): void {
     const want = this.desiredMusic();
     if (want === this.musicTrack) return;
+    if (want === ENDING_RECORDING_ID) {
+      this.musicTrack = want;
+      return;
+    }
     const track = this.assets.music(want) ?? null;
     if (!track) return;
     this.musicTrack = want;
@@ -527,6 +586,159 @@ export class Game {
   private currentMusic(): string {
     const lv = this.world?.level;
     return lv?.music ?? 'menu';
+  }
+
+  private standing(): { total: number; cleared: number; all: boolean; flawless: boolean } {
+    return routeStanding(this.doc?.levels ?? [], this.save.best_scores ?? {});
+  }
+
+  private driveReplay(): void {
+    const w = this.world;
+    const fin = this.finale;
+    if (!w || !fin || this.finaleHold) return;
+    const beat = fin.beats[fin.i];
+    if (!beat || beat.kind !== 'play') return;
+    const clip = this.save.clips?.[this.doc.levels[beat.index]?.id ?? ''];
+    if (!clip) return;
+    const s = sampleAt(clip, w.time);
+    if (s) applySample(w, s);
+    this.slowmo = false;
+    w.slowmo = 1;
+    w.timeScale = 1;
+    this.fastFwd = 1;
+  }
+
+  private startFinale(): void {
+    const stand = this.standing();
+    if (!stand.all) return;
+    const beats: FinaleBeat[] = [];
+    const levels = this.doc.levels;
+    for (let i = 0; i < levels.length; i++) {
+      const clip = this.save.clips?.[levels[i].id];
+      beats.push(clip && clip.samples.length > 1 ? { kind: 'play', index: i } : { kind: 'card', index: i });
+    }
+    beats.push({ kind: 'medal', id: 'shepherd' });
+    if (stand.flawless) beats.push({ kind: 'medal', id: 'flawless' });
+    beats.push({ kind: 'credit' });
+    this.finale = { beats, i: 0, hold: 0, clipEnd: 0, songEnded: false };
+    this.finaleHold = false;
+    this.musicTrack = ENDING_RECORDING_ID;
+    this.setScreen('finale');
+    void this.audio?.playRecording(ENDING_RECORDING_URL, {
+      loop: false,
+      onEnded: () => { if (this.finale) this.finale.songEnded = true; },
+    });
+    this.showFinaleBeat();
+  }
+
+  private showFinaleBeat(): void {
+    const fin = this.finale;
+    if (!fin) return;
+    const beat = fin.beats[fin.i];
+    if (!beat) { this.toMenu(); return; }
+    const levels = this.doc.levels;
+    if (beat.kind === 'play' || beat.kind === 'card') {
+      const lv = levels[beat.index];
+      this.levelIndex = beat.index;
+      this.loadWorld(beat.index);
+      const score = this.save.best_scores[lv.id];
+      if (beat.kind === 'play') {
+        const clip = this.save.clips?.[lv.id] as LevelClip | undefined;
+        if (clip) {
+          applyClip(this.world!, clip);
+          fin.clipEnd = clip.samples[clip.samples.length - 1].t;
+          this.finaleHold = false;
+        } else {
+          this.finaleHold = true;
+          fin.hold = 4;
+        }
+      } else {
+        this.finaleHold = true;
+        fin.hold = 4;
+        if (this.world) this.world.well.engaged = false;
+      }
+      const tag = score ? `${score.grade} · ${score.time.toFixed(0)} TU · Δv ${score.fuel.toFixed(0)}` : '已通关';
+      const note = beat.kind === 'card' ? '这一关是本功能加上之前通的，没有操作记录，只保留成绩。' : '对接前的几秒';
+      this.paintFinale(
+        `航线闭合 · ${beat.index + 1}/${levels.length}`,
+        `${lv.id}  ${lv.name_zh}`,
+        `${tag}<br>${note}`,
+      );
+      return;
+    }
+    this.finaleHold = true;
+    if (beat.kind === 'medal' && beat.id === 'shepherd') {
+      fin.hold = 8;
+      this.paintFinale('成就', '牧星者', '20 关全部通关。这枚勋章留在主菜单上。');
+      return;
+    }
+    if (beat.kind === 'medal' && beat.id === 'flawless') {
+      fin.hold = 8;
+      this.paintFinale('成就 · 最难', '无瑕航线', '20 关的最佳成绩全部是 S。');
+      return;
+    }
+    fin.hold = 16;
+    this.paintFinale(
+      '鸣谢',
+      'Hopes and Dreams',
+      'Toby Fox ·《Undertale》<br>这首曲子不是《牧星者》原创，版权归原作者。<br>感谢你把整条航线飞完。',
+    );
+  }
+
+  private updateFinale(dtReal: number): void {
+    const fin = this.finale;
+    const w = this.world;
+    if (!fin) return;
+    const beat = fin.beats[fin.i];
+    if (!beat) return;
+    if (beat.kind === 'play' && w && !this.finaleHold && w.time >= fin.clipEnd - 1e-3) {
+      this.advanceFinale();
+      return;
+    }
+    if (beat.kind === 'credit') {
+      if (fin.songEnded) fin.hold -= dtReal;
+      if (fin.songEnded && fin.hold <= 0) this.advanceFinale();
+      return;
+    }
+    if (this.finaleHold) {
+      fin.hold -= dtReal;
+      if (fin.hold <= 0) this.advanceFinale();
+    }
+  }
+
+  private advanceFinale(): void {
+    const fin = this.finale;
+    if (!fin) return;
+    fin.i++;
+    if (fin.i >= fin.beats.length) { this.toMenu(); return; }
+    this.showFinaleBeat();
+  }
+
+  private paintFinale(kicker: string, title: string, body: string): void {
+    let el = document.getElementById('lc-finale');
+    if (!el) {
+      el = document.createElement('div');
+      el.id = 'lc-finale';
+      el.addEventListener('click', (ev) => {
+        const t = ev.target as HTMLElement | null;
+        if (t?.dataset.fin === 'menu') { this.toMenu(); return; }
+        this.advanceFinale();
+      });
+      (document.getElementById('ui-root') ?? document.body).appendChild(el);
+    }
+    el.classList.add('on');
+    el.innerHTML = `<div class="lc-fin-card">
+      <div class="lc-fin-kicker">${kicker}</div>
+      <div class="lc-fin-title">${title}</div>
+      <p class="lc-fin-body">${body}</p>
+      <p class="lc-fin-hint">空格 / 点击 下一段 · Esc 返回菜单</p>
+      <button type="button" data-fin="menu" class="lc-fin-back">返回主菜单</button>
+    </div>`;
+  }
+
+  private clearFinaleOverlay(): void {
+    this.finaleHold = false;
+    document.getElementById('lc-finale')?.classList.remove('on');
   }
 
   private startAttract(): void {
@@ -602,7 +814,8 @@ export class Game {
         spec.bodies.map((b) => ({ id: b.id, mass: b.mass,
           orbit: b.orbit ? { a: b.orbit.a, e: b.orbit.e, parent: b.orbit.parent } : null })), rootId);
     }
-    if (!this.autotest) this.audio?.setMusic(this.assets.music(this.world?.level.music ?? 'loop1') ?? null);
+    if (!this.autotest && this.screen !== 'finale') this.audio?.setMusic(this.assets.music(this.world?.level.music ?? 'loop1') ?? null);
+    this.recorder.reset();
   }
 
   private nextLevel(): void {
@@ -845,6 +1058,10 @@ export class Game {
   private driveControl(dtReal: number): void {
     const w = this.world;
     if (!w) return;
+    if (this.screen === 'finale') {
+      this.driveReplay();
+      return;
+    }
     const useAi = this.attract || this.autotest;
     if (useAi) {
       autopilot(w, this.pilot, this.pilotTel);
@@ -900,6 +1117,7 @@ export class Game {
         w.well.targetMass = Math.max(WELL_MASS_MIN, Math.min(WELL_MASS_MAX, w.well.targetMass * f));
       }
       this.handlePlayKeys();
+      if (w.status === 'running') this.recorder.note(w);
     }
     // 场强质量平滑（场投影器调功需要时间，手感更真实）
     const k = Math.min(1, dtReal * 4.5);
@@ -966,19 +1184,23 @@ export class Game {
     const w = this.world;
     if (!a || !w) return;
     this.tryCall('audio', () => {
-      a.setParam('wellThrust', w.well.engaged ? w.well.thrust : 0);
-      a.setParam('wellMass', w.well.mass);
+      // 菜单/简报/结算一律视作待机：燃料充足、无警报、无推进器嘶声。
+      // 主菜单背后是吸引模式（AI 自己玩），它会烧推力，也会自己打完教学关。
+      const live = this.screen === 'play' && !this.attract;
+      a.setParam('wellThrust', live && w.well.engaged ? w.well.thrust : 0);
+      a.setParam('wellMass', live ? w.well.mass : 0);
       // **心跳与警报只在真正游玩时生效**（发布反馈："刚进游戏时背景音乐有巨大的噪音"）。
       // 根因：主菜单放的是吸引模式（AI 自己玩），AI 会把燃料烧到 0，
       // 于是 fuel < 0.25 触发了**最高严重度的低频心跳**（每 0.62 s 一记重击）叠在背景音乐上。
-      // 菜单/简报/结算页一律视作"燃料充足、无警报"。
-      const live = this.screen === 'play' && !this.attract;
       a.setParam('fuel', live ? w.fuel / Math.max(1e-6, w.fuelCapacity) : 1);
       a.setParam('alert', live ? (w.windActive ? 1 : 0) : 0);
       a.setParam('slowmo', this.slowmo ? 1 : 0);
       a.setParam('stability', Math.max(0, 1 - w.stats.energyDrift * 1e4));
-      a.loop('thruster_loop', 'well', w.well.engaged && w.well.thrust > 0.35, { gain: Math.min(0.5, w.well.thrust * 0.35) });
-      a.setIntensity(this.view.intensity);
+      // 推进器嘶声同样只在对局里响。主菜单的待机演示一直在烧推力，
+      // 若在这里开循环音，菜单会一直盖着货舱喷气。
+      a.loop('thruster_loop', 'well', live && w.well.engaged && w.well.thrust > 0.35, { gain: Math.min(0.5, w.well.thrust * 0.35) });
+      // 待机强度停在 0.58：听得见铺底、低音、闪音和主题，听不见高潮应答和过门。
+      a.setIntensity(live ? this.view.intensity : 0.58);
     });
   }
 
@@ -987,8 +1209,12 @@ export class Game {
   private drainFx(): void {
     const w = this.world;
     if (!w || !w.fx.length) return;
+    // 待机演示会自己把教学关打完。音效、结算闪白和「任务完成」提示只在玩家对局里发，
+    // 否则主菜单会突然响起通关号角。画面粒子仍留给背景演示。
+    const hear = this.screen === 'play' && !this.attract;
     for (const ev of w.fx) {
       this.tryCall('renderer', () => this.renderer?.pushFx(ev));
+      if (!hear) continue;
       if (ev.sound) this.tryCall('audio', () => this.audio?.play(ev.sound as string, { gain: Math.min(1, 0.4 + ev.mag * 0.5) }));
       if (ev.text) this.pushToast(ev.text, ev.kind === 'lost' || ev.kind === 'fail' ? 'warn' : ev.kind === 'dock' ? 'good' : 'info');
       const mag = Math.min(1.6, ev.mag);
@@ -1065,7 +1291,7 @@ export class Game {
 
   private checkLevelEnd(dtReal: number): void {
     const w = this.world;
-    if (!w || this.attract || this.autotest) return;
+    if (!w || this.attract || this.autotest || this.screen === 'finale') return;
     if (w.status === 'running') return;
     // 一局只结算一次：否则 resolveTimer 每轮归零后又会重新倒计时，
     // 结算页会每隔 2.6 秒被重新渲染一次（玩家看到的"重复刷新"）。
@@ -1105,6 +1331,12 @@ export class Game {
     this.save.totals.lost += lv.podsLost;
     this.save.totals.playtime += w.time * TIME_SCALE;
     if (w.status === 'won') {
+      const clip = this.recorder.freeze();
+      const keep = breakdown.newBest || !this.save.clips?.[lv.id];
+      if (clip && keep) {
+        if (!this.save.clips) this.save.clips = {};
+        this.save.clips[lv.id] = clip;
+      }
       const chapters = this.doc.levels[this.levelIndex]?.chapter ?? 1;
       this.save.unlocked_chapters = Math.max(this.save.unlocked_chapters, Math.min(4, chapters));
     }
@@ -1128,9 +1360,9 @@ export class Game {
 
   private applyQualityFromSave(): void {
     const q = this.save.settings.quality ?? 'high';
-    if (q === 'low') this.quality = { ...DEFAULT_QUALITY, maxParticles: 700, bloom: false, chroma: false, starLayers: 1, fieldContours: false, renderScale: 0.45 };
-    else if (q === 'mid') this.quality = { ...DEFAULT_QUALITY, maxParticles: 1400, bloom: true, chroma: false, starLayers: 2, renderScale: 0.52 };
-    else this.quality = { ...DEFAULT_QUALITY };
+    if (q === 'low') this.quality = { ...DEFAULT_QUALITY, maxParticles: 600, bloom: false, chroma: false, starLayers: 1, fieldContours: false, renderScale: 0.4 };
+    else if (q === 'mid') this.quality = { ...DEFAULT_QUALITY, maxParticles: 1100, bloom: false, chroma: false, starLayers: 2, renderScale: 0.5 };
+    else this.quality = { ...DEFAULT_QUALITY, chroma: false };
   }
 
   private applyAudioSettings(): void {
@@ -1167,7 +1399,7 @@ export class Game {
     if (key === 'physics60') {
       const p60 = String(value) === '1' || value === true;
       this.save.settings.physics60 = p60;
-      this.loop.setFixedDt(p60 ? DT * 2 : DT);
+      this.applyPhysicsRate();
       this.pushToast(p60 ? '物理步长 60 Hz（省 CPU，精度略降）' : '物理步长 120 Hz（精确）');
     }
     this.applyAudioSettings();
@@ -1252,13 +1484,13 @@ export class Game {
 
   private resizeIfNeeded(): void {
     const w = window.innerWidth, h = window.innerHeight;
-    const dpr = Math.min(2, window.devicePixelRatio || 1);
+    const dpr = Math.min(MAX_DPR, window.devicePixelRatio || 1);
     if (w !== this.view.w || h !== this.view.h || dpr !== this.view.dpr) this.resize();
   }
 
   private resize(): void {
     const w = window.innerWidth, h = window.innerHeight;
-    const dpr = Math.min(2, window.devicePixelRatio || 1);
+    const dpr = Math.min(MAX_DPR, window.devicePixelRatio || 1);
     this.view.w = w; this.view.h = h; this.view.dpr = dpr;
     this.tryCall('renderer', () => this.renderer?.resize(w, h, dpr));
     this.tryCall('hud', () => this.hud?.resize(w, h, dpr));
@@ -1297,25 +1529,29 @@ export class Game {
   private autoQualityTick(): void {
     if (this.autotest) return;
     const w = this.world;
-    if (!w || this.screen !== 'play' || this.frames < 90) return;
+    if (!w || this.screen !== 'play' || this.frames < 30) return;
     const ms = this.loop.frameMs;
-    this.qEma = this.qEma === 0 ? ms : this.qEma * 0.94 + ms * 0.06;
-    if (this.frames % 60 !== 0) return;
+    this.qEma = this.qEma === 0 ? ms : this.qEma * 0.9 + ms * 0.1;
+    if (this.frames % 20 !== 0) return;
     const q = this.save.settings.quality;
-    if (this.qEma > 22 && q === 'high') {
+    if (this.qEma > 18 && q === 'high') {
       this.save.settings.quality = 'mid';
       this.applyQualityFromSave();
       this.renderer?.setQuality(this.quality);
       this.view.quality = this.quality;
-      this.pushToast('帧耗时偏高，已自动切到中画质（HUD 右侧可手动改回）', 'warn');
+      this.persist();
+      this.pushToast('帧率不够稳，已切到中画质（设置里可改回）', 'warn');
       this.qEma = 0;
-    } else if (this.qEma > 26 && q === 'mid') {
+    } else if (this.qEma > 20 && q === 'mid') {
       this.save.settings.quality = 'low';
+      this.save.settings.physics60 = true;
       this.applyQualityFromSave();
+      this.applyPhysicsRate();
       this.renderer?.setQuality(this.quality);
       this.view.quality = this.quality;
       this.view.showField = false;
-      this.pushToast('已自动切到低画质并关闭引力场线', 'warn');
+      this.persist();
+      this.pushToast('仍偏卡，已切到低画质并放宽物理步长', 'warn');
       this.qEma = 0;
     }
   }
@@ -1539,6 +1775,7 @@ function sanitizeSave(s: SaveState, doc: LevelsDoc): SaveState {
   const out = s as SaveState & Record<string, unknown>;
   out.settings = { ...DEFAULT_SAVE.settings, ...(s.settings ?? {}) };
   out.best_scores = s.best_scores ?? {};
+  out.clips = s.clips && typeof s.clips === 'object' ? s.clips : {};
   out.totals = { ...DEFAULT_SAVE.totals, ...(s.totals ?? {}) };
   out.unlocked_chapters = Math.max(1, Math.min(4, Number(s.unlocked_chapters) || 1));
   const ids = (doc?.levels ?? []).map((l) => l.id);

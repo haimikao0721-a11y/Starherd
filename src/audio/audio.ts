@@ -82,6 +82,14 @@ export class AudioEngine {
   private musicFilter: BiquadFilterNode | null = null;
   private sfx: SfxPlayer | null = null;
   private music: MusicScheduler | null = null;
+  /** 主菜单播放的外来录音（与程序化谱面互斥） */
+  private recorded: AudioBufferSourceNode | null = null;
+  private recordedGain: GainNode | null = null;
+  private recordedUrl: string | null = null;
+  private recordedToken = 0;
+  private recordedLoop = false;
+  private recordedEnded: (() => void) | null = null;
+  private pendingRecording: string | null = null;
 
   private initPromise: Promise<void> | null = null;
   private readyFlag = false;
@@ -205,7 +213,7 @@ export class AudioEngine {
     this.musicFilter.frequency.setValueAtTime(this.intensityToHz(this.intensityTarget), ctx.currentTime);
     this.applyToneFilter(0.01);
 
-    if (this.musicSet) this.music.setScore(this.pendingMusic);
+    if (!this.pendingRecording && this.musicSet) this.music.setScore(this.pendingMusic);
 
     if (typeof document !== 'undefined' && typeof document.addEventListener === 'function') {
       document.addEventListener('visibilitychange', this.onVisibility);
@@ -234,6 +242,7 @@ export class AudioEngine {
     if (typeof document !== 'undefined' && typeof document.removeEventListener === 'function') {
       document.removeEventListener('visibilitychange', this.onVisibility);
     }
+    this.stopRecording();
     try {
       this.sfx?.dispose();
     } catch {
@@ -302,15 +311,95 @@ export class AudioEngine {
 
   /* ------------------------------------------------------------------ 音乐 */
 
-  /** 交叉淡化切换配乐；null = 淡出停止；谱面异常自动退化为程序化和声 */
+  /** 交叉淡化切换配乐；null = 淡出停止；会先停掉外来录音 */
   setMusic(track: MusicScore | null): void {
     if (this.disposed) return;
+    this.pendingRecording = null;
+    this.stopRecording();
     this.musicSet = true;
     this.pendingMusic = track;
     try {
       this.music?.setScore(track);
     } catch (err) {
       this.warn.fire('music-fail', `[audio] 配乐切换失败（已忽略）：${String(err)}`);
+    }
+  }
+
+  /**
+   * 播放一首已有的录音（循环），走音乐总线，因此静音 / 切后台 / 音效压低仍然生效。
+   * 失败时返回 false，调用方可以退回程序化谱面。
+   */
+  playRecording(url: string, opts?: { loop?: boolean; onEnded?: () => void }): Promise<boolean> {
+    if (this.disposed) return Promise.resolve(false);
+    this.pendingRecording = url;
+    this.pendingMusic = null;
+    this.musicSet = true;
+    this.recordedLoop = opts?.loop === true;
+    this.recordedEnded = opts?.onEnded ?? null;
+    const run = (): Promise<boolean> => {
+      if (this.pendingRecording !== url || !this.ctx || !this.musicBus) return Promise.resolve(false);
+      return this.beginRecording(url);
+    };
+    if (!this.readyFlag) return this.init().then(run);
+    return run();
+  }
+
+  private async beginRecording(url: string): Promise<boolean> {
+    const ctx = this.ctx;
+    const bus = this.musicBus;
+    if (!ctx || !bus || this.pendingRecording !== url) return false;
+    this.ensureRunning();
+    if (this.recordedUrl === url && this.recorded) return true;
+    this.music?.setScore(null);
+    const token = ++this.recordedToken;
+    this.stopRecordingNodes();
+    try {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const raw = await res.arrayBuffer();
+      const audioBuf = await ctx.decodeAudioData(raw.slice(0));
+      if (token !== this.recordedToken || this.pendingRecording !== url) return false;
+      const src = ctx.createBufferSource();
+      src.buffer = audioBuf;
+      src.loop = this.recordedLoop;
+      const gain = ctx.createGain();
+      gain.gain.setValueAtTime(0.0001, ctx.currentTime);
+      gain.gain.setTargetAtTime(0.55, ctx.currentTime, 0.18);
+      src.connect(gain);
+      gain.connect(bus);
+      const ended = this.recordedEnded;
+      src.onended = () => {
+        if (token !== this.recordedToken) return;
+        ended?.();
+      };
+      src.start();
+      this.recorded = src;
+      this.recordedGain = gain;
+      this.recordedUrl = url;
+      return true;
+    } catch (err) {
+      this.warn.fire('recording-fail', `[audio] 无法播放录音 ${url}：${String(err)}`);
+      return false;
+    }
+  }
+
+  private stopRecording(): void {
+    this.recordedToken++;
+    this.stopRecordingNodes();
+  }
+
+  private stopRecordingNodes(): void {
+    const ctx = this.ctx;
+    const gain = this.recordedGain;
+    const src = this.recorded;
+    this.recorded = null;
+    this.recordedGain = null;
+    this.recordedUrl = null;
+    if (gain && ctx) {
+      try { gain.gain.setTargetAtTime(0.0001, ctx.currentTime, 0.08); } catch { /* 忽略 */ }
+    }
+    if (src && ctx) {
+      try { src.stop(ctx.currentTime + 0.35); } catch { /* 已经停过 */ }
     }
   }
 

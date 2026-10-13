@@ -15,6 +15,8 @@ import type {
 } from '../sim/types';
 import { DEFAULT_SAVE, podClassCounts } from '../sim/types';
 import { recommendTransfer } from '../sim/transfer';
+import { missionBudget } from '../sim/world';
+import { routeStanding } from '../game/clip';
 import { clamp01, fmtDv, fmtDurationShort, fmtInt, fmtPct, fmtSci, fmtTime } from './format';
 import { TUT_STEPS, TutorialAnim } from './tutorial';
 
@@ -31,7 +33,7 @@ export const AUTHOR = {
   homepage: 'https://github.com/haimikao0721-a11y',
   /** 联系邮箱（想改就改这一行；关于页会显示并可一键复制） */
   email: 'haimikao0721@gmail.com',
-  version: 'v1.2.2',
+  version: 'v1.3.0',
 };
 
 export type ScreenName =
@@ -57,6 +59,8 @@ export interface MenuCallbacks {
   onOpenUrl(url: string): void;
   /** 玩家看过（或跳过）操作演示 —— 用于"首次游玩自动弹演示" */
   onTutorialSeen(): void;
+  /** 全部通关后的航线闭合 */
+  onFinale(): void;
 }
 
 /* ------------------------------------------------------------------ 工具 */
@@ -396,6 +400,7 @@ export class Menu {
       case 'tut-done': this.cb.onTutorialSeen(); this.show('menu'); break;
       case 'settings': this.show('settings'); break;
       case 'about': this.show('about'); break;
+      case 'finale': this.cb.onFinale(); break;
       case 'open-repo': this.cb.onOpenUrl(AUTHOR.repo); break;
       case 'open-home': this.cb.onOpenUrl(AUTHOR.homepage); break;
       case 'copy-repo':
@@ -592,11 +597,15 @@ export class Menu {
   /* ---- menu ---- */
   private renderMenu(): void {
     const hasSave = (this.levels?.levels?.length ?? 0) > 0;
+    const stand = routeStanding(this.levels?.levels ?? [], this.save.best_scores ?? {});
+    const medals = stand.all
+      ? `<p class="lc-hint">勋章：牧星者${stand.flawless ? ' · 无瑕航线' : ''}</p>` : '';
     const body = `
       ${this.header('牧星者', 'STARHERD', '你不是射手，你是引力源')}
       <nav class="lc-nav">
         ${btn('tutorial', '看操作演示（30 秒学会）', { title: '5 幕动画：引力井 / 左右键区别 / 怎么对接' })}
         ${btn('about', '关于本作 · 制作者与仓库', { title: '制作者 / GitHub 仓库 / 给仓库点 Star / 个人主页' })}
+        ${stand.all ? btn('finale', '航线闭合', { cls: 'lc-primary', title: '重看通关结尾：每关对接前几秒，然后颁发勋章' }) : ''}
         ${btn('start-levels', '开始任务', { title: '选择关卡' })}
         ${btn('continue', '继续', { disabled: !hasSave, title: '从上次的关卡继续' })}
         ${btn('levels', '章节选择')}
@@ -605,6 +614,7 @@ export class Menu {
         ${btn('quit', '退出', { cls: 'lc-danger' })}
       </nav>
       
+      ${medals}
       <p class="lc-hint">↑↓ 选择 · Enter 确认 · Esc 返回 · 鼠标可直接点击 · 首次游玩建议先看操作演示</p>${this.contactBlock()}`;
     this.shell(body);
   }
@@ -712,6 +722,7 @@ export class Menu {
     const ch = this.chapterOf(lv);
     const pods = lv.pods.length;
     const required = Math.max(1, Math.round(pods * (lv.difficulty <= 2 ? 1 : 0.6)));
+    const budget = missionBudget(lv);
     const sol = lv.solution;
     // 本关货舱构成（cargo pod variants）：级别标签 + 数量，缺省级别按标准舱计
     const comp = podClassCounts(lv.pods);
@@ -724,11 +735,15 @@ export class Menu {
       <div class="lc-brief">
         <div class="lc-stat-grid">
           <div class="lc-stat"><span class="lc-stat-k">任务目标</span><span class="lc-stat-v">把 ${required} / ${pods} 个货舱送入对接环</span></div>
-          <div class="lc-stat"><span class="lc-stat-k">时限</span><span class="lc-stat-v">${fmtTime(Math.max(90, lv.par_time * 3.4), 'floor')}</span></div>
-          <div class="lc-stat"><span class="lc-stat-k">Δv 预算</span><span class="lc-stat-v">${fmtDv((40 + 6 * lv.difficulty) * (lv.fuel_scale ?? 1))}${lv.fuel_scale ? ` <span class="lc-dim">(×${lv.fuel_scale} 余量)</span>` : ''}</span></div>
+          <div class="lc-stat"><span class="lc-stat-k">时限</span><span class="lc-stat-v">${fmtTime(budget.timeLimit, 'floor')}</span></div>
+          <div class="lc-stat"><span class="lc-stat-k">Δv 预算</span><span class="lc-stat-v">${fmtDv(budget.fuel)}${budget.margin > 0
+            ? ` <span class="lc-dim">(极限 +${Math.round(budget.margin * 100)}%)</span>`
+            : (lv.fuel_scale ? ` <span class="lc-dim">(×${lv.fuel_scale} 余量)</span>` : '')}</span></div>
           <div class="lc-stat"><span class="lc-stat-k">par 时间 / par Δv</span><span class="lc-stat-v">${fmtTime(lv.par_time, 'floor')} / ${fmtDv(lv.par_fuel)}</span></div>
           ${(lv.difficulty_label || '').endsWith('*')
             ? `<p class="lc-hint">带 * 的档位：本关有多个航段，内置 AI 探针不会切换航段，该分档反映 AI 的能力边界，仅供参考。</p>` : ''}
+          ${budget.margin > 0
+            ? `<p class="lc-hint">极限关：燃料和时限只比熟练标准解多 ${Math.round(budget.margin * 100)}%。打法正确就能过，多一次修正通常就不够。需要反复练，不是谁都能过。</p>` : ''}
           ${(() => { const t = this.transferLine(lv); return t
             ? `<div class="lc-stat"><span class="lc-stat-k">转移方案</span><span class="lc-stat-v">${t}</span></div>` : ''; })()}
           <div class="lc-stat"><span class="lc-stat-k">星域尺度</span><span class="lc-stat-v">bounds ${lv.bounds} RU · μ★ ${lv.mu_star}</span></div>
@@ -826,8 +841,9 @@ export class Menu {
       </section>
       <section class="lc-note lc-note-about">
         <h4>许可与素材</h4>
-        <p class="lc-hint">源码与素材均为 <b>MIT</b> 许可；美术、音效、音乐全部由本项目
-          <b>程序化生成</b>（生成器与固定种子都在仓库里），<b>不含任何第三方素材</b>。</p>
+        <p class="lc-hint">源码、程序化美术、音效和关卡配乐为 <b>MIT</b>。全部通关后的结尾会播放
+          <b>Hopes and Dreams</b>（<b>Toby Fox</b>，《Undertale》）。
+          这首不是本项目原创，版权归原作者，不包含在 MIT 里，也不随仓库和安装包分发。</p>
         <p class="lc-hint">游戏内背景音乐可在暂停页下载（仅 EXE / 网页模式）。</p>
       </section>
       <nav class="lc-nav">
@@ -914,6 +930,8 @@ export class Menu {
               : `${(sb.legsDone ?? 0) + 1}/${sb.legsTotal}`}</p></div>` : ''}
       ${this.contactBlock()}
       <nav class="lc-nav lc-nav-row">
+        ${sb.success && routeStanding(this.levels?.levels ?? [], this.save.best_scores ?? {}).all
+          ? btn('finale', '航线闭合', { cls: 'lc-primary' }) : ''}
         ${sb.success ? btn('next', '下一关', { cls: 'lc-primary' }) : ''}
         ${btn('retry', sb.success ? '重试本关' : '重试', { cls: sb.success ? '' : 'lc-primary' })}
         ${btn('menu', '返回主菜单')}

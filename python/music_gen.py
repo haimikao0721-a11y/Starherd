@@ -10,7 +10,9 @@ TS 侧 WebAudio 合成器实时演奏；每音符带 ``intensity`` 阈值，随�
 * ``t`` / ``dur`` 单位 = **拍**（不是秒），``t`` 从循环头起算。
 * ``track`` ∈ ``pad|bass|arp|perc|lead``。
 * ``perc`` 轨用 GM 打击乐音高：36 = 底鼓、38 = 军鼓、42 = 闭合踩镲。
-* 每首 16 小节 × 4 拍 = 64 拍 ≥ 32 拍；和声每 2 小节一变 → 8 次和弦变化 ≥ 4。
+* 每首 32 小节 × 4 拍 = 128 拍；和声每 4 小节一变 → 8 次和弦变化 ≥ 4。
+* 中景一直有：三和弦之上的九音、疏朗的音阶闪音、可在中等强度听到的主题。
+  高潮八度应答和过门留到高强度，避免菜单也被打成满编制。
 * 调式各不相同：aeolian / dorian / lydian / phrygian / mixolydian。
 * BPM 全部落在 84..118。所有随机性走 ``random.Random(seed)``。
 """
@@ -59,32 +61,36 @@ LV_BASS = 0.30
 LV_KICK = 0.30
 LV_HAT = 0.40
 LV_SNARE = 0.50
-LV_ARP = 0.60
-LV_LEAD = 0.75
+LV_ARP = 0.55
+LV_SHIMMER = 0.26
+LV_COLOR = 0.32
+LV_LEAD = 0.40
+LV_LEAD_ANSWER = 0.78
+LV_FILL = 0.72
 
-# 段落（16 小节）：intro → build → main → outro
-SECTIONS_LOOP = [(0, "intro", 0.20), (4, "build", 0.45), (8, "main", 0.80),
-                 (14, "outro", 0.35)]
-SECTIONS_MENU = [(0, "intro", 0.25), (4, "main", 0.55), (12, "outro", 0.30)]
+# 段落（32 小节）：引入 → 陈述 → 抬升 → 高潮 → 收回
+SECTIONS_LOOP = [(0, "intro", 0.22), (8, "verse", 0.48), (16, "lift", 0.70),
+                 (24, "chorus", 0.90), (30, "release", 0.36)]
+SECTIONS_MENU = [(0, "verse", 0.40), (16, "lift", 0.52), (24, "home", 0.38)]
 
 PIECES = [
     dict(
         name="loop1", title_zh="双星摇篮", key="A", mode="aeolian", bpm=96,
-        bars=16, prog=[0, 5, 2, 6], bars_per_chord=2, sections=SECTIONS_LOOP,
+        bars=32, prog=[0, 5, 2, 6, 3, 4, 5, 0], bars_per_chord=4, sections=SECTIONS_LOOP,
         pad_center=58, bass_pattern=[(0, 0.0, 1.5), (4, 2.0, 1.5), (0, 3.5, 0.5)],
         kick=[(0.0, 0.92), (2.0, 0.74)], snare=[(1.0, 0.62), (3.0, 0.70)],
         hat_step=0.5, hat_vel=0.30, hat_accent=0.44,
         perc_from_bar=4, hat_from_bar=6,
         arp=[(0, 1, 0.5), (2, 1, 0.5), (4, 1, 0.5), (2, 1, 0.5),
              (4, 1, 0.5), (6, 1, 0.5), (4, 1, 0.5), (2, 1, 0.5)],
-        arp_from_bar=8, arp_to_bar=14,
+        arp_from_bar=8, arp_to_bar=30,
         lead=[(4, 1, 0.0, 1.0), (5, 1, 1.0, 1.0), (4, 1, 2.0, 2.0),
               (2, 1, 4.0, 1.0), (4, 1, 5.0, 1.0), (0, 1, 6.0, 2.0)],
-        lead_repeat=2, lead_from_bar=8, lead_to_bar=14,
+        lead_repeat=6, lead_from_bar=4, lead_to_bar=32,
     ),
     dict(
         name="loop2", title_zh="碎石带", key="D", mode="dorian", bpm=110,
-        bars=16, prog=[0, 3, 5, 6], bars_per_chord=2, sections=SECTIONS_LOOP,
+        bars=32, prog=[0, 3, 4, 6, 3, 0, 4, 3], bars_per_chord=4, sections=SECTIONS_LOOP,
         pad_center=57, bass_pattern=[(0, 0.0, 1.0), (0, 1.5, 0.5), (4, 2.0, 1.0),
                                      (6, 3.5, 0.5)],
         kick=[(0.0, 0.95), (1.5, 0.60), (2.5, 0.72)],
@@ -93,15 +99,15 @@ PIECES = [
         perc_from_bar=4, hat_from_bar=5,
         arp=[(0, 1, 0.25), (2, 1, 0.25), (4, 1, 0.25), (6, 1, 0.25),
              (4, 1, 0.25), (2, 1, 0.25), (4, 1, 0.25), (6, 1, 0.25)],
-        arp_from_bar=8, arp_to_bar=14,
+        arp_from_bar=8, arp_to_bar=30,
         lead=[(0, 1, 0.0, 0.5), (1, 1, 0.5, 0.5), (2, 1, 1.0, 1.0),
               (4, 1, 2.0, 2.0), (2, 1, 4.0, 1.0), (0, 1, 5.0, 0.5),
               (2, 1, 6.0, 2.0)],
-        lead_repeat=2, lead_from_bar=8, lead_to_bar=14,
+        lead_repeat=6, lead_from_bar=4, lead_to_bar=32,
     ),
     dict(
         name="loop3", title_zh="双星共振", key="G", mode="lydian", bpm=116,
-        bars=16, prog=[0, 1, 4, 5], bars_per_chord=2, sections=SECTIONS_LOOP,
+        bars=32, prog=[0, 1, 4, 5, 3, 0, 4, 1], bars_per_chord=4, sections=SECTIONS_LOOP,
         pad_center=59, bass_pattern=[(0, 0.0, 1.0), (4, 1.0, 0.5), (0, 2.0, 1.0),
                                      (2, 3.0, 0.5), (4, 3.5, 0.5)],
         kick=[(0.0, 0.95), (1.0, 0.68), (2.0, 0.90), (3.0, 0.68)],
@@ -109,38 +115,52 @@ PIECES = [
         hat_step=0.25, hat_vel=0.24, hat_accent=0.40,
         perc_from_bar=4, hat_from_bar=6,
         arp=[(0, 1, 0.25), (4, 1, 0.25), (2, 1, 0.25), (6, 1, 0.25)],
-        arp_from_bar=8, arp_to_bar=14,
+        arp_from_bar=8, arp_to_bar=30,
         lead=[(3, 1, 0.0, 1.0), (4, 1, 1.0, 1.0), (6, 1, 2.0, 2.0),
               (4, 1, 4.0, 1.0), (2, 1, 5.0, 1.0), (4, 1, 6.0, 2.0)],
-        lead_repeat=2, lead_from_bar=8, lead_to_bar=14,
+        lead_repeat=6, lead_from_bar=4, lead_to_bar=32,
     ),
     dict(
         name="loop4", title_zh="深渊视界", key="E", mode="phrygian", bpm=92,
-        bars=16, prog=[0, 1, 6, 5], bars_per_chord=2, sections=SECTIONS_LOOP,
+        bars=32, prog=[0, 1, 6, 4, 1, 0, 6, 0], bars_per_chord=4, sections=SECTIONS_LOOP,
         pad_center=55, bass_pattern=[(0, 0.0, 2.0), (4, 2.0, 2.0)],
         kick=[(0.0, 1.00), (2.5, 0.70)], snare=[(2.0, 0.82)],
         hat_step=1.0, hat_vel=0.26, hat_accent=0.36,
         perc_from_bar=4, hat_from_bar=7,
         arp=[(0, 1, 0.5), (2, 1, 0.5), (4, 1, 0.5), (None, 1, 0.5),
              (2, 1, 0.5), (4, 1, 0.5), (6, 1, 0.5), (None, 1, 0.5)],
-        arp_from_bar=8, arp_to_bar=14,
+        arp_from_bar=10, arp_to_bar=28,
         lead=[(0, 1, 0.0, 2.0), (1, 1, 2.0, 2.0), (0, 1, 4.0, 1.0),
               (6, 0, 5.0, 3.0)],
-        lead_repeat=2, lead_from_bar=8, lead_to_bar=14,
+        lead_repeat=6, lead_from_bar=6, lead_to_bar=32,
     ),
     dict(
-        name="menu", title_zh="主菜单", key="C", mode="mixolydian", bpm=84,
-        bars=16, prog=[0, 6, 3, 4], bars_per_chord=2, sections=SECTIONS_MENU,
-        pad_center=57, bass_pattern=[(0, 0.0, 2.5), (4, 2.5, 1.5)],
-        kick=[(0.0, 0.58), (2.0, 0.42)], snare=[],
-        hat_step=1.0, hat_vel=0.20, hat_accent=0.28,
-        perc_from_bar=2, hat_from_bar=4,
-        arp=[(4, 1, 0.5), (2, 1, 0.5), (0, 1, 0.5), (2, 1, 0.5)],
-        arp_from_bar=4, arp_to_bar=12,
-        lead=[(2, 1, 0.0, 1.0), (4, 1, 1.0, 1.0), (6, 1, 2.0, 2.0),
-              (4, 1, 4.0, 1.0), (2, 1, 5.0, 1.0), (0, 1, 6.0, 2.0)],
-        lead_repeat=1, lead_from_bar=4, lead_to_bar=12,
-        lead_level=0.50, arp_level=0.50,
+        # 安静的慢流行：C 大调 I–V–vi–IV，旋律在前，铺底很轻，没有空间闪音。
+        name="menu", title_zh="主菜单", key="C", mode="ionian", bpm=96,
+        bars=32,
+        prog=[0, 4, 5, 3, 0, 4, 5, 3, 5, 3, 0, 4, 3, 4, 0, 0],
+        bars_per_chord=2, sections=SECTIONS_MENU,
+        pad_center=64, pad_vel=0.22,
+        no_color=True, no_sub=True, no_shimmer=True, no_answer=True, no_fill=True,
+        bass_from_bar=0, bass_vel=0.40,
+        bass_pattern=[(0, 0.0, 1.5), (4, 2.0, 1.0), (0, 3.25, 0.5)],
+        kick=[(0.0, 0.34)], snare=[(2.0, 0.20)],
+        hat_step=1.0, hat_vel=0.08, hat_accent=0.14,
+        perc_from_bar=0, hat_from_bar=0,
+        arp=[(0, 1, 2.0), (2, 1, 2.0)],
+        arp_from_bar=0, arp_to_bar=32, arp_level=0.20, arp_vel=0.26,
+        lead=[
+            (2, 1, 0.0, 1.0), (4, 1, 1.0, 0.5), (5, 1, 1.5, 1.0), (4, 1, 2.5, 1.5),
+            (2, 1, 4.0, 1.0), (1, 1, 5.0, 1.0), (2, 1, 6.0, 2.0),
+            (0, 1, 8.0, 2.0), (4, 1, 10.0, 1.0), (5, 1, 11.0, 1.0),
+            (4, 1, 12.0, 1.0), (2, 1, 13.0, 1.0), (0, 1, 14.0, 2.0),
+            (2, 1, 16.0, 1.0), (4, 1, 17.0, 1.0), (5, 1, 18.0, 2.0),
+            (6, 1, 20.0, 1.0), (5, 1, 21.0, 1.0), (4, 1, 22.0, 2.0),
+            (2, 1, 24.0, 2.0), (1, 1, 26.0, 1.0), (0, 1, 27.0, 5.0),
+        ],
+        lead_absolute=True, lead_vel=0.46,
+        lead_repeat=4, lead_span=32, lead_from_bar=0, lead_to_bar=32,
+        lead_level=0.16,
     ),
     # ---- 扩展方案第 5 项：事件与终章 ----------
     # 注：原本打算用全音阶（whole-tone）写终章，但本项目的谱面 schema 要求
@@ -148,8 +168,8 @@ PIECES = [
     # 对「终章」的释然感其实更贴切。
     dict(
         name="storm", title_zh="宇宙风暴", key="G", mode="hijaz", bpm=118,
-        bars=16, prog=[0, 1, 4, 5], bars_per_chord=2,
-        sections=[(0, "warning", 0.25), (4, "storm", 1.00), (12, "aftermath", 0.40)],
+        bars=32, prog=[0, 1, 4, 5, 0, 6, 1, 4], bars_per_chord=4,
+        sections=[(0, "warning", 0.25), (6, "storm", 0.95), (22, "aftermath", 0.42)],
         pad_center=59, bass_pattern=[(0, 0.0, 0.5), (0, 0.5, 0.5), (4, 1.0, 1.0),
                                      (2, 2.0, 0.5), (0, 2.5, 0.5), (4, 3.0, 1.0)],
         kick=[(0.0, 1.00), (1.0, 0.78), (2.0, 0.95), (3.0, 0.78)],
@@ -158,16 +178,16 @@ PIECES = [
         perc_from_bar=2, hat_from_bar=2,
         arp=[(0, 1, 0.25), (2, 1, 0.25), (4, 1, 0.25), (6, 1, 0.25),
              (4, 1, 0.25), (2, 1, 0.25), (1, 1, 0.25), (0, 1, 0.25)],
-        arp_from_bar=4, arp_to_bar=16,
+        arp_from_bar=4, arp_to_bar=30,
         lead=[(4, 1, 0.0, 1.0), (5, 1, 1.0, 1.0), (4, 1, 2.0, 2.0),
               (2, 1, 4.0, 1.0), (4, 1, 5.0, 0.5), (1, 1, 5.5, 0.5),
               (0, 1, 6.0, 2.0)],
-        lead_repeat=2, lead_from_bar=4, lead_to_bar=16,
+        lead_repeat=6, lead_from_bar=4, lead_to_bar=32,
     ),
     dict(
         name="rescue", title_zh="救援倒计时", key="A", mode="locrian", bpm=104,
-        bars=16, prog=[0, 1, 0, 6], bars_per_chord=2,
-        sections=[(0, "alert", 0.35), (3, "countdown", 0.95), (12, "resolve", 0.45)],
+        bars=32, prog=[0, 1, 0, 6, 1, 3, 0, 6], bars_per_chord=4,
+        sections=[(0, "alert", 0.32), (6, "countdown", 0.88), (22, "resolve", 0.42)],
         pad_center=57, bass_pattern=[(0, 0.0, 1.0), (0, 1.0, 1.0), (0, 2.0, 1.0),
                                      (4, 3.0, 1.0)],
         kick=[(0.0, 0.72), (2.0, 0.62)],
@@ -175,24 +195,24 @@ PIECES = [
         hat_step=0.5, hat_vel=0.30, hat_accent=0.48,     # 稳定的滴答 → 倒计时感
         perc_from_bar=2, hat_from_bar=1,
         arp=[(0, 1, 0.5), (2, 1, 0.5), (4, 1, 0.5), (2, 1, 0.5)],
-        arp_from_bar=3, arp_to_bar=16,
+        arp_from_bar=4, arp_to_bar=30,
         lead=[(0, 1, 0.0, 1.5), (1, 1, 2.0, 0.5), (0, 1, 3.0, 1.0),
               (6, 1, 5.0, 1.0)],
-        lead_repeat=3, lead_from_bar=3, lead_to_bar=16,
+        lead_repeat=8, lead_from_bar=4, lead_to_bar=32,
     ),
     dict(
         name="finale", title_zh="终章", key="D", mode="ionian", bpm=84,
-        bars=16, prog=[0, 2, 4, 1], bars_per_chord=2,
-        sections=[(0, "drift", 0.20), (6, "bloom", 0.70), (12, "rest", 0.25)],
+        bars=32, prog=[0, 2, 4, 1, 3, 4, 0, 2], bars_per_chord=4,
+        sections=[(0, "drift", 0.22), (10, "bloom", 0.68), (24, "rest", 0.30)],
         pad_center=62, bass_pattern=[(0, 0.0, 3.0), (4, 3.0, 1.0)],
         kick=[], snare=[],                                # 终章不用打击乐
         hat_step=1.0, hat_vel=0.14, hat_accent=0.20,
-        perc_from_bar=16, hat_from_bar=8,
+        perc_from_bar=32, hat_from_bar=10,
         arp=[(0, 1, 1.0), (2, 1, 1.0), (4, 1, 1.0), (2, 1, 1.0)],
-        arp_from_bar=6, arp_to_bar=16,
+        arp_from_bar=8, arp_to_bar=30,
         lead=[(4, 1, 0.0, 2.0), (2, 1, 2.0, 2.0), (0, 1, 4.0, 4.0)],
-        lead_repeat=2, lead_from_bar=6, lead_to_bar=16,
-        lead_level=0.45, arp_level=0.45,
+        lead_repeat=6, lead_from_bar=6, lead_to_bar=32,
+        lead_level=0.42, arp_level=0.40,
     ),
 ]
 
@@ -303,18 +323,29 @@ def build_score(piece: dict, seed: int = DEFAULT_SEED) -> dict:
         if dur <= 0:
             continue
         for p in voicing:
-            notes.add(t, dur, p, 0.66, "pad", LV_PAD, jitter=0.02)
-        # 主歌段加一层低八度根音，垫厚度（不低于 C2，避免糊成一团）
-        if start_bar >= 8:
+            notes.add(t, dur, p, float(piece.get("pad_vel", 0.66)), "pad", LV_PAD, jitter=0.02)
+        if not piece.get("no_color"):
+            # 九音：贴在和弦上方，中等强度就听得见，避免三和弦干铺八拍
+            top = max(voicing)
+            color = _midi(root, scale, deg + 1, 1)
+            while color < top + 2:
+                color += 12
+            while color > top + 14:
+                color -= 12
+            if 48 <= color <= 84:
+                notes.add(t, dur, color, 0.40, "pad", LV_COLOR, jitter=0.0)
+        if not piece.get("no_sub") and start_bar >= 4:
             sub = voicing[0] - 12
             while sub < 38:
                 sub += 12
-            notes.add(t, dur, sub, 0.52, "pad", LV_PAD_SUB, jitter=0.0)
+            notes.add(t, dur, sub, 0.48, "pad", LV_PAD_SUB, jitter=0.0)
 
     # ---------------- bass（根音 + 五度） ---------------- #
     bass_root = root - 12
+    bass_from = int(piece.get("bass_from_bar", 2))
+    bass_vel = float(piece.get("bass_vel", 0.88))
     for b in range(bars):
-        if b < 2:
+        if b < bass_from:
             continue
         t_bar = b * bpb
         deg = prog[(b // bpc) % len(prog)]
@@ -324,7 +355,7 @@ def build_score(piece: dict, seed: int = DEFAULT_SEED) -> dict:
                 midi -= 12
             while midi < bass_root - 1:
                 midi += 12
-            notes.add(t_bar + beat, dur, midi, 0.88, "bass", LV_BASS, jitter=0.03)
+            notes.add(t_bar + beat, dur, midi, bass_vel, "bass", LV_BASS, jitter=0.03)
 
     # ---------------- perc（底鼓 / 军鼓 / 踩镲） ---------------- #
     for b in range(bars):
@@ -337,6 +368,10 @@ def build_score(piece: dict, seed: int = DEFAULT_SEED) -> dict:
         for beat, vel in piece["snare"]:
             notes.add(t_bar + beat, 0.25, PERC_SNARE, vel, "perc", LV_SNARE,
                       jitter=0.03)
+        # 每 8 小节末的过门只在高强度出现，平时留白
+        if piece["kick"] and not piece.get("no_fill") and b % 8 == 7:
+            notes.add(t_bar + 3.5, 0.18, PERC_KICK, 0.66, "perc", LV_FILL, jitter=0.02)
+            notes.add(t_bar + 3.75, 0.16, PERC_SNARE, 0.52, "perc", LV_FILL, jitter=0.02)
     hat_step = float(piece.get("hat_step", 0.5))
     hat_from = int(piece.get("hat_from_bar", 6))
     step = 0.0
@@ -369,18 +404,30 @@ def build_score(piece: dict, seed: int = DEFAULT_SEED) -> dict:
             bar_now = int(t // bpb)
             deg = prog[(bar_now // bpc) % len(prog)]
             if off is not None and t + dur <= end + 1e-9:
-                notes.add(t, dur, _midi(root, scale, deg + off, octv), 0.62,
+                notes.add(t, dur, _midi(root, scale, deg + off, octv),
+                          float(piece.get("arp_vel", 0.62)),
                           "arp", arp_level, jitter=0.05)
             t = round(t + dur, 6)
             i += 1
 
+    if not piece.get("no_shimmer"):
+        shimmer_from = 2
+        for b in range(shimmer_from, bars):
+            t_bar = b * bpb
+            deg = prog[(b // bpc) % len(prog)]
+            notes.add(t_bar + 0.5, 0.85, _midi(root, scale, deg + 2, 1), 0.36,
+                      "arp", LV_SHIMMER, jitter=0.03)
+            notes.add(t_bar + 2.5, 0.85, _midi(root, scale, deg + 4, 1), 0.30,
+                      "arp", LV_SHIMMER, jitter=0.03)
+
     # ---------------- lead（主题动机，只在 main，重复 lead_repeat 次） ---------------- #
     motif = piece.get("lead") or []
-    lead_from = int(piece.get("lead_from_bar", 8))
-    lead_to = int(piece.get("lead_to_bar", 14))
+    lead_from = int(piece.get("lead_from_bar", 4))
+    lead_to = int(piece.get("lead_to_bar", bars))
     lead_level = float(piece.get("lead_level", LV_LEAD))
-    span = 8.0
-    for rep in range(int(piece.get("lead_repeat", 2))):
+    span = float(piece.get("lead_span", 16.0))
+    reps = int(piece.get("lead_repeat", 6))
+    for rep in range(reps):
         base = lead_from * bpb + rep * span
         for off, octv, beat, dur in motif:
             t = base + beat
@@ -388,8 +435,13 @@ def build_score(piece: dict, seed: int = DEFAULT_SEED) -> dict:
                 continue
             bar_now = int(t // bpb)
             deg = prog[(bar_now // bpc) % len(prog)]
-            notes.add(t, dur, _midi(root, scale, deg + off, octv), 0.80,
-                      "lead", lead_level, jitter=0.04)
+            step = off if piece.get("lead_absolute") else deg + off
+            notes.add(t, dur, _midi(root, scale, step, octv),
+                      float(piece.get("lead_vel", 0.78)),
+                      "lead", lead_level, jitter=0.03)
+            if not piece.get("no_answer") and rep >= reps // 2:
+                notes.add(t, dur * 0.8, _midi(root, scale, step, octv + 1), 0.46,
+                          "lead", LV_LEAD_ANSWER, jitter=0.02)
 
     items = sorted(notes.items, key=lambda n: (n["t"], n["track"], n["midi"]))
     return {

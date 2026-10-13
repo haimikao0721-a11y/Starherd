@@ -54,9 +54,9 @@ export type MusicTrack = (typeof TRACKS)[number];
 export const TRACK_ON: Record<MusicTrack, number> = {
   pad: 0.0,
   bass: 0.05,
-  arp: 0.3,
+  arp: 0.22,
   perc: 0.15,
-  lead: 0.7,
+  lead: 0.36,
 };
 
 /* ------------------------------------------------------------------ 调式工具 */
@@ -390,8 +390,12 @@ function playPad(env: VoiceEnv, note: MusicNote, when: number, dur: number): boo
 
   const filter = ctx.createBiquadFilter();
   filter.type = 'lowpass';
-  filter.frequency.value = clamp(620 + 1900 * env.intensity + freq * 1.7, 260, 8200);
-  filter.Q.value = 0.7;
+  const baseHz = clamp(560 + 1200 * env.intensity + freq * 1.15, 280, 6200);
+  const lift = baseHz * (0.16 + 0.22 * env.intensity);
+  filter.frequency.setValueAtTime(baseHz, when);
+  filter.frequency.linearRampToValueAtTime(baseHz + lift, when + Math.min(Math.max(dur, 0.4) * 0.45, 3.4));
+  filter.frequency.linearRampToValueAtTime(baseHz * 0.84, when + Math.max(dur, 0.5));
+  filter.Q.value = 0.85;
 
   const amp = ctx.createGain();
   amp.gain.value = 0.0001;
@@ -434,11 +438,11 @@ function playPad(env: VoiceEnv, note: MusicNote, when: number, dur: number): boo
 
 /** bass：正弦 + 轻微方波，短衰减，跟和弦根音 */
 function playBass(env: VoiceEnv, note: MusicNote, when: number, dur: number): boolean {
-  const n = Math.min(2, env.budget.available());
+  const n = Math.min(3, env.budget.available());
   if (n <= 0) return false;
   const ctx = env.ctx;
   const freq = midiToFreq(note.midi);
-  const peak = 0.3 * clamp(note.vel, 0, 1.4);
+  const peak = 0.26 * clamp(note.vel, 0, 1.4);
 
   const filter = ctx.createBiquadFilter();
   filter.type = 'lowpass';
@@ -476,6 +480,19 @@ function playBass(env: VoiceEnv, note: MusicNote, when: number, dur: number): bo
     sources.push({ n: sub });
   }
 
+  if (n >= 3) {
+    const low = ctx.createOscillator();
+    low.type = 'sine';
+    low.frequency.value = clamp(freq * 0.5, 20, 2000);
+    low.detune.value = env.detuneCents;
+    const lg = ctx.createGain();
+    lg.gain.value = 0.42;
+    low.connect(lg);
+    lg.connect(filter);
+    nodes.push(lg, low);
+    sources.push({ n: low });
+  }
+
   filter.connect(amp);
   amp.connect(env.dest);
   const stop = end + 0.35;
@@ -485,31 +502,47 @@ function playBass(env: VoiceEnv, note: MusicNote, when: number, dur: number): bo
 const ARP_STOP = 0.5;
 
 function arpVoice(env: VoiceEnv, midi: number, when: number, dur: number, vel: number, pan: number): boolean {
-  if (env.budget.available() < 1) return false;
+  const voices = env.budget.available() >= 2 ? 2 : 1;
+  if (voices < 1) return false;
   const ctx = env.ctx;
   const freq = midiToFreq(midi);
   const osc = ctx.createOscillator();
-  osc.type = env.intensity > 0.6 ? 'square' : 'triangle';
+  osc.type = env.intensity > 0.72 ? 'square' : 'triangle';
   osc.frequency.value = clamp(freq, 20, 12000);
   osc.detune.value = clamp(env.detuneCents, -1200, 1200);
 
   const filter = ctx.createBiquadFilter();
   filter.type = 'lowpass';
-  filter.frequency.value = clamp(900 + 4200 * env.intensity + freq * 0.8, 400, 13000);
-  filter.Q.value = 3.2;
+  filter.frequency.value = clamp(780 + 3600 * env.intensity + freq * 0.7, 420, 11000);
+  filter.Q.value = 2.4;
 
   const amp = ctx.createGain();
   amp.gain.value = 0.0001;
-  const stop = envPerc(amp.gain, when, 0.15 * clamp(vel, 0, 1.4), 0.004, Math.min(0.32, Math.max(0.07, dur * 0.9)));
+  const stop = envPerc(amp.gain, when, 0.16 * clamp(vel, 0, 1.4), 0.006, Math.min(0.42, Math.max(0.09, dur * 0.85)));
 
   const p = ctx.createStereoPanner();
   p.pan.value = clamp(pan, -1, 1);
+
+  const nodes: AudioNode[] = [osc, filter, amp, p];
+  const sources: SourceSpec[] = [{ n: osc }];
+  if (voices >= 2) {
+    const body = ctx.createOscillator();
+    body.type = 'sine';
+    body.frequency.value = clamp(freq, 20, 12000);
+    body.detune.value = clamp(env.detuneCents + 9, -1200, 1200);
+    const bg = ctx.createGain();
+    bg.gain.value = 0.38;
+    body.connect(bg);
+    bg.connect(filter);
+    nodes.push(body, bg);
+    sources.push({ n: body });
+  }
 
   osc.connect(filter);
   filter.connect(amp);
   amp.connect(p);
   p.connect(env.dest);
-  return launch(env, 1, when, stop + 0.02, [osc, filter, amp, p], [{ n: osc }]);
+  return launch(env, voices, when, stop + 0.02, nodes, sources);
 }
 
 /**
@@ -602,9 +635,8 @@ function playPerc(env: VoiceEnv, note: MusicNote, when: number): boolean {
   return launch(env, 1, when, stop + 0.01, [noise, hp, amp], [{ n: noise, offset: (note.midi * 0.211) % 1.5 }]);
 }
 
-/** lead：仅在 intensity > 0.7 出现；五声音阶吸附 + 轻微起音滑音 */
+/** lead：旋律。出现时机由谱面 intensity 和声部开关决定，不再额外卡在 0.7。 */
 function playLead(env: VoiceEnv, note: MusicNote, when: number, dur: number): boolean {
-  if (env.intensity <= 0.7) return false; // 契约：lead 只在强度 > 0.7 时出现
   const n = Math.min(2, env.budget.available());
   if (n <= 0) return false;
   const ctx = env.ctx;
@@ -629,6 +661,10 @@ function playLead(env: VoiceEnv, note: MusicNote, when: number, dur: number): bo
   osc.type = 'triangle';
   osc.frequency.setValueAtTime(clamp(freq * 0.985, 20, 12000), when);
   osc.frequency.linearRampToValueAtTime(clamp(freq, 20, 12000), when + 0.07);
+  if (dur > 0.35) {
+    osc.frequency.linearRampToValueAtTime(clamp(freq * 1.006, 20, 12000), when + dur * 0.55);
+    osc.frequency.linearRampToValueAtTime(clamp(freq, 20, 12000), when + dur);
+  }
   osc.detune.value = clamp(env.detuneCents + 4, -1200, 1200);
   osc.connect(filter);
   nodes.push(osc);

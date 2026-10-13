@@ -7,7 +7,7 @@ import type {
 } from './types';
 import { resolvePodSpec } from './types';
 import { Rng } from '../engine/rng';
-import { DT, TRAIL_LEN } from './constants';
+import { DT, SKILLED_TIME_FACTOR, TRAIL_LEN } from './constants';
 import { areaOf, elementsToState, rocheLimit, sphereDensity, timeDilation } from './physics';
 
 const TRAIL_KINDS: SimBodyKind[] = ['pod', 'shard'];
@@ -184,13 +184,9 @@ export function createWorld(level: LevelSpec, doc: LevelsDoc, attempt = 1): Worl
 
   const nebulae: Nebula[] = (level.nebulae ?? []).map((n) => ({ ...n }));
 
-  // 燃料：飞船自身的 Δv 预算由难度给出（与货舱的霍曼 Δv 是两种货币，HUD 分开显示）
-  // 标定依据：悬停在 r≈1.5 处对抗恒星引力约需 0.44 Δv/TU，一次 1 RU 的转场约 3 Δv，
-  // 因此 40~110 Δv 对应 20~60 TU 的真实任务时长。
-  // 燃料预算：40 + 6×难度，再乘可选的关卡系数（fuel_scale）。
-  // 玩家反馈「有些关太极限、不像能过」——放宽预算即可，物理与几何一律不动。
-  const fuelScale = Number((level as { fuel_scale?: number }).fuel_scale ?? 1) || 1;
-  const fuelCapacity = (40 + 6 * level.difficulty) * fuelScale;
+  // 燃料与时限见 missionBudget()：普通关沿用放宽后的预算，极限关只留 margin。
+  const budget = missionBudget(level);
+  const fuelCapacity = budget.fuel;
 
   // 定时事件（宇宙风暴等）：运行时状态挂到 world.events，由 step 每步更新
   const eventState = (level.events ?? []).map((e) => ({
@@ -220,9 +216,9 @@ export function createWorld(level: LevelSpec, doc: LevelsDoc, attempt = 1): Worl
     objectives: level.objectives,
     objectiveIndex: 0,
     objectivesTotal: Math.max(1, level.objectives?.length ?? 1),
-    // 时限（秒）。第 1 章是教学章：给足 180 秒，让玩家能反复试错而不被计时器逼死。
-    // 注意时限不参与计分——时间分用的是 parTime（见 score.ts），所以放宽时限不会让分数虚高。
-    timeLimit: Math.max(90, level.par_time * 3.4, level.chapter === 1 ? 180 : 0),
+    // 时限与 world.time 同一单位。第 1 章教学关在 missionBudget 里给到至少 180。
+    // 时限不参与计分——时间分用的是 parTime（见 score.ts）。
+    timeLimit: budget.timeLimit,
     combo: 0, comboTimer: 0,
   };
 
@@ -289,6 +285,48 @@ export function createWorld(level: LevelSpec, doc: LevelsDoc, attempt = 1): Worl
   // 洛希极限（真实公式）预计算：用于关卡危险区可视化与撕裂判定
   (world as World & { requiredPods?: number }).requiredPods = required;
   return world;
+}
+
+export interface MissionBudget {
+  /** 飞船 Δv 上限 */
+  fuel: number;
+  /** 失败时限，与 world.time 同一单位 */
+  timeLimit: number;
+  /** 极限容差；普通关为 0 */
+  margin: number;
+  /** 名义预算 40 + 6×难度，不含系数 */
+  nominalFuel: number;
+}
+
+/**
+ * 关卡的燃料与时限。
+ *
+ * 普通关：燃料 = (40+6×难度)×fuel_scale，时限 = max(90, par×3.4)，第 1 章至少 180。
+ * 极限关（level.margin，例如 0.05）：只在熟练标准解之上留这个比例。
+ *   燃料 = 名义预算 × (1+margin)
+ *   时限 = max(par×熟练倍数, 12) × (1+margin)
+ * 几何、质量、物理常量不动。
+ */
+export function missionBudget(level: Pick<LevelSpec, 'difficulty' | 'par_time' | 'chapter' | 'fuel_scale' | 'margin'>): MissionBudget {
+  const nominalFuel = 40 + 6 * level.difficulty;
+  const margin = Number(level.margin);
+  const limit = Number.isFinite(margin) && margin > 0 && margin < 1;
+  if (limit) {
+    const skilled = Math.max(level.par_time * SKILLED_TIME_FACTOR, 12);
+    return {
+      fuel: nominalFuel * (1 + margin),
+      timeLimit: skilled * (1 + margin),
+      margin,
+      nominalFuel,
+    };
+  }
+  const fuelScale = Number(level.fuel_scale ?? 1) || 1;
+  return {
+    fuel: nominalFuel * fuelScale,
+    timeLimit: Math.max(90, level.par_time * 3.4, level.chapter === 1 ? 180 : 0),
+    margin: 0,
+    nominalFuel,
+  };
 }
 
 /** 关卡要求的送达数量（存活率计分与胜负判定用） */

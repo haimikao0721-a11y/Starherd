@@ -294,90 +294,90 @@
       "name": "loop1",
       "file": "audio/music_loop1.json",
       "bpm": 96,
-      "bars": 16,
+      "bars": 32,
       "beats_per_bar": 4,
       "key": "A",
       "mode": "aeolian",
-      "bytes": 36654,
-      "sha256": "984b08e19d1111e0e0253f7e7b79c88ae159cbd9ebdbac12a065007ffe7c56d1"
+      "bytes": 105528,
+      "sha256": "ca40e4017decd88717206bc450b212262fdc6f604ea78b5aacb2cfd07cdacc2c"
     },
     {
       "name": "loop2",
       "file": "audio/music_loop2.json",
       "bpm": 110,
-      "bars": 16,
+      "bars": 32,
       "beats_per_bar": 4,
       "key": "D",
       "mode": "dorian",
-      "bytes": 48500,
-      "sha256": "e4a531392d1e1f0cd279bed6046fb00862601edd40822b3df1dae5ad4a9a7085"
+      "bytes": 141261,
+      "sha256": "34f27c082ed87ff8fcac07ffdc82aefd89565d747a51bc6b12fabcc60a999e52"
     },
     {
       "name": "loop3",
       "file": "audio/music_loop3.json",
       "bpm": 116,
-      "bars": 16,
+      "bars": 32,
       "beats_per_bar": 4,
       "key": "G",
       "mode": "lydian",
-      "bytes": 62035,
-      "sha256": "f783d62aaf4351872e904bbb62cb7067f18fb19c59fdc153936fd7d5b5f9f07a"
+      "bytes": 176401,
+      "sha256": "17ef04ae4f5c8adce61849bf68726eb4bdc41b05d5c72347fa2687d908f88586"
     },
     {
       "name": "loop4",
       "file": "audio/music_loop4.json",
       "bpm": 92,
-      "bars": 16,
+      "bars": 32,
       "beats_per_bar": 4,
       "key": "E",
       "mode": "phrygian",
-      "bytes": 24602,
-      "sha256": "c14d0807ec2fd3d65f0adc9e6bcf18334bd40b25f00e08f7dbd4044571eae1b4"
+      "bytes": 70168,
+      "sha256": "ef2ba2283c00ddd996268d06f5de7479a2f77f508216fa296fd8247b363d4ab0"
     },
     {
       "name": "menu",
       "file": "audio/music_menu.json",
-      "bpm": 84,
-      "bars": 16,
+      "bpm": 96,
+      "bars": 32,
       "beats_per_bar": 4,
       "key": "C",
-      "mode": "mixolydian",
-      "bytes": 28674,
-      "sha256": "b6bdabbdfffa97b060b0fd808038c37237a7bcae134a609e77352537e4216154"
+      "mode": "ionian",
+      "bytes": 68894,
+      "sha256": "9012887459d5076713526783b14a2c9a14937fbea65676da7e77231abc9daf34"
     },
     {
       "name": "storm",
       "file": "audio/music_storm.json",
       "bpm": 118,
-      "bars": 16,
+      "bars": 32,
       "beats_per_bar": 4,
       "key": "G",
       "mode": "hijaz",
-      "bytes": 88310,
-      "sha256": "389db8f1d6619ee1c955db25300f11c7ecdd9fd4eeefac55ab97f993927ebbbb"
+      "bytes": 201368,
+      "sha256": "fa1865d6bddfc5d2f2b2aa560a3967c8bfe46fe1c77573ac5621fb8915878a05"
     },
     {
       "name": "rescue",
       "file": "audio/music_rescue.json",
       "bpm": 104,
-      "bars": 16,
+      "bars": 32,
       "beats_per_bar": 4,
       "key": "A",
       "mode": "locrian",
-      "bytes": 51048,
-      "sha256": "9482431834ca23a361ccb2d269747499887e3c90e08a38b8f5b0f7b0820580d6"
+      "bytes": 114554,
+      "sha256": "342de80498365666606fa5e9dbe8678890e722a55be991fed9ebcebf78fcc1ed"
     },
     {
       "name": "finale",
       "file": "audio/music_finale.json",
       "bpm": 84,
-      "bars": 16,
+      "bars": 32,
       "beats_per_bar": 4,
       "key": "D",
       "mode": "ionian",
-      "bytes": 19203,
-      "sha256": "f27313421407837cc7ba9d9fc2c9f54e605ed07602b48334f8a2f414015c57d8"
+      "bytes": 51206,
+      "sha256": "616cd89870c560656a22f3e0a3e60e35649b0917371c6e371ec26852ede4d7f1"
     }
   ],
-  "total_bytes": 5903685
+  "total_bytes": 6474039
 }

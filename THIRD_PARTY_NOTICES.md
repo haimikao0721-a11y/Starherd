@@ -1,7 +1,12 @@
 # 第三方组件与许可 / THIRD-PARTY NOTICES
 
-《牧星者 / STARHERD》**自身不含任何第三方素材**（美术、音效、音乐全部由本仓库的
-`python/assets_gen.py` 与 `python/music_gen.py` 程序化生成，详见 [LICENSE](LICENSE)）。
+《牧星者 / STARHERD》随仓库分发的美术、音效和音乐谱面，由
+`python/assets_gen.py` 与 `python/music_gen.py` 程序化生成，属于本项目 MIT 许可的一部分
+（详见 [LICENSE](LICENSE)）。
+
+全通关结尾若在本机播放《Hopes and Dreams》，那是 **Toby Fox** 为《Undertale》所写的曲子。
+录音文件不在本仓库、不在发布包里，也不适用 MIT。版权归原作者。
+
 本文件列出构建与运行时实际使用的第三方**软件组件**及其许可证。
 
 > 说明：本表按本机实际安装/使用的版本与用途核对（`npm ls`、`importlib.metadata`）。
@@ -48,8 +53,8 @@ PyInstaller 本体是 GPL-2.0-or-later，但**其 bootloader 带有明确例外�
 |---|---|---|
 | 美术（PNG/ICO） | 17 | `python/assets_gen.py`（纯标准库 PNG 编码器，固定种子 `20260101`） |
 | 音效（WAV） | 17 | 同上（纯标准库 WAV 写入器，程序化合成） |
-| 音乐（谱面 JSON） | 5 | `python/music_gen.py`（各章不同调式：aeolian / dorian / lydian / phrygian / mixolydian） |
+| 音乐（谱面 JSON） | 8 | `python/music_gen.py`（menu / loop1–4 / storm / rescue / finale） |
 | 音乐（下载用 WAV） | 按需 | `python/music_render.py`（离线渲染同一份谱面） |
 
-> 以上生成器与种子均在仓库内，任何人可用相同命令复现出一致的素材；
-> 因此本项目可以声明：**除上表列出的软件组件外，无任何第三方版权内容**。
+> 以上生成器与种子均在仓库内，可复现出一致的程序化素材。
+> 《Hopes and Dreams》（Toby Fox）不在此列，也不在发行包内。

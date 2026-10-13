@@ -1,5 +1,6 @@
 /** 计分：四项分解 × 难度系数 + 连击奖励（见 docs/DESIGN.md §5） */
 import type { ScoreBreakdown, World } from '../sim/types';
+import { SKILLED_TIME_FACTOR } from '../sim/constants';
 
 const WEIGHTS = { time: 0.35, fuel: 0.30, fidelity: 0.20, survival: 0.15 };
 
@@ -20,7 +21,7 @@ export function computeScore(world: World, verdict: VerdictLike | null, newBest:
   const time = Math.max(world.time, 0.001);
   // 时间因子：par_time 是"物理最短时间"（≥1.25×霍曼转移），人类不可能贴着它完成，
   // 因此满分基准取 2.5×par_time，提前完成最多 1.25 倍加成。
-  const parTimeScore = Math.max(lv.parTime * 2.5, 12);
+  const parTimeScore = Math.max(lv.parTime * SKILLED_TIME_FACTOR, 12);
   const timeFactor = clamp(parTimeScore / time, 0, 1.25);
   // 燃料因子：飞船 Δv 预算的 55% 视为"优秀飞行员"的基准消耗
   const parDv = lv.fuelCapacity * 0.55;

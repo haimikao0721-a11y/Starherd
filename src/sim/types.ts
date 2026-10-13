@@ -96,8 +96,13 @@ export interface LevelSpec {
   objectives?: ObjectiveSpec[];
   /** 难度档位（tools/difficulty_probe.py 用 AI 探针实测写入）：普通/困难/挑战 */
   difficulty_label?: string;
-  /** 燃料预算系数（可选）：fuelCapacity = (40 + 6×难度) × 该值 */
+  /** 燃料预算系数（可选）：fuelCapacity = (40 + 6×难度) × 该值。极限关（margin）忽略此项。 */
   fuel_scale?: number;
+  /**
+   * 极限容差。设置后，燃料与时限只在「熟练标准解」之上留出该比例。
+   * 0.05 = 多 5%：打法正确就能过，再多一次修正就不够。不设置则沿用原来的宽预算。
+   */
+  margin?: number;
   mu_star: number; bounds: number;
   camera: { x: number; y: number; zoom: number };
   bodies: BodySpec[]; pods: PodSpec[];
@@ -527,9 +532,9 @@ export const PALETTES: Record<string, Palette> = {
 };
 
 export const DEFAULT_QUALITY: Quality = {
-  maxParticles: 2200, trails: true, bloom: true, chroma: true,
-  fieldContours: true, starLayers: 3, glowScale: 1, targetFps: 60,
-  renderScale: 0.62,
+  maxParticles: 1600, trails: true, bloom: true, chroma: false,
+  fieldContours: true, starLayers: 2, glowScale: 1, targetFps: 60,
+  renderScale: 0.5,
 };
 
 /* ------------------------------------------------------------------ 网络 */
@@ -564,13 +569,15 @@ export interface SaveState {
   };
   unlocked_chapters: number;
   best_scores: Record<string, { score: number; grade: string; time: number; fuel: number }>;
+  /** 各关通关前几秒的操作片段。旧存档没有这个字段。 */
+  clips?: Record<string, import('../game/clip').LevelClip>;
   totals: { played: number; delivered: number; lost: number; playtime: number };
   last_level: string;
 }
 
 export const DEFAULT_SAVE: SaveState = {
   version: '1.0',
-  settings: { master: 0.8, music: 0.55, sfx: 0.9, muted: false, quality: 'high', showField: true, fpsCap: 0, renderScaleAuto: true, physics60: false },
+  settings: { master: 0.8, music: 0.55, sfx: 0.9, muted: false, quality: 'mid', showField: true, fpsCap: 0, renderScaleAuto: true, physics60: false },
   unlocked_chapters: 1,
   best_scores: {},
   totals: { played: 0, delivered: 0, lost: 0, playtime: 0 },

@@ -124,6 +124,7 @@ var Rng = class {
 // src/sim/constants.ts
 var G = 1;
 var TIME_SCALE = 1.6;
+var SKILLED_TIME_FACTOR = 2.5;
 var PHYS_HZ = 120;
 var DT = 1 / (PHYS_HZ * TIME_SCALE);
 var MAX_ADAPT_DEPTH = 3;
@@ -523,8 +524,8 @@ function createWorld(level, doc2, attempt = 1) {
     pulse: 0
   };
   const nebulae = (level.nebulae ?? []).map((n) => ({ ...n }));
-  const fuelScale = Number(level.fuel_scale ?? 1) || 1;
-  const fuelCapacity = (40 + 6 * level.difficulty) * fuelScale;
+  const budget = missionBudget(level);
+  const fuelCapacity = budget.fuel;
   const eventState = (level.events ?? []).map((e) => ({
     kind: e.kind,
     x: 0,
@@ -569,9 +570,9 @@ function createWorld(level, doc2, attempt = 1) {
     objectives: level.objectives,
     objectiveIndex: 0,
     objectivesTotal: Math.max(1, level.objectives?.length ?? 1),
-    // 时限（秒）。第 1 章是教学章：给足 180 秒，让玩家能反复试错而不被计时器逼死。
-    // 注意时限不参与计分——时间分用的是 parTime（见 score.ts），所以放宽时限不会让分数虚高。
-    timeLimit: Math.max(90, level.par_time * 3.4, level.chapter === 1 ? 180 : 0),
+    // 时限与 world.time 同一单位。第 1 章教学关在 missionBudget 里给到至少 180。
+    // 时限不参与计分——时间分用的是 parTime（见 score.ts）。
+    timeLimit: budget.timeLimit,
     combo: 0,
     comboTimer: 0
   };
@@ -674,6 +675,27 @@ function createWorld(level, doc2, attempt = 1) {
   world.well.lty = world.well.y;
   world.requiredPods = required;
   return world;
+}
+function missionBudget(level) {
+  const nominalFuel = 40 + 6 * level.difficulty;
+  const margin = Number(level.margin);
+  const limit = Number.isFinite(margin) && margin > 0 && margin < 1;
+  if (limit) {
+    const skilled = Math.max(level.par_time * SKILLED_TIME_FACTOR, 12);
+    return {
+      fuel: nominalFuel * (1 + margin),
+      timeLimit: skilled * (1 + margin),
+      margin,
+      nominalFuel
+    };
+  }
+  const fuelScale = Number(level.fuel_scale ?? 1) || 1;
+  return {
+    fuel: nominalFuel * fuelScale,
+    timeLimit: Math.max(90, level.par_time * 3.4, level.chapter === 1 ? 180 : 0),
+    margin: 0,
+    nominalFuel
+  };
 }
 function requiredPods(world) {
   const r = world.requiredPods;
@@ -1116,6 +1138,30 @@ function advanceObjective(world) {
     `\u822A\u6BB5 ${lv.objectiveIndex + 1}/${list.length} \xB7 ${o.label_zh ?? "\u4E0B\u4E00\u4E2A\u76EE\u6807"}`
   );
 }
+var K_SLING_DAMP = 0.05;
+function wellCaptureAssist(world, dt) {
+  if (!world.fieldEnabled) return;
+  const wl = world.well;
+  if (!(wl.mass > 0)) return;
+  for (let i = 0; i < world.pods.length; i++) {
+    const p = world.pods[i];
+    if (!p.alive || p.delivered) continue;
+    const dx = p.x - wl.x;
+    const dy = p.y - wl.y;
+    const r = Math.hypot(dx, dy);
+    if (!(r > 1e-4) || r > WELL_RANGE * 2.2) continue;
+    const cut = 1 / (1 + Math.pow(r / WELL_RANGE, 6));
+    const mu = wl.mass * cut;
+    const rvx = p.vx - wl.vx;
+    const rvy = p.vy - wl.vy;
+    const v2 = rvx * rvx + rvy * rvy;
+    if (v2 >= 2 * mu / r) continue;
+    const rad = (rvx * dx + rvy * dy) / r;
+    const damp = Math.min(0.5, K_SLING_DAMP * dt);
+    p.vx -= rad * damp * (dx / r);
+    p.vy -= rad * damp * (dy / r);
+  }
+}
 function applyShower(world, dt) {
   const list = world.level.events;
   if (!list || !list.length) return;
@@ -1517,6 +1563,7 @@ function stepOnce(world, dt, depth = 0) {
   applyFlare(world, dt);
   applyWave(world, dt);
   applyShower(world, dt);
+  wellCaptureAssist(world, dt);
   updateTrails(world, dt);
 }
 function frameEnd(world, simDt) {

@@ -47,7 +47,7 @@ if str(_HERE) not in sys.path:
 import paths  # noqa: E402
 import save as save_mod  # noqa: E402
 
-VERSION = "1.2.2"
+VERSION = "1.3.0"
 LOG = logging.getLogger("lagrange.host")
 
 TITLE = "牧星者 / STARHERD"
@@ -87,6 +87,7 @@ _EXTRA_MIME = {
     ".wav": ("audio/wav", None),
     ".ogg": ("audio/ogg", None),
     ".mp3": ("audio/mpeg", None),
+    ".m4a": ("audio/mp4", None),
     ".woff2": ("font/woff2", None),
     ".wasm": ("application/wasm", None),
 }

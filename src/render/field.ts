@@ -2,17 +2,17 @@
  * STARHERD — 引力场可视化（W-render）
  *
  * 真实等势面  Φ(p) = -Σ G·m_i / sqrt(r_i² + ε²)
- * 在 96×54 粗网格上用 marching squares 求等值线（深空里的「引力地形等高线」），
- * 每 120 ms 重算一次并把结果缓存为 Path2D（不每帧重建、不每帧分配）；
+ * 在 80×45 粗网格上用 marching squares 求等值线（深空里的「引力地形等高线」），
+ * 每 280 ms 重算一次并把结果缓存为 Path2D（不每帧重建、不每帧分配）；
  * 再叠一层稀疏场向量箭头（每 8 格一个，长度按 |g| 归一化）。
  */
 import type { Palette, Quality, World } from '../sim/types';
 import { PX_PER_RU } from '../engine/view';
 import { clamp, hexToRgb, mixColor, perf, rgba, rgbToHex, mixRgb } from './draw';
 
-export const FIELD_COLS = 112;
-export const FIELD_ROWS = 63;
-const REBUILD_MS = 120;
+export const FIELD_COLS = 80;
+export const FIELD_ROWS = 45;
+const REBUILD_MS = 280;
 const ARROW_STEP = 8;
 const MAX_LEVELS = 14;
 

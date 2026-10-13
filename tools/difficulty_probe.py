@@ -109,6 +109,10 @@ def main(argv: list[str] | None = None) -> int:
         lv = levels.get(lid, {})
         par_time = float(lv.get("par_time", 0) or 0)
         fuel_cap = (40 + 6 * float(lv.get("difficulty", 1))) * float(lv.get("fuel_scale", 1) or 1)
+        margin = float(lv.get("margin") or 0)
+        if 0 < margin < 1:
+            # 与 src/sim/world.ts missionBudget 同一口径：极限关忽略 fuel_scale
+            fuel_cap = (40 + 6 * float(lv.get("difficulty", 1))) * (1 + margin)
         grade, why = classify(row, par_time, fuel_cap)
         # 多段关卡的口径限制：探针的自动驾驶不支持多航段，它的失败不代表人类难度
         legs = len(lv.get("objectives") or [])
