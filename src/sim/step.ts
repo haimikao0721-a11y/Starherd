@@ -15,6 +15,7 @@ import {
 import {
   conservedQuantities, dragAccel, primaryAccel, radiationAccel, rocheLimit,
   sphereDensity, tidalGradient, wellAccel,
+  primaryAccelRel,
 } from './physics';
 import { requiredPods } from './world';
 
@@ -87,7 +88,7 @@ function lightAccel(world: World, b: Body, wind: number): void {
   b.ax = 0; b.ay = 0;
   if (b.docked || !b.alive) return;
   ACC.x = 0; ACC.y = 0;
-  primaryAccel(b.x, b.y, world.primaries, world.epsilon, ACC);
+  primaryAccelRel(b.x, b.y, b.vx, b.vy, world.primaries, world.epsilon, ACC);
   const w = world.well;
   if (world.fieldEnabled && w.engaged && w.mass > 0) {
     wellAccel(b.x, b.y, w.x, w.y, w.mass, WELL_RANGE, w.repel, world.epsilon, ACC);

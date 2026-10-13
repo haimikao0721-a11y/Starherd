@@ -22,11 +22,69 @@ export function softenInvCube(dx: number, dy: number, eps: number): number {
   return 1 / (r2 * Math.sqrt(r2));
 }
 
+/**
+ * 光速（游戏单位 RU/TU）。
+ *
+ * ⚠️ 本作单位是**游戏单位**（G = μ = 1），不是 SI —— 所以这个值不是 299792458，
+ * 而是为了让 1PN 近星点进动"看得见但不夸张"而选的常数：
+ * 取轨道速度 ~0.5 RU/TU、μ=1、a≈1.5 时每圈进动约 1°（Δϖ = 6πμ/(c²a(1−e²))）。
+ * 更强的相对论效应留给黑洞关（那里 μ/r 大得多），普通关卡几乎无感。
+ */
+export const C_LIGHT = 30.0;
+
+/** 1PN 是否在该处显著：μ/(c²r) 可忽略就跳过（普通关卡自动走纯牛顿） */
+export function relSignificant(mu: number, r: number): boolean {
+  return mu / (C_LIGHT * C_LIGHT * Math.max(1e-9, r)) > 1e-5;
+}
+
+/**
+ * 一阶后牛顿（1PN）相对加速度，**累加**到 out。
+ *
+ * @param dx,dy   相对位置 r⃗（目标点 − 源）
+ * @param dvx,dvy 相对速度 v⃗
+ * @param muTotal μ_tot = G(m₁+m₂)
+ */
+export function relAccel(dx: number, dy: number, dvx: number, dvy: number,
+  muTotal: number, out: Vec2): void {
+  const r2 = dx * dx + dy * dy;
+  const r = Math.sqrt(r2);
+  if (!relSignificant(muTotal, r)) return;
+  const v2 = dvx * dvx + dvy * dvy;
+  const rv = dx * dvx + dy * dvy;
+  const k = muTotal / (C_LIGHT * C_LIGHT * r2 * r);
+  const c1 = (4 * muTotal) / r - v2;
+  out.x += k * (c1 * dx + 4 * rv * dvx);
+  out.y += k * (c1 * dy + 4 * rv * dvy);
+}
+
 /** 单质点引力加速度（写入 out） */
 export function pointAccel(dx: number, dy: number, mu: number, eps: number, out: Vec2): void {
   const k = mu * softenInvCube(dx, dy, eps);
   out.x += k * dx;
   out.y += k * dy;
+}
+
+/**
+ * 主天体群对 (x,y) 的引力加速度，**含 1PN 相对论修正**（近致密源才生效，见 relSignificant）。
+ *
+ * 与 primaryAccel 的区别只是多要一个速度——1PN 项依赖速度，这是它产生近星点进动的原因。
+ */
+export function primaryAccelRel(x: number, y: number, vx: number, vy: number,
+  primaries: Body[], eps: number, out: Vec2): void {
+  for (let i = 0; i < primaries.length; i++) {
+    const b = primaries[i];
+    if (!b.alive) continue;
+    const dx = b.x - x;
+    const dy = b.y - y;
+    pointAccel(dx, dy, b.mu, eps, out);
+    const r2 = dx * dx + dy * dy;
+    // 只在**黑洞**附近开启 1PN：普通恒星的 μ/(c²r) 也可观，但那样会改变既有解法的可解性，
+    // 而可行性分析器（Python）并不建模 1PN —— 与其让两套口径打架，不如把相对论效应
+    // 限定在本来就是"强场"的黑洞关。判定用运行时已有的 kind，不新增数据字段。
+    if (b.kind === 'blackhole' && r2 > 1e-12 && relSignificant(b.mu, Math.sqrt(r2))) {
+      relAccel(dx, dy, b.vx - vx, b.vy - vy, b.mu, out);
+    }
+  }
 }
 
 /** 主天体群对 (x,y) 的引力加速度（O(M)，M=主天体数） */

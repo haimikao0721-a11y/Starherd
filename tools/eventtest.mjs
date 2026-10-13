@@ -208,6 +208,7 @@ function makeBody(id, key, kind, mass, radius, x, y, vx, vy, tint, primary) {
     qpr: 1,
     // 光帆系数缺省 1：主天体/小行星/碎片沿用改造前的光压（货舱在下面按级别覆盖）
     sail: 1,
+    hull: 1,
     docked: false,
     delivered: false,
     lost: false,
@@ -314,6 +315,7 @@ function createWorld(level, doc2, attempt = 1) {
     b.tag = spec2.id;
     b.class = pc.cls.id;
     b.sail = pc.sail;
+    b.hull = pc.hull;
     b.integrity = pc.hull;
     b.cd = 0.7;
     bodies.push(b);
@@ -351,16 +353,17 @@ function createWorld(level, doc2, attempt = 1) {
       byKey.set(b.key, b);
     }
   }
-  const dockBody = byKey.get(level.dock.body) ?? primaries[primaries.length - 1];
-  const off = level.dock.offset ?? { x: 0, y: 0 };
+  const dockTarget = level.objectives && level.objectives.length ? level.objectives[0] : null;
+  const dockBody = (dockTarget ? byKey.get(dockTarget.body) : null) ?? byKey.get(level.dock.body) ?? primaries[primaries.length - 1];
+  const off = dockTarget?.offset ?? level.dock.offset ?? { x: 0, y: 0 };
   const dock = {
     bodyId: dockBody.id,
     x: dockBody.x + off.x,
     y: dockBody.y + off.y,
     ox: off.x,
     oy: off.y,
-    radius: level.dock.radius,
-    vMax: level.dock.v_max,
+    radius: dockTarget?.radius ?? level.dock.radius,
+    vMax: dockTarget?.v_max ?? level.dock.v_max,
     pulse: 0
   };
   const nebulae = (level.nebulae ?? []).map((n) => ({ ...n }));
@@ -406,6 +409,10 @@ function createWorld(level, doc2, attempt = 1) {
     bounds: level.bounds,
     // 定时事件（宇宙风暴等）：必须抄进运行时 level，否则 applyEvents 读到 undefined（曾经漏抄导致"数据到了前端但事件静默失效"）
     events: level.events,
+    // 多段目标：同样必须显式拷入（运行时 level 是逐字段手抄的）
+    objectives: level.objectives,
+    objectiveIndex: 0,
+    objectivesTotal: Math.max(1, level.objectives?.length ?? 1),
     // 时限（秒）。第 1 章是教学章：给足 180 秒，让玩家能反复试错而不被计时器逼死。
     // 注意时限不参与计分——时间分用的是 parTime（见 score.ts），所以放宽时限不会让分数虚高。
     timeLimit: Math.max(90, level.par_time * 3.4, level.chapter === 1 ? 180 : 0),

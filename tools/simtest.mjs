@@ -185,10 +185,38 @@ function softenInvCube(dx, dy, eps) {
   const r2 = dx * dx + dy * dy + eps * eps;
   return 1 / (r2 * Math.sqrt(r2));
 }
+var C_LIGHT = 30;
+function relSignificant(mu, r) {
+  return mu / (C_LIGHT * C_LIGHT * Math.max(1e-9, r)) > 1e-5;
+}
+function relAccel(dx, dy, dvx, dvy, muTotal, out) {
+  const r2 = dx * dx + dy * dy;
+  const r = Math.sqrt(r2);
+  if (!relSignificant(muTotal, r)) return;
+  const v2 = dvx * dvx + dvy * dvy;
+  const rv = dx * dvx + dy * dvy;
+  const k = muTotal / (C_LIGHT * C_LIGHT * r2 * r);
+  const c1 = 4 * muTotal / r - v2;
+  out.x += k * (c1 * dx + 4 * rv * dvx);
+  out.y += k * (c1 * dy + 4 * rv * dvy);
+}
 function pointAccel(dx, dy, mu, eps, out) {
   const k = mu * softenInvCube(dx, dy, eps);
   out.x += k * dx;
   out.y += k * dy;
+}
+function primaryAccelRel(x, y, vx, vy, primaries, eps, out) {
+  for (let i = 0; i < primaries.length; i++) {
+    const b = primaries[i];
+    if (!b.alive) continue;
+    const dx = b.x - x;
+    const dy = b.y - y;
+    pointAccel(dx, dy, b.mu, eps, out);
+    const r2 = dx * dx + dy * dy;
+    if (b.kind === "blackhole" && r2 > 1e-12 && relSignificant(b.mu, Math.sqrt(r2))) {
+      relAccel(dx, dy, b.vx - vx, b.vy - vy, b.mu, out);
+    }
+  }
 }
 function primaryAccel(x, y, primaries, eps, out) {
   for (let i = 0; i < primaries.length; i++) {
@@ -336,6 +364,7 @@ function makeBody(id, key, kind, mass, radius, x, y, vx, vy, tint, primary) {
     qpr: 1,
     // 光帆系数缺省 1：主天体/小行星/碎片沿用改造前的光压（货舱在下面按级别覆盖）
     sail: 1,
+    hull: 1,
     docked: false,
     delivered: false,
     lost: false,
@@ -442,6 +471,7 @@ function createWorld(level, doc2, attempt = 1) {
     b.tag = spec.id;
     b.class = pc.cls.id;
     b.sail = pc.sail;
+    b.hull = pc.hull;
     b.integrity = pc.hull;
     b.cd = 0.7;
     bodies.push(b);
@@ -479,21 +509,30 @@ function createWorld(level, doc2, attempt = 1) {
       byKey.set(b.key, b);
     }
   }
-  const dockBody = byKey.get(level.dock.body) ?? primaries[primaries.length - 1];
-  const off = level.dock.offset ?? { x: 0, y: 0 };
+  const dockTarget = level.objectives && level.objectives.length ? level.objectives[0] : null;
+  const dockBody = (dockTarget ? byKey.get(dockTarget.body) : null) ?? byKey.get(level.dock.body) ?? primaries[primaries.length - 1];
+  const off = dockTarget?.offset ?? level.dock.offset ?? { x: 0, y: 0 };
   const dock = {
     bodyId: dockBody.id,
     x: dockBody.x + off.x,
     y: dockBody.y + off.y,
     ox: off.x,
     oy: off.y,
-    radius: level.dock.radius,
-    vMax: level.dock.v_max,
+    radius: dockTarget?.radius ?? level.dock.radius,
+    vMax: dockTarget?.v_max ?? level.dock.v_max,
     pulse: 0
   };
   const nebulae = (level.nebulae ?? []).map((n) => ({ ...n }));
   const fuelScale = Number(level.fuel_scale ?? 1) || 1;
   const fuelCapacity = (40 + 6 * level.difficulty) * fuelScale;
+  const eventState = (level.events ?? []).map((e) => ({
+    kind: e.kind,
+    x: 0,
+    y: 0,
+    dir: e.dir,
+    eta: e.t0,
+    active: false
+  }));
   const required = Math.max(1, Math.round(level.pods.length * (level.difficulty <= 2 ? 1 : 0.6)));
   const levelRt = {
     id: level.id,
@@ -524,6 +563,12 @@ function createWorld(level, doc2, attempt = 1) {
       notes: level.solution?.notes ?? ""
     },
     bounds: level.bounds,
+    // 定时事件（宇宙风暴等）：必须抄进运行时 level，否则 applyEvents 读到 undefined（曾经漏抄导致"数据到了前端但事件静默失效"）
+    events: level.events,
+    // 多段目标：同样必须显式拷入（运行时 level 是逐字段手抄的）
+    objectives: level.objectives,
+    objectiveIndex: 0,
+    objectivesTotal: Math.max(1, level.objectives?.length ?? 1),
     // 时限（秒）。第 1 章是教学章：给足 180 秒，让玩家能反复试错而不被计时器逼死。
     // 注意时限不参与计分——时间分用的是 parTime（见 score.ts），所以放宽时限不会让分数虚高。
     timeLimit: Math.max(90, level.par_time * 3.4, level.chapter === 1 ? 180 : 0),
@@ -585,6 +630,7 @@ function createWorld(level, doc2, attempt = 1) {
     computeMax: 1,
     timeScale: 1,
     slowmo: 1,
+    events: eventState,
     fx: [],
     predicted: [],
     stats: {
@@ -699,7 +745,7 @@ function lightAccel(world, b, wind) {
   if (b.docked || !b.alive) return;
   ACC.x = 0;
   ACC.y = 0;
-  primaryAccel(b.x, b.y, world.primaries, world.epsilon, ACC);
+  primaryAccelRel(b.x, b.y, b.vx, b.vy, world.primaries, world.epsilon, ACC);
   const w = world.well;
   if (world.fieldEnabled && w.engaged && w.mass > 0) {
     wellAccel(b.x, b.y, w.x, w.y, w.mass, WELL_RANGE, w.repel, world.epsilon, ACC);
@@ -995,6 +1041,225 @@ function wellConstraint(world) {
   }
   w.hot = 1;
 }
+function eventAccelAt(world, t, x, y, out) {
+  out.x = 0;
+  out.y = 0;
+  const list = world.level.events;
+  if (!list || !list.length) return;
+  const span = world.bounds * 2.4;
+  for (let i = 0; i < list.length; i++) {
+    const e = list[i];
+    if (e.kind !== "storm") continue;
+    const period = e.period > 0 ? e.period : Number.POSITIVE_INFINITY;
+    const u = period === Number.POSITIVE_INFINITY ? t - e.t0 : (t - e.t0) % period;
+    if (u < 0) continue;
+    const cx = -span * 0.5 + u * e.speed;
+    if (Math.abs(cx) > span * 0.75) continue;
+    const nx = Math.cos(e.dir);
+    const ny = Math.sin(e.dir);
+    const d = x * nx + y * ny - cx;
+    if (Math.abs(d) > e.width) continue;
+    const sig = e.width * 0.45;
+    const fall = Math.exp(-(d * d) / (2 * sig * sig));
+    out.x += nx * e.accel * fall;
+    out.y += ny * e.accel * fall;
+  }
+}
+var EV_TMP = { x: 0, y: 0 };
+function applyFlare(world, dt) {
+  const list = world.level.events;
+  if (!list || !list.length) return;
+  for (let i = 0; i < list.length; i++) {
+    const e = list[i];
+    if (e.kind !== "flare") continue;
+    const dur = e.duration ?? 1.2;
+    const u = world.time - e.t0;
+    if (u < 0 || u > dur) continue;
+    const env = Math.sin(u / dur * Math.PI);
+    for (let k = 0; k < world.pods.length; k++) {
+      const b = world.pods[k];
+      if (!b.alive || b.delivered) continue;
+      const sail = b.sail ?? 1;
+      const thin = (b.hull ?? 1) <= 0.6 ? 1.8 : 0.7;
+      b.integrity -= e.accel * (0.35 + sail) * thin * env * dt;
+      if (b.integrity <= 0) destroyBody(world, b, "impact_hull", "\u592A\u9633\u8000\u6591\u70E7\u7A7F\u8239\u4F53");
+    }
+  }
+}
+function advanceObjective(world) {
+  const lv = world.level;
+  const list = lv.objectives;
+  if (!list || list.length <= 1) return;
+  if (lv.objectiveIndex >= list.length - 1) return;
+  lv.objectiveIndex++;
+  const o = list[lv.objectiveIndex];
+  const body = world.primaries.find((p) => p.key === o.body) ?? world.primaries[world.primaries.length - 1];
+  const off = o.offset ?? { x: 0, y: 0 };
+  world.dock.bodyId = body.id;
+  world.dock.ox = off.x;
+  world.dock.oy = off.y;
+  world.dock.x = body.x + off.x;
+  world.dock.y = body.y + off.y;
+  if (o.radius != null) world.dock.radius = o.radius;
+  if (o.v_max != null) world.dock.vMax = o.v_max;
+  world.dock.pulse = 1;
+  fx(
+    world,
+    "dock",
+    world.dock.x,
+    world.dock.y,
+    0,
+    0,
+    1,
+    9425151,
+    "dock_success",
+    `\u822A\u6BB5 ${lv.objectiveIndex + 1}/${list.length} \xB7 ${o.label_zh ?? "\u4E0B\u4E00\u4E2A\u76EE\u6807"}`
+  );
+}
+function applyShower(world, dt) {
+  const list = world.level.events;
+  if (!list || !list.length) return;
+  for (let i = 0; i < list.length; i++) {
+    const e = list[i];
+    if (e.kind !== "shower") continue;
+    if (world.time < e.t0) continue;
+    const period = e.period > 0 ? e.period : Number.POSITIVE_INFINITY;
+    if (period === Number.POSITIVE_INFINITY) {
+      if (world.time - dt < e.t0 && world.time >= e.t0) spawnShower(world, e);
+      continue;
+    }
+    const k = Math.floor((world.time - e.t0) / period);
+    const key = e.t0 + k * period;
+    if (world.time - dt < key && world.time >= key) spawnShower(world, e);
+  }
+}
+function spawnShower(world, e) {
+  const n = Math.max(1, Math.min(24, e.count ?? 6));
+  const rm = e.rockMass ?? 6e-6;
+  const rr = e.rockRadius ?? 0.045;
+  const area = Math.PI * rr * rr;
+  const nx = Math.cos(e.dir);
+  const ny = Math.sin(e.dir);
+  const base = 9e6 + world.bodies.length * 32;
+  const edge = world.bounds * 1.15;
+  for (let i = 0; i < n; i++) {
+    const t = n === 1 ? 0 : (i / (n - 1) - 0.5) * 2;
+    const ox = -ny * t * e.width;
+    const oy = nx * t * e.width;
+    const b = {
+      id: base + i,
+      key: `rock${base + i}`,
+      kind: "asteroid",
+      tag: "\u788E\u77F3",
+      mass: rm,
+      mu: rm,
+      radius: rr,
+      x: -nx * edge + ox,
+      y: -ny * edge + oy,
+      vx: nx * e.speed + ox * 0.05,
+      vy: ny * e.speed + oy * 0.05,
+      ax: 0,
+      ay: 0,
+      px: -nx * edge + ox,
+      py: -ny * edge + oy,
+      alive: true,
+      integrity: 1,
+      area,
+      cd: 0.9,
+      qpr: 1,
+      docked: false,
+      delivered: false,
+      lost: false,
+      tint: 10129286,
+      ang: e.dir,
+      spin: (i % 2 ? 1 : -1) * (0.5 + i * 0.07),
+      primary: false,
+      contact: 0,
+      jolt: 0,
+      stress: 0,
+      dilation: 1,
+      life: 0,
+      tearT: 0,
+      trailX: new Float32Array(48),
+      trailY: new Float32Array(48),
+      trailN: 0,
+      trailHead: 0,
+      trailTick: 0
+    };
+    world.bodies.push(b);
+  }
+}
+function applyWave(world, dt) {
+  const list = world.level.events;
+  if (!list || !list.length) return;
+  for (let i = 0; i < list.length; i++) {
+    const e = list[i];
+    if (e.kind !== "wave") continue;
+    const dur = e.duration ?? 2.5;
+    const u = world.time - e.t0;
+    if (u < 0 || u > dur) continue;
+    const env = Math.sin(u / dur * Math.PI);
+    const nx = Math.cos(e.dir);
+    const ny = Math.sin(e.dir);
+    for (let k = 0; k < world.pods.length; k++) {
+      const b = world.pods[k];
+      if (!b.alive || b.delivered) continue;
+      const along = b.x * nx + b.y * ny;
+      const perpX = b.x - along * nx;
+      const perpY = b.y - along * ny;
+      if (Math.hypot(b.x, b.y) > world.bounds * 1.2) continue;
+      const aAlong = 0.5 * e.accel * env * along;
+      const aPerp = -0.5 * e.accel * env;
+      b.vx += (aAlong * nx + aPerp * perpX) * dt;
+      b.vy += (aAlong * ny + aPerp * perpY) * dt;
+    }
+  }
+}
+function applyRescue(world, dt) {
+  const list = world.level.events;
+  if (!list || !list.length) return;
+  for (let i = 0; i < list.length; i++) {
+    const e = list[i];
+    if (e.kind !== "rescue") continue;
+    if (world.time < e.t0) continue;
+    const b = world.pods.find((p) => p.alive && !p.delivered);
+    if (!b) continue;
+    b.integrity -= (e.leakRate ?? 0.02) * dt;
+    if (b.integrity <= 0) {
+      destroyBody(world, b, "impact_hull", "\u8239\u4F53\u6CC4\u6F0F\u89E3\u4F53");
+    }
+  }
+}
+function applyEvents(world, dt) {
+  const list = world.level.events;
+  if (!list || !list.length) return;
+  if (!world.events || world.events.length !== list.length) {
+    world.events = list.map((e) => ({ kind: e.kind, x: 0, y: 0, dir: e.dir, eta: e.t0, active: false }));
+  }
+  const span = world.bounds * 2.4;
+  for (let i = 0; i < list.length; i++) {
+    const e = list[i];
+    const st = world.events[i];
+    const period = e.period > 0 ? e.period : Number.POSITIVE_INFINITY;
+    const u = period === Number.POSITIVE_INFINITY ? world.time - e.t0 : (world.time - e.t0) % period;
+    const cx = -span * 0.5 + u * e.speed;
+    const nx = Math.cos(e.dir);
+    const ny = Math.sin(e.dir);
+    st.x = nx * cx;
+    st.y = ny * cx;
+    st.dir = e.dir;
+    st.eta = world.time < e.t0 ? e.t0 - world.time : -cx / Math.max(1e-6, e.speed);
+    st.active = Math.abs(cx) < e.width * 0.5 + world.bounds * 0.6;
+    if (u < 0 || Math.abs(cx) > span * 0.75) continue;
+    for (let k = 0; k < world.pods.length; k++) {
+      const b = world.pods[k];
+      if (!b.alive || b.delivered) continue;
+      eventAccelAt(world, world.time, b.x, b.y, EV_TMP);
+      b.vx += EV_TMP.x * dt;
+      b.vy += EV_TMP.y * dt;
+    }
+  }
+}
 function interactions(world, dt) {
   for (let i = 0; i < PODSH.length; i++) {
     const b = PODSH[i];
@@ -1120,6 +1385,7 @@ function interactions(world, dt) {
         p.vy = station.vy;
         p.integrity = soft ? 1 : 0.55;
         world.level.podsDelivered++;
+        advanceObjective(world);
         if (soft) {
           world.level.combo++;
           world.level.comboTimer = 8;
@@ -1246,6 +1512,11 @@ function stepOnce(world, dt, depth = 0) {
   world.time += dt;
   world.stats.steps++;
   interactions(world, dt);
+  applyEvents(world, dt);
+  applyRescue(world, dt);
+  applyFlare(world, dt);
+  applyWave(world, dt);
+  applyShower(world, dt);
   updateTrails(world, dt);
 }
 function frameEnd(world, simDt) {
