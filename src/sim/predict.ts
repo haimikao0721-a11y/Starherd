@@ -6,6 +6,7 @@
 import type { PredictedPath, World } from './types';
 import { EPS } from './constants';
 import { wellAccel } from './physics';
+import { eventAccelAt } from './step';
 
 const MAXP = 8;   // 主天体上限
 const MAXK = 8;   // 被预测的货舱上限
@@ -108,6 +109,16 @@ export function predictPaths(
   accelPrimaries(eps);
   accelLight(eps, wMass, w.x, w.y, range);
 
+  // 事件力（宇宙风暴等）也进预测线：与实时物理共用 eventAccelAt，保证"看到的就是会发生的"
+  const evTmp = { x: 0, y: 0 };
+  const addEvents = (t: number): void => {
+    for (let i = 0; i < NK; i++) {
+      eventAccelAt(world, t, kx[i], ky[i], evTmp);
+      kax[i] += evTmp.x; kay[i] += evTmp.y;
+    }
+  };
+  addEvents(now);
+
   for (let s = 0; s < steps; s++) {
     for (let i = 0; i < NP; i++) { pvx[i] += pax[i] * h * 0.5; pvy[i] += pay[i] * h * 0.5; }
     for (let i = 0; i < NK; i++) { kvx[i] += kax[i] * h * 0.5; kvy[i] += kay[i] * h * 0.5; }
@@ -115,6 +126,7 @@ export function predictPaths(
     for (let i = 0; i < NK; i++) { kx[i] += kvx[i] * h; ky[i] += kvy[i] * h; }
     accelPrimaries(eps);
     accelLight(eps, wMass, w.x, w.y, range);
+    addEvents(now + (s + 0.5) * h);
     for (let i = 0; i < NP; i++) { pvx[i] += pax[i] * h * 0.5; pvy[i] += pay[i] * h * 0.5; }
     for (let i = 0; i < NK; i++) { kvx[i] += kax[i] * h * 0.5; kvy[i] += kay[i] * h * 0.5; }
 

@@ -370,6 +370,39 @@ function wellConstraint(world: World): void {
  * 位置只由 ``t0/period/speed/dir`` 决定，HUD 提前给 ETA，Tab 预测线里也能看到它推偏货舱。
  * 玩家要做的不是祈祷，而是**提前把货舱挪出锋面路径**，或**顺风利用它省燃料**。
  */
+/**
+ * 事件在某个**时刻 t**、某个位置 (x,y) 处产生的加速度。
+ *
+ * 抽成公共函数是为了让**实时物理与 Tab 预测线用同一套力**——玩家反馈过
+ * "事件不能变成运气"：只有预测线也画得出锋面的推偏，玩家才能提前规划。
+ */
+export function eventAccelAt(world: World, t: number, x: number, y: number,
+  out: { x: number; y: number }): void {
+  out.x = 0; out.y = 0;
+  const list = world.level.events;
+  if (!list || !list.length) return;
+  const span = world.bounds * 2.4;
+  for (let i = 0; i < list.length; i++) {
+    const e = list[i];
+    if (e.kind !== 'storm') continue;
+    const period = e.period > 0 ? e.period : Number.POSITIVE_INFINITY;
+    const u = period === Number.POSITIVE_INFINITY ? t - e.t0 : (t - e.t0) % period;
+    if (u < 0) continue;
+    const cx = -span * 0.5 + u * e.speed;
+    if (Math.abs(cx) > span * 0.75) continue;
+    const nx = Math.cos(e.dir);
+    const ny = Math.sin(e.dir);
+    const d = (x * nx + y * ny) - cx;
+    if (Math.abs(d) > e.width) continue;
+    const sig = e.width * 0.45;
+    const fall = Math.exp(-(d * d) / (2 * sig * sig));
+    out.x += nx * e.accel * fall;
+    out.y += ny * e.accel * fall;
+  }
+}
+
+const EV_TMP = { x: 0, y: 0 };
+
 function applyEvents(world: World, dt: number): void {
   const list = world.level.events;
   if (!list || !list.length) return;
@@ -394,12 +427,9 @@ function applyEvents(world: World, dt: number): void {
     for (let k = 0; k < world.pods.length; k++) {
       const b = world.pods[k];
       if (!b.alive || b.delivered) continue;
-      const d = (b.x * nx + b.y * ny) - cx;
-      if (Math.abs(d) > e.width) continue;
-      const sig = e.width * 0.45;
-      const fall = Math.exp(-(d * d) / (2 * sig * sig));
-      b.vx += nx * e.accel * fall * dt;
-      b.vy += ny * e.accel * fall * dt;
+      eventAccelAt(world, world.time, b.x, b.y, EV_TMP);
+      b.vx += EV_TMP.x * dt;
+      b.vy += EV_TMP.y * dt;
     }
   }
 }
