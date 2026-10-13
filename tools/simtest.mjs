@@ -214,7 +214,7 @@ function primaryAccelRel(x, y, vx, vy, primaries, eps, out) {
     pointAccel(dx, dy, b.mu, eps, out);
     const r2 = dx * dx + dy * dy;
     if (b.kind === "blackhole" && r2 > 1e-12 && relSignificant(b.mu, Math.sqrt(r2))) {
-      relAccel(dx, dy, b.vx - vx, b.vy - vy, b.mu, out);
+      relAccel(-dx, -dy, vx - b.vx, vy - b.vy, b.mu, out);
     }
   }
 }

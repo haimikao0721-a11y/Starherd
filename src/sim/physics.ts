@@ -40,7 +40,7 @@ export function relSignificant(mu: number, r: number): boolean {
 /**
  * 一阶后牛顿（1PN）相对加速度，**累加**到 out。
  *
- * @param dx,dy   相对位置 r⃗（目标点 − 源）
+ * @param dx,dy   相对位置 r⃗ = **目标点 − 源**（注意方向，反了会让整项变号）
  * @param dvx,dvy 相对速度 v⃗
  * @param muTotal μ_tot = G(m₁+m₂)
  */
@@ -82,7 +82,10 @@ export function primaryAccelRel(x: number, y: number, vx: number, vy: number,
     // 而可行性分析器（Python）并不建模 1PN —— 与其让两套口径打架，不如把相对论效应
     // 限定在本来就是"强场"的黑洞关。判定用运行时已有的 kind，不新增数据字段。
     if (b.kind === 'blackhole' && r2 > 1e-12 && relSignificant(b.mu, Math.sqrt(r2))) {
-      relAccel(dx, dy, b.vx - vx, b.vy - vy, b.mu, out);
+      // ⚠️ 约定：relAccel 要的是 r⃗ = 目标 − 源、v⃗ = 目标速度 − 源速度。
+      // 而上面的 dx = b.x − x 是**源 − 目标**，所以这里必须取反——否则 1PN 项整体变号，
+      // 圆轨道上本该有的排斥修正会变成吸引，近星点进动方向也跟着反。
+      relAccel(-dx, -dy, vx - b.vx, vy - b.vy, b.mu, out);
     }
   }
 }
