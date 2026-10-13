@@ -23,6 +23,8 @@ export class GameLoop {
   private acc = 0;
   private accSecond = 0;
   /** 帧率上限：帧间隔小于该毫秒数就跳过本帧（0 = 不限） */
+  /** 物理固定步长（可切 120Hz/60Hz：弱机上把 CPU 占用减半） */
+  private dt = DT;
   private minFrameMs = 0;
   private frameGate = 0;
   private running = false;
@@ -46,6 +48,17 @@ export class GameLoop {
    * 于是帧间隔变稳——玩家反馈"帧率低，希望有固定帧率生效"，抖动比峰值更影响手感。
    * 跳过帧不会丢时间：`this.last` 已更新，下一帧的 dtReal 会自然累积，模拟保持一致。
    */
+  /**
+   * 设置物理固定步长（默认 120Hz）。传 `DT * 2` 即 60Hz：
+   * 每帧的子步数减半 → CPU 占用明显下降；速度 Verlet 在 2× 步长下仍然稳定，
+   * 只是积分精度略降（远距离交会无感，近距离高速掠过大天体时误差会大一些）。
+   */
+  setFixedDt(dt: number): void {
+    this.dt = Math.max(1e-4, Math.min(0.05, dt));
+  }
+
+  get fixedDt(): number { return this.dt; }
+
   setFrameCap(fps: number): void {
     this.minFrameMs = fps > 0 ? 1000 / Math.max(1, Math.min(240, fps)) : 0;
     this.frameGate = 0;
@@ -103,9 +116,9 @@ export class GameLoop {
     if (!this.hidden && dtReal > 0) {
       const want = this.hooks.simDt(dtReal);
       this.acc += want;
-      while (this.acc >= DT && steps < MAX_SUBSTEPS * 3) {
-        this.hooks.fixed(DT);
-        this.acc -= DT;
+      while (this.acc >= this.dt && steps < MAX_SUBSTEPS * 3) {
+        this.hooks.fixed(this.dt);
+        this.acc -= this.dt;
         steps++;
       }
       if (steps >= MAX_SUBSTEPS * 3) this.acc = 0; // 死亡螺旋保护：丢弃积压
@@ -119,8 +132,8 @@ export class GameLoop {
       this._steps = 0;
     }
 
-    const alpha = Math.max(0, Math.min(1, this.acc / DT));
-    this.hooks.frame(alpha, dtReal, steps * DT);
+    const alpha = Math.max(0, Math.min(1, this.acc / this.dt));
+    this.hooks.frame(alpha, dtReal, steps * this.dt);
     const ms = performance.now() - t0;
     this._frameMs = this._frameMs * 0.9 + ms * 0.1;
     const inst = dtReal > 0 ? 1 / dtReal : 60;

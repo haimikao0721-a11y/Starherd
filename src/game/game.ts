@@ -188,6 +188,9 @@ export class Game {
     });
     // 启动即应用已保存的帧率上限（0=不限）
     this.loop.setFrameCap(this.save.settings.fpsCap ?? 0);
+    if (this.save.settings.physics60) this.loop.setFixedDt(DT * 2);
+    this.renderer?.setRenderScale(this.save.settings.renderScale ?? 0.62,
+      this.save.settings.renderScaleAuto !== false);
     window.addEventListener('error', this.onError);
     window.addEventListener('unhandledrejection', this.onRejection);
   }
@@ -1095,7 +1098,29 @@ export class Game {
   private applySetting<K extends keyof SaveState['settings']>(key: K, value: SaveState['settings'][K]): void {
     (this.save.settings as Record<string, unknown>)[key as string] = value;
     if (key === 'quality') { this.applyQualityFromSave(); this.renderer?.setQuality(this.quality); this.view.quality = this.quality; }
-    if (key === 'showField') this.view.showField = Boolean(value);
+    // ---- 性能相关设置（玩家反馈：帧率低、设置无效、弱机卡顿）----
+    if (key === 'fpsCap') {
+      const cap = Number(value) || 0;
+      this.save.settings.fpsCap = cap;
+      this.loop.setFrameCap(cap);
+    }
+    if (key === 'renderScale') {
+      const v = Math.max(0.35, Math.min(1, Number(value) || 0.62));
+      this.save.settings.renderScale = v;
+      this.save.settings.renderScaleAuto = false;   // 拖动滑块即视为手动
+      this.renderer?.setRenderScale(v, false);
+    }
+    if (key === 'renderScaleAuto') {
+      const auto = String(value) !== 'fixed';
+      this.save.settings.renderScaleAuto = auto;
+      this.renderer?.setRenderScale(this.save.settings.renderScale ?? 0.62, auto);
+    }
+    if (key === 'physics60') {
+      const p60 = String(value) === '1' || value === true;
+      this.save.settings.physics60 = p60;
+      this.loop.setFixedDt(p60 ? DT * 2 : DT);
+      this.pushToast(p60 ? '物理步长 60 Hz（省 CPU，精度略降）' : '物理步长 120 Hz（精确）');
+    }
     this.applyAudioSettings();
     this.persist();
   }

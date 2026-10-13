@@ -477,6 +477,12 @@ export interface SaveState {
     quality: 'low' | 'mid' | 'high'; showField: boolean;
     /** 帧率上限：0 = 不限，可设 30/60/120（玩家反馈要求固定帧率生效） */
     fpsCap?: number;
+    /** 渲染分辨率比例 0.35~1（玩家反馈"分辨率设置作用不大"→ 现在可手动调） */
+    renderScale?: number;
+    /** true = 由性能自动调节分辨率；false = 用 renderScale 固定值 */
+    renderScaleAuto?: boolean;
+    /** true = 物理用 60Hz 步长（弱机省 CPU）；false = 120Hz（默认，更精确） */
+    physics60?: boolean;
   };
   unlocked_chapters: number;
   best_scores: Record<string, { score: number; grade: string; time: number; fuel: number }>;
@@ -486,7 +492,7 @@ export interface SaveState {
 
 export const DEFAULT_SAVE: SaveState = {
   version: '1.0',
-  settings: { master: 0.8, music: 0.55, sfx: 0.9, muted: false, quality: 'high', showField: true, fpsCap: 0 },
+  settings: { master: 0.8, music: 0.55, sfx: 0.9, muted: false, quality: 'high', showField: true, fpsCap: 0, renderScaleAuto: true, physics60: false },
   unlocked_chapters: 1,
   best_scores: {},
   totals: { played: 0, delivered: 0, lost: 0, playtime: 0 },

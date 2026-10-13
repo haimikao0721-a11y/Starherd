@@ -280,6 +280,38 @@ export class Menu {
         this.cb.onSetting('quality', v);
         break;
       }
+      // ---- 性能设置（玩家反馈：帧率低 / 分辨率设置无效 / 弱机卡顿）----
+      case 'fpsCap': {
+        const v = Number(t.value) || 0;
+        if (out) out.textContent = v === 0 ? '不限' : `${v}`;
+        this.save.settings.fpsCap = v;
+        this.cb.onSetting('fpsCap', v);
+        break;
+      }
+      case 'renderScale': {
+        const v = Math.max(0.35, Math.min(1, Number(t.value) || 0.62));
+        if (out) out.textContent = fmtPct(v);
+        this.save.settings.renderScale = v;
+        this.save.settings.renderScaleAuto = false;
+        this.cb.onSetting('renderScale', v);
+        break;
+      }
+      case 'renderScaleAuto': {
+        const auto = t.value !== 'fixed';
+        if (out) out.textContent = auto ? '自动' : '手动';
+        this.save.settings.renderScaleAuto = auto;
+        this.cb.onSetting('renderScaleAuto', auto);
+        // 重渲染：手动模式才允许拖动分辨率滑块（否则 disabled 的滑块收不到事件）
+        this.renderSettings();
+        break;
+      }
+      case 'physics60': {
+        const p60 = t.value === '1';
+        if (out) out.textContent = p60 ? '60 Hz' : '120 Hz';
+        this.save.settings.physics60 = p60;
+        this.cb.onSetting('physics60', p60);
+        break;
+      }
       case 'muted': {
         const v = !!t.checked;
         if (out) out.textContent = v ? '静音' : '开启';
@@ -957,7 +989,7 @@ export class Menu {
     const q = st.quality;
     const qText = q === 'low' ? '低' : q === 'mid' ? '中' : '高';
     const body = `
-      ${this.header('设置', 'SETTINGS', '变更立即生效并写入存档')}
+      ${this.header('设置', 'SETTINGS', '变更立即生效并写入存档 · 卡顿就调低「渲染分辨率」或切到 60 Hz 物理步长')}
       <div class="lc-sliders">
         <div class="lc-slider-row">
           <span class="lc-label">主音量</span>
@@ -982,6 +1014,39 @@ export class Menu {
             <option value="high" ${q === 'high' ? 'selected' : ''}>高</option>
           </select>
           <span class="lc-value" data-out="quality">${qText}</span>
+        </div>
+        <div class="lc-slider-row">
+          <span class="lc-label">帧率上限</span>
+          <select class="lc-select" data-set="fpsCap" data-sfx="ui_click" aria-label="帧率上限">
+            <option value="0" ${(st.fpsCap ?? 0) === 0 ? 'selected' : ''}>不限</option>
+            <option value="120" ${st.fpsCap === 120 ? 'selected' : ''}>120 fps</option>
+            <option value="60" ${st.fpsCap === 60 ? 'selected' : ''}>60 fps</option>
+            <option value="30" ${st.fpsCap === 30 ? 'selected' : ''}>30 fps</option>
+          </select>
+          <span class="lc-value" data-out="fpsCap">${(st.fpsCap ?? 0) === 0 ? '不限' : `${st.fpsCap}`}</span>
+        </div>
+        <div class="lc-slider-row">
+          <span class="lc-label">渲染分辨率</span>
+          <input class="lc-range" type="range" min="0.35" max="1" step="0.05" value="${st.renderScale ?? 0.62}"
+            data-set="renderScale" data-sfx="ui_click" aria-label="渲染分辨率"
+            ${st.renderScaleAuto === false ? '' : 'disabled'}>
+          <span class="lc-value" data-out="renderScale">${st.renderScaleAuto === false ? fmtPct(st.renderScale ?? 0.62) : '自动'}</span>
+        </div>
+        <div class="lc-slider-row">
+          <span class="lc-label">分辨率模式</span>
+          <select class="lc-select" data-set="renderScaleAuto" data-sfx="ui_click" aria-label="分辨率模式">
+            <option value="auto" ${st.renderScaleAuto === false ? '' : 'selected'}>自动（按帧率调节）</option>
+            <option value="fixed" ${st.renderScaleAuto === false ? 'selected' : ''}>手动（用上面的滑块）</option>
+          </select>
+          <span class="lc-value" data-out="renderScaleAuto">${st.renderScaleAuto === false ? '手动' : '自动'}</span>
+        </div>
+        <div class="lc-slider-row">
+          <span class="lc-label">物理步长</span>
+          <select class="lc-select" data-set="physics60" data-sfx="ui_click" aria-label="物理步长">
+            <option value="0" ${st.physics60 ? '' : 'selected'}>120 Hz（精确）</option>
+            <option value="1" ${st.physics60 ? 'selected' : ''}>60 Hz（弱机省 CPU）</option>
+          </select>
+          <span class="lc-value" data-out="physics60">${st.physics60 ? '60 Hz' : '120 Hz'}</span>
         </div>
         <div class="lc-slider-row">
           <span class="lc-label">引力场线</span>

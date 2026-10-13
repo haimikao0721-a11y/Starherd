@@ -59,6 +59,8 @@ export class Renderer {
   private rs = 0.62;
   private rsApplied = 0.62;
   private adaptWarmup = 0;
+  /** 是否由性能自动调节分辨率（false = 玩家用滑块固定） */
+  private rsAuto = true;
   private sg: CanvasRenderingContext2D;
   private bank: SpriteBank;
   private post: PostFX;
@@ -177,7 +179,27 @@ export class Renderer {
    * **只有渲染分辨率随帧预算伸缩**——于是 60Hz 屏与 120Hz 屏都能落在各自目标上。
    * 用滞后带（1.12 / 0.72）避免在阈值附近来回抖动。
    */
+  /**
+   * 手动固定渲染分辨率（玩家反馈"分辨率设置作用不大"）。
+   * `auto=false` 时关闭自动调节，完全按传入比例渲染；`auto=true` 交回自适应。
+   */
+  setRenderScale(v: number, auto: boolean): void {
+    this.rsAuto = auto;
+    const nv = clamp(v, RS_MIN, RS_MAX);
+    if (auto || Math.abs(nv - this.rs) > 1e-3) {
+      this.rs = auto ? this.rs : nv;
+      if (Math.abs(this.rs - this.rsApplied) > 1e-3) {
+        this.rsApplied = this.rs;
+        this.resize(this.w, this.h, this.dpr);
+      }
+    }
+  }
+
+  get renderScale(): number { return this.rs; }
+  get renderScaleAuto(): boolean { return this.rsAuto; }
+
   private adaptRenderScale(): void {
+    if (!this.rsAuto) return;
     if (this.adaptWarmup < 45) { this.adaptWarmup++; return; }
     const target = clamp(this.q.targetFps || 60, 30, 144);
     const budget = 1000 / target;
