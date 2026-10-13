@@ -1338,6 +1338,30 @@ export class Hud {
       const pulse2 = 0.6 + 0.4 * Math.sin(this.clock * 7);
     /* 事件预警（宇宙风暴等）：**必须可预见**，否则就退化成运气 —— 提前 5 秒给 ETA。 */
     if (f.world.events && f.world.events.length) {
+      const flare = f.world.level.events?.find((e) => e.kind === 'flare');
+      const wave = f.world.level.events?.find((e) => e.kind === 'wave');
+      if (flare) {
+        const lead = flare.t0 - f.world.time;
+        if (lead > 0 && lead < 5) {
+          const pf = 0.55 + 0.45 * Math.sin(this.clock * 8);
+          this.txt(`⚠ 太阳耀斑 ${lead.toFixed(1)} 秒后抵达 —— 薄壳货舱（易碎/光帆）将受重创，先让它们避一避`,
+            x + w * 0.5, y + h + 75, rgba(pal.danger, pf), 10.5, 'center', '600');
+        } else if (lead <= 0 && lead > -(flare.duration ?? 1.2)) {
+          this.txt('⚠ 太阳耀斑轰击中 —— 薄壳货舱正在受损',
+            x + w * 0.5, y + h + 75, rgba(pal.danger, 0.95), 10.5, 'center', '600');
+        }
+      }
+      if (wave) {
+        const lead = wave.t0 - f.world.time;
+        if (lead > 0 && lead < 4) {
+          const pg = 0.55 + 0.45 * Math.sin(this.clock * 7);
+          this.txt(`⚠ 引力波 ${lead.toFixed(1)} 秒后掠过 —— 潮汐会拉伸压扁轨迹，稳一点`,
+            x + w * 0.5, y + h + 90, rgba(pal.uiAccent, pg), 10.5, 'center', '600');
+        } else if (lead <= 0 && lead > -(wave.duration ?? 2.5)) {
+          this.txt('⚠ 引力波过境中 —— 潮汐四极正在拉伸货舱轨迹',
+            x + w * 0.5, y + h + 90, rgba(pal.uiAccent, 0.95), 10.5, 'center', '600');
+        }
+      }
       const rescue = f.world.level.events?.find((e) => e.kind === 'rescue');
       if (rescue) {
         const lead = rescue.t0 - f.world.time;

@@ -412,6 +412,69 @@ const EV_TMP2 = { x: 0, y: 0 };
  * 那样救援事件在教学章会形同虚设。这里直接扣 `integrity` 并走统一的 destroyBody 路径，
  * 全章节一致，且 HUD 可以用「剩余秒数」明确预警（玩家要的是"可应对"，不是"看运气"）。
  */
+/**
+ * 太阳耀斑：预警之后来一发**辐射脉冲**，薄壳货舱（易碎 / 光帆）受重创。
+ *
+ * 物理依据：辐射压对**迎风面积/质量**敏感，而光帆货舱的 sail 高达 1.9、易碎舱的 hull 只有 0.55。
+ * 所以伤害按 `(0.35 + sail) × (hull <= 0.6 ? 1.8 : 0.7)` 计——标准舱几乎无恙，
+ * 光帆/易碎舱会被打出可见损伤。这给了关卡一个**编队选择**的维度：带光帆省燃料，但要躲耀斑。
+ */
+function applyFlare(world: World, dt: number): void {
+  const list = world.level.events;
+  if (!list || !list.length) return;
+  for (let i = 0; i < list.length; i++) {
+    const e = list[i];
+    if (e.kind !== 'flare') continue;
+    const dur = e.duration ?? 1.2;
+    const u = world.time - e.t0;
+    if (u < 0 || u > dur) continue;
+    // 脉冲包络：半正弦，峰值在窗口中央
+    const env = Math.sin((u / dur) * Math.PI);
+    for (let k = 0; k < world.pods.length; k++) {
+      const b = world.pods[k];
+      if (!b.alive || b.delivered) continue;
+      const sail = b.sail ?? 1;
+      const thin = (b.hull ?? 1) <= 0.6 ? 1.8 : 0.7;
+      b.integrity -= e.accel * (0.35 + sail) * thin * env * dt;
+      if (b.integrity <= 0) destroyBody(world, b, 'impact_hull', '太阳耀斑烧穿船体');
+    }
+  }
+}
+
+/**
+ * 引力波掠过：一段短暂的**潮汐四极**踢——沿传播方向拉伸、垂直方向压缩。
+ *
+ * 这是真实的引力波应变图样（h+ 极化）：位移场 δx = ½h·x、δy = −½h·y（在波坐标系里）。
+ * 效果上表现为"货舱被拉长压扁"，对已经贴站的低速货舱影响小、对高速掠过的轨迹影响大——
+ * 于是它惩罚"莽"，而不是随机惩罚玩家。
+ */
+function applyWave(world: World, dt: number): void {
+  const list = world.level.events;
+  if (!list || !list.length) return;
+  for (let i = 0; i < list.length; i++) {
+    const e = list[i];
+    if (e.kind !== 'wave') continue;
+    const dur = e.duration ?? 2.5;
+    const u = world.time - e.t0;
+    if (u < 0 || u > dur) continue;
+    const env = Math.sin((u / dur) * Math.PI);     // 起落各半，避免瞬时跳变
+    const nx = Math.cos(e.dir);
+    const ny = Math.sin(e.dir);
+    for (let k = 0; k < world.pods.length; k++) {
+      const b = world.pods[k];
+      if (!b.alive || b.delivered) continue;
+      const along = b.x * nx + b.y * ny;           // 沿传播方向的投影
+      const perpX = b.x - along * nx;
+      const perpY = b.y - along * ny;
+      if (Math.hypot(b.x, b.y) > world.bounds * 1.2) continue;
+      const aAlong = 0.5 * e.accel * env * along;  // 拉伸
+      const aPerp = -0.5 * e.accel * env;          // 压缩（垂直于方向）
+      b.vx += (aAlong * nx + aPerp * perpX) * dt;
+      b.vy += (aAlong * ny + aPerp * perpY) * dt;
+    }
+  }
+}
+
 function applyRescue(world: World, dt: number): void {
   const list = world.level.events;
   if (!list || !list.length) return;
@@ -717,6 +780,8 @@ export function stepOnce(world: World, dt: number, depth = 0): void {
   interactions(world, dt);
   applyEvents(world, dt);
   applyRescue(world, dt);
+  applyFlare(world, dt);
+  applyWave(world, dt);
   updateTrails(world, dt);
 }
 

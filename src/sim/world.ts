@@ -26,6 +26,7 @@ function makeBody(
     qpr: 1,
     // 光帆系数缺省 1：主天体/小行星/碎片沿用改造前的光压（货舱在下面按级别覆盖）
     sail: 1,
+    hull: 1,
     docked: false, delivered: false, lost: false,
     tint, ang: 0, spin: 0, primary,
     contact: 0, jolt: 0, stress: 0, dilation: 1, life: 0, tearT: 0,
@@ -132,6 +133,7 @@ export function createWorld(level: LevelSpec, doc: LevelsDoc, attempt = 1): Worl
     b.tag = spec.id;
     b.class = pc.cls.id;
     b.sail = pc.sail;
+    b.hull = pc.hull;
     b.integrity = pc.hull;
     b.cd = 0.7;
     bodies.push(b); pods.push(b); byKey.set(spec.id, b);

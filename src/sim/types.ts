@@ -37,7 +37,7 @@ export interface NebulaSpec { x: number; y: number; r: number; density: number; 
 
 /** 关卡内的定时事件（目前支持宇宙风暴：一道推进的力场锋面）。 */
 export interface EventSpec {
-  kind: 'storm' | 'rescue';
+  kind: 'storm' | 'rescue' | 'flare' | 'wave';
   /** 首次触发时刻（TU） */
   t0: number;
   /** 周期（TU）；0 = 只出现一次 */
@@ -52,11 +52,13 @@ export interface EventSpec {
   accel: number;
   /** （rescue 专用）船体泄漏速率：每秒扣多少结构强度；0.02 ≈ 50 秒解体 */
   leakRate?: number;
+  /** （flare / wave 专用）事件持续时长（TU）；缺省 flare 1.2 / wave 2.5 */
+  duration?: number;
 }
 
 /** 事件运行时状态（供 HUD 预警与渲染使用）。 */
 export interface EventRuntime {
-  kind: 'storm' | 'rescue';
+  kind: 'storm' | 'rescue' | 'flare' | 'wave';
   /** 锋面中心位置（世界坐标） */
   x: number;
   y: number;
@@ -302,6 +304,8 @@ export interface Body {
   /** 光帆系数（仅 kind='pod'）：辐射压 a = K_RAD·sail·A/(r²m) 的 sail。
    *  其余天体缺省 1，与改造前一致（小行星/碎片的光压不受货舱级别影响）。 */
   sail?: number;
+  /** 结构强度（来自货舱级别）：耀斑等事件按它决定伤害倍率 */
+  hull?: number;
 }
 
 export interface Well {
