@@ -1,0 +1,170 @@
+{
+  "scale": {
+    "普通": "AI 一次通关",
+    "困难": "勉强通关或已很接近",
+    "挑战": "AI 未通关（有可行性证明，需自行发明解法）"
+  },
+  "counts": {
+    "普通": 4,
+    "困难": 2,
+    "挑战": 6
+  },
+  "levels": {
+    "L1-1": {
+      "grade": "普通",
+      "why": "AI 一次通关",
+      "status": "成功",
+      "success": true,
+      "time": 8.1,
+      "delivered": 1,
+      "lost": 0,
+      "closest": 0.734,
+      "fuelUsed": 21.49,
+      "parTime": 15.0,
+      "fuelCap": 46.0
+    },
+    "L1-2": {
+      "grade": "困难",
+      "why": "通关但用时接近上限",
+      "status": "成功",
+      "success": true,
+      "time": 82.3,
+      "delivered": 1,
+      "lost": 0,
+      "closest": 0.218,
+      "fuelUsed": 52.0,
+      "parTime": 12.0,
+      "fuelCap": 52.0
+    },
+    "L1-3": {
+      "grade": "普通",
+      "why": "AI 一次通关",
+      "status": "成功",
+      "success": true,
+      "time": 12.9,
+      "delivered": 1,
+      "lost": 1,
+      "closest": 0.389,
+      "fuelUsed": 33.96,
+      "parTime": 14.6274,
+      "fuelCap": 58.0
+    },
+    "L2-1": {
+      "grade": "挑战",
+      "why": "AI 未通关且距离较远（有构造性可行性证明，需自行发明解法）",
+      "status": "未达成",
+      "success": false,
+      "time": 20.9,
+      "delivered": 0,
+      "lost": 2,
+      "closest": NaN,
+      "fuelUsed": 49.75,
+      "parTime": 70.0,
+      "fuelCap": 80.0
+    },
+    "L2-2": {
+      "grade": "挑战",
+      "why": "AI 未通关且距离较远（有构造性可行性证明，需自行发明解法）",
+      "status": "未达成",
+      "success": false,
+      "time": 12.2,
+      "delivered": 0,
+      "lost": 1,
+      "closest": NaN,
+      "fuelUsed": 36.7,
+      "parTime": 32.0,
+      "fuelCap": 101.5
+    },
+    "L2-3": {
+      "grade": "普通",
+      "why": "AI 一次通关",
+      "status": "成功",
+      "success": true,
+      "time": 8.0,
+      "delivered": 1,
+      "lost": 0,
+      "closest": 0.007,
+      "fuelUsed": 23.79,
+      "parTime": 18.0,
+      "fuelCap": 76.0
+    },
+    "L3-1": {
+      "grade": "挑战",
+      "why": "AI 未通关且距离较远（有构造性可行性证明，需自行发明解法）",
+      "status": "未达成",
+      "success": false,
+      "time": 12.6,
+      "delivered": 0,
+      "lost": 1,
+      "closest": NaN,
+      "fuelUsed": 37.88,
+      "parTime": 34.0,
+      "fuelCap": 110.7
+    },
+    "L3-2": {
+      "grade": "挑战",
+      "why": "AI 未通关且距离较远（有构造性可行性证明，需自行发明解法）",
+      "status": "未达成",
+      "success": false,
+      "time": 92.3,
+      "delivered": 0,
+      "lost": 2,
+      "closest": NaN,
+      "fuelUsed": 127.6,
+      "parTime": 42.0,
+      "fuelCap": 127.6
+    },
+    "L3-3": {
+      "grade": "困难",
+      "why": "通关但用时接近上限",
+      "status": "成功",
+      "success": true,
+      "time": 37.2,
+      "delivered": 1,
+      "lost": 1,
+      "closest": 0.087,
+      "fuelUsed": 85.19,
+      "parTime": 24.5801,
+      "fuelCap": 94.0
+    },
+    "L4-1": {
+      "grade": "普通",
+      "why": "AI 一次通关",
+      "status": "成功",
+      "success": true,
+      "time": 23.4,
+      "delivered": 1,
+      "lost": 0,
+      "closest": 0.481,
+      "fuelUsed": 55.81,
+      "parTime": 26.0,
+      "fuelCap": 100.0
+    },
+    "L4-2": {
+      "grade": "挑战",
+      "why": "AI 未通关且距离较远（有构造性可行性证明，需自行发明解法）",
+      "status": "未达成",
+      "success": false,
+      "time": 140.6,
+      "delivered": 0,
+      "lost": 1,
+      "closest": NaN,
+      "fuelUsed": 153.7,
+      "parTime": 44.0,
+      "fuelCap": 153.7
+    },
+    "L4-3": {
+      "grade": "挑战",
+      "why": "AI 未通关且距离较远（有构造性可行性证明，需自行发明解法）",
+      "status": "未达成",
+      "success": false,
+      "time": 10.9,
+      "delivered": 0,
+      "lost": 2,
+      "closest": NaN,
+      "fuelUsed": 32.72,
+      "parTime": 40.0,
+      "fuelCap": 151.20000000000002
+    }
+  }
+}

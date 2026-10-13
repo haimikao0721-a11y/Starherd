@@ -38,6 +38,10 @@ export interface NebulaSpec { x: number; y: number; r: number; density: number; 
 export interface LevelSpec {
   id: string; index: number; chapter: number;
   name_zh: string; name_en: string; difficulty: number;
+  /** 难度档位（tools/difficulty_probe.py 用 AI 探针实测写入）：普通/困难/挑战 */
+  difficulty_label?: string;
+  /** 燃料预算系数（可选）：fuelCapacity = (40 + 6×难度) × 该值 */
+  fuel_scale?: number;
   mu_star: number; bounds: number;
   camera: { x: number; y: number; zoom: number };
   bodies: BodySpec[]; pods: PodSpec[];
@@ -510,6 +514,8 @@ export interface ScoreBreakdown {
   fidelityGrade: string; fidelityNote: string;
   energyDrift: number; angularDrift: number;
   difficulty: number;
+  /** 难度档位（由 tools/difficulty_probe.py 用 AI 探针实测写入）：普通/困难/挑战 */
+  difficulty_label?: string;
   /** 燃料预算系数（可选）：fuelCapacity = (40 + 6*difficulty) × 该值。
    * 用于把「极限」关卡放宽成「难但能过」——只加预算，不改任何物理与几何。 */
   fuel_scale?: number; newBest: boolean; success: boolean;

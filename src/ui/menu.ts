@@ -631,7 +631,7 @@ export class Menu {
         const best = this.bestOf(lv);
         const unlocked = this.levelUnlocked(lv);
         cards += `<button class="lc-card ${unlocked ? '' : 'lc-locked'} ${best ? 'lc-done' : ''}"
-          data-act="level" data-level="${lv.index}" data-sfx="ui_click" data-sfx-hover="ui_hover" ${unlocked ? '' : 'disabled'}>
+          data-act="level" data-level="${lv.index}" data-grade="${esc(lv.difficulty_label ?? '')}" data-sfx="ui_click" data-sfx-hover="ui_hover" ${unlocked ? '' : 'disabled'}>
           <span class="lc-card-no">${String(lv.index).padStart(2, '0')}</span>
           <span class="lc-card-name">${esc(lv.name_zh)}</span>
           <span class="lc-card-en">${esc(lv.name_en)}</span>
@@ -681,12 +681,12 @@ export class Menu {
     const compNotes = comp.map(({ cls }) =>
       `<p><b style="color:${esc(cls.color)}">${esc(cls.nameZh)}</b> <span class="lc-dim">${esc(cls.nameEn)}</span> · ${esc(cls.note)}</p>`).join('');
     const body = `
-      ${this.header(`${lv.name_zh}`, lv.name_en, `CH.${lv.chapter}${ch ? ' ' + ch.name_zh : ''} · 难度 ${lv.difficulty}/12 · ${lv.id}`)}
+      ${this.header(`${lv.name_zh}`, lv.name_en, `CH.${lv.chapter}${ch ? ' ' + ch.name_zh : ''} · 难度 ${lv.difficulty}/12${lv.difficulty_label ? ` · ${esc(lv.difficulty_label)}` : ''} · ${lv.id}`)}
       <div class="lc-brief">
         <div class="lc-stat-grid">
           <div class="lc-stat"><span class="lc-stat-k">任务目标</span><span class="lc-stat-v">把 ${required} / ${pods} 个货舱送入对接环</span></div>
           <div class="lc-stat"><span class="lc-stat-k">时限</span><span class="lc-stat-v">${fmtTime(Math.max(90, lv.par_time * 3.4), 'floor')}</span></div>
-          <div class="lc-stat"><span class="lc-stat-k">Δv 预算</span><span class="lc-stat-v">${fmtDv(24 + 2.2 * lv.difficulty)}</span></div>
+          <div class="lc-stat"><span class="lc-stat-k">Δv 预算</span><span class="lc-stat-v">${fmtDv((40 + 6 * lv.difficulty) * (lv.fuel_scale ?? 1))}${lv.fuel_scale ? ` <span class="lc-dim">(×${lv.fuel_scale} 余量)</span>` : ''}</span></div>
           <div class="lc-stat"><span class="lc-stat-k">par 时间 / par Δv</span><span class="lc-stat-v">${fmtTime(lv.par_time, 'floor')} / ${fmtDv(lv.par_fuel)}</span></div>
           <div class="lc-stat"><span class="lc-stat-k">星域尺度</span><span class="lc-stat-v">bounds ${lv.bounds} RU · μ★ ${lv.mu_star}</span></div>
           <div class="lc-stat"><span class="lc-stat-k">对接门限</span><span class="lc-stat-v">|v_rel| &lt; ${lv.dock.v_max} RU/TU · 环半径 ${lv.dock.radius}</span></div>
