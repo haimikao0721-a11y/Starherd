@@ -1336,6 +1336,20 @@ export class Hud {
        必须主动告诉玩家"发生了什么 + 怎么出去"，而不是让他自己想到按 R。 */
     if (f.wellLost) {
       const pulse2 = 0.6 + 0.4 * Math.sin(this.clock * 7);
+    /* 事件预警（宇宙风暴等）：**必须可预见**，否则就退化成运气 —— 提前 5 秒给 ETA。 */
+    if (f.world.events && f.world.events.length) {
+      const ev = f.world.events[0];
+      if (ev.active) {
+        const p2 = 0.6 + 0.4 * Math.sin(this.clock * 8);
+        this.txt('⚠ 宇宙风暴过境中 —— 锋面会推偏货舱，提前留出侧向余量',
+          x + w * 0.5, y + h + 45, rgba(pal.danger, p2), 10.5, 'center', '600');
+      } else if (ev.eta > 0 && ev.eta < 5) {
+        const p3 = 0.55 + 0.45 * Math.sin(this.clock * 6);
+        this.txt(`⚠ 宇宙风暴 ${ev.eta.toFixed(1)} 秒后抵达 —— 把货舱挪出锋面路径，或顺风借力`,
+          x + w * 0.5, y + h + 45, rgba(pal.danger, p3), 10.5, 'center', '600');
+      }
+    }
+
       this.txt('⚠ 引力井已脱离作业区（飞船飞到地图外）—— 鼠标移回画面中心即可召回，或按 R 重试本关',
         x + w * 0.5, y + h + 30, rgba(pal.danger, pulse2), 10.5, 'center', '600');
     }

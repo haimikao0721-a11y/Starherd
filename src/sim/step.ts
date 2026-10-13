@@ -362,6 +362,48 @@ function wellConstraint(world: World): void {
   w.hot = 1;
 }
 
+
+/**
+ * 定时事件：**宇宙风暴** —— 一道推进的力场锋面。
+ *
+ * 设计要点（玩家反馈「事件不能变成运气」）：锋面**完全可预测**——
+ * 位置只由 ``t0/period/speed/dir`` 决定，HUD 提前给 ETA，Tab 预测线里也能看到它推偏货舱。
+ * 玩家要做的不是祈祷，而是**提前把货舱挪出锋面路径**，或**顺风利用它省燃料**。
+ */
+function applyEvents(world: World, dt: number): void {
+  const list = world.level.events;
+  if (!list || !list.length) return;
+  if (!world.events || world.events.length !== list.length) {
+    world.events = list.map((e) => ({ kind: e.kind, x: 0, y: 0, dir: e.dir, eta: e.t0, active: false }));
+  }
+  const span = world.bounds * 2.4;
+  for (let i = 0; i < list.length; i++) {
+    const e = list[i];
+    const st = world.events[i];
+    const period = e.period > 0 ? e.period : Number.POSITIVE_INFINITY;
+    const u = period === Number.POSITIVE_INFINITY ? world.time - e.t0 : (world.time - e.t0) % period;
+    const cx = -span * 0.5 + u * e.speed;
+    const nx = Math.cos(e.dir);
+    const ny = Math.sin(e.dir);
+    st.x = nx * cx;
+    st.y = ny * cx;
+    st.dir = e.dir;
+    st.eta = world.time < e.t0 ? e.t0 - world.time : -cx / Math.max(1e-6, e.speed);
+    st.active = Math.abs(cx) < e.width * 0.5 + world.bounds * 0.6;
+    if (u < 0 || Math.abs(cx) > span * 0.75) continue;
+    for (let k = 0; k < world.pods.length; k++) {
+      const b = world.pods[k];
+      if (!b.alive || b.delivered) continue;
+      const d = (b.x * nx + b.y * ny) - cx;
+      if (Math.abs(d) > e.width) continue;
+      const sig = e.width * 0.45;
+      const fall = Math.exp(-(d * d) / (2 * sig * sig));
+      b.vx += nx * e.accel * fall * dt;
+      b.vy += ny * e.accel * fall * dt;
+    }
+  }
+}
+
 function interactions(world: World, dt: number): void {  // 1) 轻体 × 主天体（撞星/越视界/撞行星 = 损毁）
   for (let i = 0; i < PODSH.length; i++) {
     const b = PODSH[i];
@@ -618,6 +660,7 @@ export function stepOnce(world: World, dt: number, depth = 0): void {
   world.time += dt;
   world.stats.steps++;
   interactions(world, dt);
+  applyEvents(world, dt);
   updateTrails(world, dt);
 }
 

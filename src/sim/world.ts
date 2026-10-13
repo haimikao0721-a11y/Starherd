@@ -187,6 +187,11 @@ export function createWorld(level: LevelSpec, doc: LevelsDoc, attempt = 1): Worl
   // 玩家反馈「有些关太极限、不像能过」——放宽预算即可，物理与几何一律不动。
   const fuelScale = Number((level as { fuel_scale?: number }).fuel_scale ?? 1) || 1;
   const fuelCapacity = (40 + 6 * level.difficulty) * fuelScale;
+
+  // 定时事件（宇宙风暴等）：运行时状态挂到 world.events，由 step 每步更新
+  const eventState = (level.events ?? []).map((e) => ({
+    kind: e.kind, x: 0, y: 0, dir: e.dir, eta: e.t0, active: false,
+  }));
   const required = Math.max(1, Math.round(level.pods.length * (level.difficulty <= 2 ? 1 : 0.6)));
 
   const levelRt: LevelRuntime = {
@@ -240,6 +245,7 @@ export function createWorld(level: LevelSpec, doc: LevelsDoc, attempt = 1): Worl
     fuel: fuelCapacity, fuelCapacity,
     compute: 1, computeMax: 1,
     timeScale: 1, slowmo: 1,
+    events: eventState,
     fx: [], predicted: [],
     stats: {
       steps: 0, substeps: 0, ke: 0, pe: 0, energy: 0,
