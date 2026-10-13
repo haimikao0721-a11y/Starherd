@@ -1034,3 +1034,10 @@ html, body {
 .lc-gradetag[data-grade="普通"] { border-color: rgba(110,220,170,.55); color: rgba(150,240,200,.95); }
 .lc-gradetag[data-grade="困难"] { border-color: rgba(255,200,110,.55); color: rgba(255,220,150,.95); }
 .lc-gradetag[data-grade="挑战"] { border-color: rgba(255,130,130,.55); color: rgba(255,170,170,.95); }
+
+/* ---- 联系区块（结算页 / 启动页 / 关于页共用）---- */
+.lc-contact { margin: 10px 0 4px; padding: 10px 12px; border-radius: 8px;
+  border: 1px solid rgba(140,180,255,.22); background: rgba(120,160,255,.05); text-align: center; }
+.lc-contact-lead { margin: 0 0 6px; font-size: 12.5px; color: rgba(215,230,255,.92); }
+.lc-contact .lc-nav { justify-content: center; }
+.lc-contact .lc-hint { margin: 6px 0 0; font-size: 11px; }

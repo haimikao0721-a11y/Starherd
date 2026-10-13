@@ -578,7 +578,7 @@ export class Menu {
   private renderBoot(): void {
     const d = (this.data ?? {}) as { text?: string; progress?: number };
     const pct = clamp01(typeof d.progress === 'number' ? d.progress : 0) * 100;
-    this.shell(`
+    this.shell(`${this.contactBlock()}` + `
       <div class="lc-boot">
         <div class="lc-boot-ring" aria-hidden="true"></div>
         <h2 class="lc-boot-title">正在连接任务控制中心…</h2>
@@ -603,6 +603,7 @@ export class Menu {
         ${btn('settings', '设置')}
         ${btn('quit', '退出', { cls: 'lc-danger' })}
       </nav>
+      
       <p class="lc-hint">↑↓ 选择 · Enter 确认 · Esc 返回 · 鼠标可直接点击 · 首次游玩建议先看操作演示</p>`;
     this.shell(body);
   }
@@ -822,6 +823,20 @@ export class Menu {
   }
 
   /* ---- debrief ---- */
+  /** 联系区块：结算页与启动页共用。作者最需要的是反馈与 Star，所以放在曝光最高的位置。 */
+  private contactBlock(): string {
+    return `
+      <div class="lc-contact">
+        <p class="lc-contact-lead">喜欢《牧星者》？给个 ⭐ <b>Star</b> 是独立开发者最实在的鼓励。</p>
+        <nav class="lc-nav lc-nav-row">
+          ${btn('copy-mail', '复制邮箱', { title: AUTHOR.email })}
+          ${btn('copy-repo', '复制仓库地址', { title: AUTHOR.repo })}
+        </nav>
+        <p class="lc-hint">发现 bug、想加关卡、想聊公式，都欢迎写信：<b>${esc(AUTHOR.email)}</b>
+          · 仓库 <span class="lc-mono">${esc(AUTHOR.repo)}</span></p>
+      </div>`;
+  }
+
   private renderDebrief(): void {
     const sb = (this.data ?? null) as ScoreBreakdown | null;
     if (!sb) {
@@ -851,6 +866,7 @@ export class Menu {
         <p>${esc(sb.fidelityNote || '守恒量审计未返回评语')}</p>
         <p class="lc-mono">ΔE/E = ${esc(fmtSci(sb.energyDrift, 2))}    ΔL/L = ${esc(fmtSci(sb.angularDrift, 2))}    连击 ×${fmtInt(sb.combo)}    难度 ${sb.difficulty}</p>
       </div>
+      ${this.contactBlock()}
       <nav class="lc-nav lc-nav-row">
         ${sb.success ? btn('next', '下一关', { cls: 'lc-primary' }) : ''}
         ${btn('retry', sb.success ? '重试本关' : '重试', { cls: sb.success ? '' : 'lc-primary' })}
