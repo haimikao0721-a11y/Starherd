@@ -1338,6 +1338,22 @@ export class Hud {
       const pulse2 = 0.6 + 0.4 * Math.sin(this.clock * 7);
     /* 事件预警（宇宙风暴等）：**必须可预见**，否则就退化成运气 —— 提前 5 秒给 ETA。 */
     if (f.world.events && f.world.events.length) {
+      const rescue = f.world.level.events?.find((e) => e.kind === 'rescue');
+      if (rescue) {
+        const lead = rescue.t0 - f.world.time;
+        const pod = f.world.pods.find((p) => p.alive && !p.delivered);
+        if (lead > 0 && lead < 6) {
+          const pw = 0.55 + 0.45 * Math.sin(this.clock * 7);
+          this.txt(`⚠ 救援警报：${lead.toFixed(1)} 秒后货舱开始泄漏（约 ${(1 / (rescue.leakRate ?? 0.02)).toFixed(0)} 秒解体）`,
+            x + w * 0.5, y + h + 60, rgba(pal.danger, pw), 10.5, 'center', '600');
+        } else if (lead <= 0 && pod) {
+          const secs = Math.max(0, pod.integrity / (rescue.leakRate ?? 0.02));
+          const pw = 0.6 + 0.4 * Math.sin(this.clock * 9);
+          this.txt(`⚠ 船体泄漏中 —— 约 ${secs.toFixed(1)} 秒后解体，尽快入坞`,
+            x + w * 0.5, y + h + 60, rgba(pal.danger, pw), 10.5, 'center', '600');
+        }
+      }
+
       const ev = f.world.events[0];
       if (ev.active) {
         const p2 = 0.6 + 0.4 * Math.sin(this.clock * 8);

@@ -37,7 +37,7 @@ export interface NebulaSpec { x: number; y: number; r: number; density: number; 
 
 /** 关卡内的定时事件（目前支持宇宙风暴：一道推进的力场锋面）。 */
 export interface EventSpec {
-  kind: 'storm';
+  kind: 'storm' | 'rescue';
   /** 首次触发时刻（TU） */
   t0: number;
   /** 周期（TU）；0 = 只出现一次 */
@@ -50,11 +50,13 @@ export interface EventSpec {
   width: number;
   /** 锋面内的加速度（RU/TU²），方向与 dir 相反则把货舱往回推 */
   accel: number;
+  /** （rescue 专用）船体泄漏速率：每秒扣多少结构强度；0.02 ≈ 50 秒解体 */
+  leakRate?: number;
 }
 
 /** 事件运行时状态（供 HUD 预警与渲染使用）。 */
 export interface EventRuntime {
-  kind: 'storm';
+  kind: 'storm' | 'rescue';
   /** 锋面中心位置（世界坐标） */
   x: number;
   y: number;

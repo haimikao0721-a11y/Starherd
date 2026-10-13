@@ -403,6 +403,31 @@ export function eventAccelAt(world: World, t: number, x: number, y: number,
 
 const EV_TMP = { x: 0, y: 0 };
 
+const EV_TMP2 = { x: 0, y: 0 };
+
+/**
+ * 极限救援：从 t0 起某个货舱**船体泄漏**，结构强度持续下降，送到对接环即可保住。
+ *
+ * 为什么不复用潮汐应力（stress）：撕裂机制在第 1~2 章是**关闭**的（教学章不惩罚），
+ * 那样救援事件在教学章会形同虚设。这里直接扣 `integrity` 并走统一的 destroyBody 路径，
+ * 全章节一致，且 HUD 可以用「剩余秒数」明确预警（玩家要的是"可应对"，不是"看运气"）。
+ */
+function applyRescue(world: World, dt: number): void {
+  const list = world.level.events;
+  if (!list || !list.length) return;
+  for (let i = 0; i < list.length; i++) {
+    const e = list[i];
+    if (e.kind !== 'rescue') continue;
+    if (world.time < e.t0) continue;
+    const b = world.pods.find((p) => p.alive && !p.delivered);
+    if (!b) continue;
+    b.integrity -= (e.leakRate ?? 0.02) * dt;
+    if (b.integrity <= 0) {
+      destroyBody(world, b, 'impact_hull', '船体泄漏解体');
+    }
+  }
+}
+
 function applyEvents(world: World, dt: number): void {
   const list = world.level.events;
   if (!list || !list.length) return;
@@ -691,6 +716,7 @@ export function stepOnce(world: World, dt: number, depth = 0): void {
   world.stats.steps++;
   interactions(world, dt);
   applyEvents(world, dt);
+  applyRescue(world, dt);
   updateTrails(world, dt);
 }
 
