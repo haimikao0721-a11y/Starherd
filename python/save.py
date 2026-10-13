@@ -30,7 +30,8 @@ import paths  # noqa: E402
 
 STATE_VERSION = "1.0.0"
 LEVELS_PER_CHAPTER = 3
-MAX_CHAPTER = 4
+# v1.2 起是 5 章 20 关。这里若停在 4，通关第 4 章后写入的 5 会在读档时被钳回 4，第 5 章重启即锁死。
+MAX_CHAPTER = 5
 GRADE_ORDER = {"S": 4, "A": 3, "B": 2, "C": 1, "-": 0}
 _LEVEL_ID_RE = re.compile(r"^L(\d+)-(\d+)$", re.IGNORECASE)
 
@@ -138,13 +139,23 @@ def _normalize(data) -> dict:
             if not isinstance(entry, dict):
                 continue
             grade = entry.get("grade")
-            best[str(level_id)] = {
+            item = {
                 "score": _int(entry.get("score"), 0),
                 "grade": str(grade) if isinstance(grade, str) and grade else "-",
                 "time": round(_num(entry.get("time"), 0.0), 3),
                 "fuel": round(_num(entry.get("fuel"), 0.0), 5),
             }
+            # 客户端靠 won===true 才算通关。丢掉这个字段的话，重启后成绩会被整笔删掉，章内后续关卡重新上锁。
+            if entry.get("won") is True:
+                item["won"] = True
+            best[str(level_id)] = item
     state["best_scores"] = best
+    for level_id in best:
+        coords = level_coords(level_id)
+        if not coords:
+            continue
+        # 旧包把第 5 章钳成 4，但成绩键还在。读到 L5-* 时把章节数补回，避免已经打到的章被永久锁死。
+        state["unlocked_chapters"] = max(state["unlocked_chapters"], min(MAX_CHAPTER, coords[0]))
 
     raw_totals = data.get("totals")
     if isinstance(raw_totals, dict):
@@ -258,7 +269,7 @@ def merge_result(state: dict, result: dict, verdict: dict | None) -> dict:
 
     * best_scores[level_id]：分数取历史最高；time/fuel 取成功局里的最小值；
       grade 跟随最高分那一局（若新局分数不高于旧纪录则保留旧评级）。
-    * unlocked_chapters：通关章节最后一关（第 3 关）后解锁下一章，上限 4。
+    * unlocked_chapters：通关章节最后一关（关序 ≥ 3）后解锁下一章，上限 5。
     * totals：played+1、delivered/lost 累加、playtime 累加本局用时。
     """
     current = _normalize(state)
@@ -285,16 +296,20 @@ def merge_result(state: dict, result: dict, verdict: dict | None) -> dict:
     # ---- 最佳分 ----
     if level_id:
         prev = current["best_scores"].get(level_id)
+        fresh = {
+            "score": score,
+            "grade": grade,
+            "time": round(elapsed, 3),
+            "fuel": round(fuel, 5),
+        }
+        if success or (isinstance(prev, dict) and prev.get("won") is True):
+            fresh["won"] = True
         if prev is None or score > _int(prev.get("score"), 0):
-            current["best_scores"][level_id] = {
-                "score": score,
-                "grade": grade,
-                "time": round(elapsed, 3),
-                "fuel": round(fuel, 5),
-            }
+            current["best_scores"][level_id] = fresh
         elif success:
             # 未破纪录，但成功局的最佳用时/燃料仍可取更优值
             entry = dict(prev)
+            entry["won"] = True
             if elapsed > 0:
                 entry["time"] = round(min(_num(entry.get("time"), elapsed) or elapsed, elapsed), 3)
             if fuel > 0:

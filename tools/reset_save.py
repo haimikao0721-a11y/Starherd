@@ -48,7 +48,7 @@ def main(argv: list[str] | None = None) -> int:
 
     changed = False
     if args.chapter:
-        d["unlocked_chapters"] = max(1, min(4, args.chapter))
+        d["unlocked_chapters"] = max(1, min(5, args.chapter))
         changed = True
         print(f"  → 解锁章节将设为 {d['unlocked_chapters']}")
     for lv in args.clear_scores:

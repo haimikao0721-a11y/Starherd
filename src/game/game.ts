@@ -1342,8 +1342,12 @@ export class Game {
         if (!this.save.clips) this.save.clips = {};
         this.save.clips[lv.id] = clip;
       }
-      const chapters = this.doc.levels[this.levelIndex]?.chapter ?? 1;
-      this.save.unlocked_chapters = Math.max(this.save.unlocked_chapters, Math.min(5, chapters));
+      const curLv = this.doc.levels[this.levelIndex];
+      const chapters = curLv?.chapter ?? 1;
+      const nxtLv = this.doc.levels[this.levelIndex + 1];
+      // 章末（没有下一关，或下一关换章）要解开下一章。只记当前章的话，打完 L4-3 再退出，第 5 章不会落盘。
+      const opened = !nxtLv || nxtLv.chapter !== chapters ? chapters + 1 : chapters;
+      this.save.unlocked_chapters = Math.max(this.save.unlocked_chapters, Math.min(5, opened));
     }
     this.save.totals.played++;
     this.save.totals.delivered += lv.podsDelivered;

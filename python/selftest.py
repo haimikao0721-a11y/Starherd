@@ -804,6 +804,54 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     return ap.parse_args(argv)
 
 
+def check_chapter5_persists() -> bool:
+    """通关 L4-3 写入后重新读档，第 5 章和通关标记都还在。"""
+    sys.path.insert(0, str(HERE))
+    import save as save_mod
+
+    prev = os.environ.get("STARHERD_DATA_DIR")
+    tmp = Path(tempfile.mkdtemp(prefix="lc_ch5_"))
+    try:
+        os.environ["STARHERD_DATA_DIR"] = str(tmp)
+        state = save_mod.merge_result(save_mod.default_state(), {
+            "level_id": "L4-3",
+            "success": True,
+            "time": 12,
+            "fuel_used": 1,
+            "score": 900,
+            "pods_total": 1,
+            "pods_delivered": 1,
+        }, {"grade": "S", "fidelity": 1, "score_bonus": 40})
+        if state.get("unlocked_chapters") != 5 or state.get("best_scores", {}).get("L4-3", {}).get("won") is not True:
+            R.failed("通关 L4-3 解锁第 5 章", f"un={state.get('unlocked_chapters')} score={state.get('best_scores', {}).get('L4-3')}")
+            return False
+        save_mod.write_state(state)
+        loaded = save_mod.load_state()
+        if loaded.get("unlocked_chapters") != 5 or loaded.get("best_scores", {}).get("L4-3", {}).get("won") is not True:
+            R.failed("重启后第 5 章仍在", f"un={loaded.get('unlocked_chapters')} score={loaded.get('best_scores', {}).get('L4-3')}")
+            return False
+        client = save_mod.default_state()
+        client["unlocked_chapters"] = 5
+        client["best_scores"] = {"L5-1": {"score": 800, "grade": "A", "time": 1, "fuel": 1, "won": True}}
+        save_mod.write_state(client)
+        again = save_mod.load_state()
+        if again.get("unlocked_chapters") != 5 or again.get("best_scores", {}).get("L5-1", {}).get("won") is not True:
+            R.failed("客户端写入 5 读回仍是 5", f"un={again.get('unlocked_chapters')} scores={again.get('best_scores')}")
+            return False
+        end = save_mod.merge_result(again, {"level_id": "L5-9", "success": True, "time": 1, "score": 1}, None)
+        if end.get("unlocked_chapters") != 5:
+            R.failed("终章不会解锁第 6 章", f"got {end.get('unlocked_chapters')}")
+            return False
+        R.passed("通关 L4-3 → 重启 → 第 5 章仍在")
+        return True
+    finally:
+        if prev is None:
+            os.environ.pop("STARHERD_DATA_DIR", None)
+        else:
+            os.environ["STARHERD_DATA_DIR"] = prev
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
 def main(argv: list[str]) -> int:
     args = parse_args(argv)
     t0 = time.time()
@@ -818,6 +866,7 @@ def main(argv: list[str]) -> int:
     R.info(f"项目根: {PROJECT_ROOT}")
     R.info(f"宿主入口: {host_script}")
     R.info(f"Python: {sys.version.split()[0]} ({sys.executable})")
+    check_chapter5_persists()
 
     host: HostProcess | None = None
     _reap_stale_tmpdirs()
