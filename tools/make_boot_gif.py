@@ -196,7 +196,7 @@ def main() -> None:
     base = frames[0].quantize(colors=48, method=Image.Quantize.MEDIANCUT, dither=Image.Dither.NONE)
     pal = [base] + [f.quantize(palette=base, dither=Image.Dither.NONE) for f in frames[1:]]
     out = r"C:\Users\a\Desktop\LagrangeCourier\assets\art\boot.gif"
-    pal[0].save(out, save_all=True, append_images=pal[1:], duration=140, loop=0, optimize=True, disposal=2)
+    pal[0].save(out, save_all=True, append_images=pal[1:], duration=310, loop=0, optimize=True, disposal=2)
     print(out, frames[0].size, "frames", len(pal))
 
 

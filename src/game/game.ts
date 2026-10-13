@@ -249,6 +249,7 @@ export class Game {
     };
 
     setBoot('正在连接任务控制中心…', 0.02);
+    const bootStarted = performance.now();
     const ctx = this.tryCreateAudioContext();
     // ?? 而非 ||：离线单文件版的 asset_base 是空串（素材内联为 data URL），空串必须被尊重
     this.assets = new Assets(this.manifest, this.musicIndex, this.welcome.asset_base ?? '/assets/');
@@ -310,8 +311,17 @@ export class Game {
     }, true);
 
     this.phase('进入主菜单');
-    if (boot) { boot.classList.add('hidden'); setTimeout(() => { try { boot.remove(); } catch { /* 忽略 */ } }, 900); }
-    shell?.done?.(500);
+    // 开头动画固定约 5 秒。素材更早就绪时把剩下的时间留白；自检不等待。
+    const bootHold = this.autotest ? 0 : Math.max(0, 5000 - 650 - (performance.now() - bootStarted));
+    if (bootHold > 0) {
+      setBoot('航线已接通', 1);
+      await new Promise((resolve) => window.setTimeout(resolve, bootHold));
+    }
+    shell?.done?.(0);
+    if (!shell?.done && boot) {
+      boot.classList.add('boot-out');
+      window.setTimeout(() => { try { boot.remove(); } catch { /* 忽略 */ } }, 700);
+    }
     if (this.autotest) { this.startLevelAt(this.startLevel); this.setScreen('play'); }
     else { this.startAttract(); this.setScreen('menu'); }
     // 首次游玩：自动弹操作演示（玩家反馈"看不懂玩法、左右键像重合"，这是最直接的入口）。
