@@ -455,6 +455,33 @@ function applyFlare(world: World, dt: number): void {
  * 货舱撞上就按 `dv > V_CRIT*2.2 → 撞击小行星` 损毁，抢在雨前把货舱挪开就行——是可控风险，不是随机灾难。
  * 判定"跨过周期边界"而不是"每帧撒"，避免同一批被重复生成。
  */
+/**
+ * 多段目标：一次成功对接后推进到下一段，站台随即切换到下一个目标天体。
+ *
+ * 这就是「多星串联」的机制底座——先送到 A 站，HUD 显示"航段 2/2"，再把后续货舱送去 B 站。
+ * 单站关（objectives 缺省）不受影响：objectivesTotal = 1，本函数直接返回。
+ */
+function advanceObjective(world: World): void {
+  const lv = world.level;
+  const list = lv.objectives;
+  if (!list || list.length <= 1) return;
+  if (lv.objectiveIndex >= list.length - 1) return;
+  lv.objectiveIndex++;
+  const o = list[lv.objectiveIndex];
+  const body = world.primaries.find((p) => p.key === o.body) ?? world.primaries[world.primaries.length - 1];
+  const off = o.offset ?? { x: 0, y: 0 };
+  world.dock.bodyId = body.id;
+  world.dock.ox = off.x;
+  world.dock.oy = off.y;
+  world.dock.x = body.x + off.x;
+  world.dock.y = body.y + off.y;
+  if (o.radius != null) world.dock.radius = o.radius;
+  if (o.v_max != null) world.dock.vMax = o.v_max;
+  world.dock.pulse = 1;
+  fx(world, 'dock', world.dock.x, world.dock.y, 0, 0, 1.0, 0x8fd0ff, 'dock_success',
+    `航段 ${lv.objectiveIndex + 1}/${list.length} · ${o.label_zh ?? '下一个目标'}`);
+}
+
 function applyShower(world: World, dt: number): void {
   const list = world.level.events;
   if (!list || !list.length) return;
@@ -714,6 +741,7 @@ function interactions(world: World, dt: number): void {  // 1) 轻体 × 主天�
         p.vx = station.vx; p.vy = station.vy;
         p.integrity = soft ? 1 : 0.55;
         world.level.podsDelivered++;
+        advanceObjective(world);   // 多段目标：推进航段
         if (soft) {
           world.level.combo++;
           world.level.comboTimer = 8;

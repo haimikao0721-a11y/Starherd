@@ -547,6 +547,7 @@ export class Hud {
     this.drawFieldCard(f, pal, 0, 0);
 
     this.drawSling(f, pal);
+    this.drawLegs(f, pal);
     // 6) 屏幕世界的危险叠加（潮汐应力环 / 货舱标记 / 实体名牌 / 目标指示）
     this.drawPodMarkers(f, pal);
     this.drawObjective(f, pal);
@@ -1064,6 +1065,18 @@ export class Hud {
     this.txt('甩摆捕获 / SLING', x + 12, y + 17, pal.uiDim, 10);
     this.txt(line1, x + 12, y + 36, col, 12, 'left', '600');
     this.txt(line2, x + 12, y + 48, pal.uiDim, 10);
+  }
+
+  /** 多段目标（多星串联）：显示当前航段与目标。单站关不显示。 */
+  private drawLegs(f: HudFrame, pal: Palette): void {
+    const lv = f.world.level;
+    if (!lv.objectives || lv.objectivesTotal <= 1) return;
+    const o = lv.objectives[lv.objectiveIndex];
+    const x = 16;
+    const y = 84;
+    this.txt(`航段 ${lv.objectiveIndex + 1}/${lv.objectivesTotal} · ${o?.label_zh ?? '目标'}`,
+      x, y, pal.uiAccent, 12, 'left', '600');
+    this.txt('把货舱送到当前泊位后，站台会自动切换到下一段', x, y + 14, pal.uiDim, 10);
   }
 
   private drawCurve(

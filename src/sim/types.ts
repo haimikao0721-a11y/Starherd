@@ -73,11 +73,27 @@ export interface EventRuntime {
   active: boolean;
 }
 
+/** 多段目标的一段：把货舱送到某天体附近的泊位。 */
+export interface ObjectiveSpec {
+  /** 目标天体的 key（与 bodies 里的 key 对应） */
+  body: string;
+  /** 相对该天体的偏移（RU） */
+  offset?: { x: number; y: number };
+  /** 泊位半径（缺省沿用关卡 dock.radius） */
+  radius?: number;
+  /** 软对接速度门限（缺省沿用关卡 dock.v_max） */
+  v_max?: number;
+  label_zh?: string;
+  label_en?: string;
+}
+
 export interface LevelSpec {
   id: string; index: number; chapter: number;
   name_zh: string; name_en: string; difficulty: number;
   /** 定时事件（可选）：宇宙风暴等 */
   events?: EventSpec[];
+  /** 多段目标（可选）：按顺序送达的泊位序列。缺省 = 单一 dock，行为不变。 */
+  objectives?: ObjectiveSpec[];
   /** 难度档位（tools/difficulty_probe.py 用 AI 探针实测写入）：普通/困难/挑战 */
   difficulty_label?: string;
   /** 燃料预算系数（可选）：fuelCapacity = (40 + 6×难度) × 该值 */
@@ -370,6 +386,13 @@ export interface LevelRuntime {
   events?: EventSpec[]; timeLimit: number;
   /** 手感的即时反馈 */
   combo: number; comboTimer: number;
+
+  /** 多段目标（从 spec 拷入；缺省为 undefined 表示单站） */
+  objectives?: ObjectiveSpec[];
+  /** 当前航段序号（0 起） */
+  objectiveIndex: number;
+  /** 总航段数（单站关为 1） */
+  objectivesTotal: number;
 }
 
 export interface PredictedPath {
