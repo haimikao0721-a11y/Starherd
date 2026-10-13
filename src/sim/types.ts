@@ -472,7 +472,12 @@ export interface VerdictMsg {
 }
 export interface SaveState {
   version: string;
-  settings: { master: number; music: number; sfx: number; muted: boolean; quality: 'low' | 'mid' | 'high'; showField: boolean };
+  settings: {
+    master: number; music: number; sfx: number; muted: boolean;
+    quality: 'low' | 'mid' | 'high'; showField: boolean;
+    /** 帧率上限：0 = 不限，可设 30/60/120（玩家反馈要求固定帧率生效） */
+    fpsCap?: number;
+  };
   unlocked_chapters: number;
   best_scores: Record<string, { score: number; grade: string; time: number; fuel: number }>;
   totals: { played: number; delivered: number; lost: number; playtime: number };
@@ -481,7 +486,7 @@ export interface SaveState {
 
 export const DEFAULT_SAVE: SaveState = {
   version: '1.0',
-  settings: { master: 0.8, music: 0.55, sfx: 0.9, muted: false, quality: 'high', showField: true },
+  settings: { master: 0.8, music: 0.55, sfx: 0.9, muted: false, quality: 'high', showField: true, fpsCap: 0 },
   unlocked_chapters: 1,
   best_scores: {},
   totals: { played: 0, delivered: 0, lost: 0, playtime: 0 },

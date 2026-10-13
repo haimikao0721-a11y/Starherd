@@ -22,6 +22,9 @@ export class GameLoop {
   private last = 0;
   private acc = 0;
   private accSecond = 0;
+  /** 帧率上限：帧间隔小于该毫秒数就跳过本帧（0 = 不限） */
+  private minFrameMs = 0;
+  private frameGate = 0;
   private running = false;
   private hidden = false;
   private _fps = 60;
@@ -37,6 +40,16 @@ export class GameLoop {
   get frameMs(): number { return this._frameMs; }
   get steps(): number { return this._steps; }
   get lastSimDt(): number { return this.acc; }
+
+  /**
+   * 设置帧率上限（0 = 不限）。超出预算的帧**整帧跳过**（不推进模拟、不渲染），
+   * 于是帧间隔变稳——玩家反馈"帧率低，希望有固定帧率生效"，抖动比峰值更影响手感。
+   * 跳过帧不会丢时间：`this.last` 已更新，下一帧的 dtReal 会自然累积，模拟保持一致。
+   */
+  setFrameCap(fps: number): void {
+    this.minFrameMs = fps > 0 ? 1000 / Math.max(1, Math.min(240, fps)) : 0;
+    this.frameGate = 0;
+  }
 
   start(): void {
     if (this.running) return;
@@ -79,6 +92,12 @@ export class GameLoop {
     if (!isFinite(dtReal) || dtReal < 0) dtReal = 0;
     // 后台或长时间挂起后不要一次补太多（否则物理会"瞬移"）
     if (dtReal > 0.1) dtReal = 0.1;
+    // 帧率上限：还没到下一帧的时间点就整帧跳过（渲染与物理都不做）
+    if (this.minFrameMs > 0) {
+      this.frameGate += dtReal * 1000;
+      if (this.frameGate < this.minFrameMs - 0.5) return;
+      this.frameGate = 0;
+    }
 
     let steps = 0;
     if (!this.hidden && dtReal > 0) {

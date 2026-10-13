@@ -186,6 +186,8 @@ export class Game {
       second: (dtReal) => this.second(dtReal),
       onVisibility: (hidden) => this.onVisibility(hidden),
     });
+    // 启动即应用已保存的帧率上限（0=不限）
+    this.loop.setFrameCap(this.save.settings.fpsCap ?? 0);
     window.addEventListener('error', this.onError);
     window.addEventListener('unhandledrejection', this.onRejection);
   }
@@ -872,6 +874,17 @@ export class Game {
     if (inp.pressed('KeyF')) this.view.showVectors = !this.view.showVectors;
     if (inp.pressed('KeyO')) this.view.showOrbits = !this.view.showOrbits;
     if (inp.pressed('KeyH')) this.showHelp = !this.showHelp;
+    // **帧率上限（Y）**：玩家反馈"帧率低、希望有固定帧率生效"。
+    // 不限 → 120 → 60 → 30 循环；超出预算的帧直接跳过，让帧间隔稳定（抖动比峰值更影响手感）。
+    if (inp.pressed('KeyY')) {
+      const caps = [0, 120, 60, 30];
+      const i = caps.indexOf(this.save.settings.fpsCap ?? 0);
+      const next = caps[(i + 1) % caps.length];
+      this.save.settings.fpsCap = next;
+      this.loop.setFrameCap(next);
+      this.persist();
+      this.pushToast(next ? `帧率上限 ${next} fps` : '帧率不限');
+    }
     if (inp.pressed('KeyM')) { this.save.settings.muted = !this.save.settings.muted; this.applyAudioSettings(); }
     // **时间加速（T）**：用户反馈"运气性太重"——本质是只能在相位窗口前干等。
     // 1× → 2× → 4× 循环；慢动作（空格）优先，两者叠加时以慢动作为准。
@@ -903,8 +916,13 @@ export class Game {
     this.tryCall('audio', () => {
       a.setParam('wellThrust', w.well.engaged ? w.well.thrust : 0);
       a.setParam('wellMass', w.well.mass);
-      a.setParam('fuel', w.fuel / Math.max(1e-6, w.fuelCapacity));
-      a.setParam('alert', w.windActive);
+      // **心跳与警报只在真正游玩时生效**（发布反馈："刚进游戏时背景音乐有巨大的噪音"）。
+      // 根因：主菜单放的是吸引模式（AI 自己玩），AI 会把燃料烧到 0，
+      // 于是 fuel < 0.25 触发了**最高严重度的低频心跳**（每 0.62 s 一记重击）叠在背景音乐上。
+      // 菜单/简报/结算页一律视作"燃料充足、无警报"。
+      const live = this.screen === 'play' && !this.attract;
+      a.setParam('fuel', live ? w.fuel / Math.max(1e-6, w.fuelCapacity) : 1);
+      a.setParam('alert', live ? (w.windActive ? 1 : 0) : 0);
       a.setParam('slowmo', this.slowmo ? 1 : 0);
       a.setParam('stability', Math.max(0, 1 - w.stats.energyDrift * 1e4));
       a.loop('thruster_loop', 'well', w.well.engaged && w.well.thrust > 0.35, { gain: Math.min(0.5, w.well.thrust * 0.35) });

@@ -36,7 +36,24 @@ FADE_OUT = 1.6                   # 尾部淡出秒数
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
-ASSETS = ROOT / "assets" / "audio"
+
+
+def _assets_dir() -> Path:
+    """定位 `assets/audio`。
+
+    **必须走 paths.assets_dir()**：打包成 EXE 后本模块的 `__file__` 位于 PyInstaller 的
+    临时解包目录（`sys._MEIPASS/music_render.py`），此时 `__file__.parent.parent` 会指到临时目录的
+    父目录、完全找不到素材——这正是发布后 `/api/music` 返回空、游戏里「背景音乐下载」整块消失的根因
+    （开发模式下路径恰好正确，所以只在打包后复现）。
+    """
+    try:
+        import paths  # 项目自带的资源定位器：内部处理了冻结环境的 sys._MEIPASS
+        return paths.assets_dir() / "audio"
+    except Exception:  # noqa: BLE001
+        return ROOT / "assets" / "audio"
+
+
+ASSETS = _assets_dir()
 
 # 正式曲名（不改动谱面 JSON：避免牵动 manifest 的 sha256 与离线包）
 TITLES = {

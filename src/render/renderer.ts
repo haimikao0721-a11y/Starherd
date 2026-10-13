@@ -182,6 +182,15 @@ export class Renderer {
     const target = clamp(this.q.targetFps || 60, 30, 144);
     const budget = 1000 / target;
     if (this.frameMs > budget * 1.12) {
+      // **先降最贵的特效，再降分辨率**（反馈："弱机卡顿、分辨率设置作用不大"）。
+      // 顺序按实测开销排：泛光/色差(全屏后处理) > 星场层数 > 渲染分辨率。
+      // 分辨率最低只到 0.35，单靠它救不了弱机；把后处理关掉往往立竿见影。
+      if (this.q.bloom && this.frameMs > budget * 1.2) { this.setQuality({ bloom: false }); return; }
+      if (this.q.chroma && this.frameMs > budget * 1.2) { this.setQuality({ chroma: false }); return; }
+      if (this.q.starLayers > 1 && this.frameMs > budget * 1.2) {
+        this.setQuality({ starLayers: this.q.starLayers - 1 }); return;
+      }
+      if (this.q.fieldContours && this.frameMs > budget * 1.35) { this.setQuality({ fieldContours: false }); return; }
       this.rs = Math.max(RS_MIN, this.rs - 0.05);
     } else if (this.frameMs < budget * 0.72) {
       this.rs = Math.min(RS_MAX, this.rs + 0.01);

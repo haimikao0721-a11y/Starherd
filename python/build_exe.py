@@ -55,6 +55,12 @@ HIDDEN_IMPORTS = (
     "pythonnet",
     "clr",
     "websockets",
+    # 背景音乐下载（/api/music）：把谱面离线渲染成 WAV 所需。
+    # music_render 只在请求处理函数里被 import，且它依赖 stdlib 的 wave
+    # （纯 Python 模块不会被自动收集）——不加这两项，打包后 /api/music 会返回空，
+    # 游戏里「背景音乐下载」整块消失（发布后实测到的回归）。
+    "music_render",
+    "wave",
 )
 
 # aiohttp / websockets 都有动态导入，必须 collect-submodules 才不至于运行期 ImportError

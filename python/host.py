@@ -28,6 +28,14 @@ import threading
 import time
 from pathlib import Path
 from urllib.parse import urlsplit
+
+# **顶层静态导入**：`music_render` 原先只在请求处理函数里 import，
+# PyInstaller 冻结后该模块没被打进包 → /api/music 返回空 → 游戏里"背景音乐下载"整块消失
+# （开发模式正常、打包后失效的典型问题）。放顶层后分析阶段必然收集到。
+try:
+    import music_render  # noqa: F401
+except Exception:  # noqa: BLE001
+    music_render = None  # type: ignore[assignment]
 from typing import Any, Callable, Optional
 
 from aiohttp import WSMsgType, web
