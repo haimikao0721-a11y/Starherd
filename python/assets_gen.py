@@ -625,7 +625,7 @@ def _fbm(x: float, y: float, seed: int, octaves: int = 4,
 def _art_nebula(seed: int, tint_core, tint_edge, octaves: int = 5):
     """fBm 值噪声星云：4~6 倍频 + 自适应对比拉伸成丝状，径向遮罩收边。
 
-    自适应：先统计本张噪声的 55%/99% 分位再拉伸，保证 4 章星云浓度一致，
+    自适应：先统计本张噪声的 55%/99% 分位再拉伸，保证各章星云浓度一致，
     不会因为噪声相位不同而一张浓一张淡。
     """
     s = 256

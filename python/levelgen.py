@@ -1374,7 +1374,7 @@ def validate(levels: list[dict]) -> list[str]:
                 if station_body is None or not station_body.get("orbit"):
                     problems.append(f"{lid}: 缺少空间站轨道")
 
-        # ---- 集成口径硬约束 (全部 12 关, 与中心天体类型无关) ----
+        # ---- 集成口径硬约束 (全部 20 关, 与中心天体类型无关) ----
         # 1) 潮汐撕裂半径 (自引力判据) 决定空间站与货舱的半径下界
         r_tear = tidal_tear_radius(mu)
 
