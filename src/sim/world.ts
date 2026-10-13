@@ -210,6 +210,8 @@ export function createWorld(level: LevelSpec, doc: LevelsDoc, attempt = 1): Worl
       notes: level.solution?.notes ?? '',
     },
     bounds: level.bounds,
+    // 定时事件（宇宙风暴等）：必须抄进运行时 level，否则 applyEvents 读到 undefined（曾经漏抄导致"数据到了前端但事件静默失效"）
+    events: level.events,
     // 时限（秒）。第 1 章是教学章：给足 180 秒，让玩家能反复试错而不被计时器逼死。
     // 注意时限不参与计分——时间分用的是 parTime（见 score.ts），所以放宽时限不会让分数虚高。
     timeLimit: Math.max(90, level.par_time * 3.4, level.chapter === 1 ? 180 : 0),
