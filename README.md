@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="docs/social-preview.png" alt="牧星者 / STARHERD — 你不是射手，你是引力源" width="100%">
+</p>
+
 # 《牧星者 / STARHERD》
 
 [![Star](https://img.shields.io/github/stars/haimikao0721-a11y/Starherd?style=social&label=Star)](https://github.com/haimikao0721-a11y/Starherd/stargazers)
