@@ -1040,11 +1040,14 @@ export class Hud {
    */
   /** 飞船相对主星的径向距离历史极小/极大（Oberth 提示用） */
   private rMin = Number.POSITIVE_INFINITY;
+  /** 相对**井**的径向距离历史极小（甩摆窗口判定；与相对恒星的 rMin 分开） */
+  private rWellMin = Number.POSITIVE_INFINITY;
+  private rWellMax = 0;
   private rMax = 0;
 
   /** 每关重置（换关/重开时调用）。 */
   /** 换关时由 game 层调用，清空 Oberth 的径向历史（因此是 public） */
-  resetOberth(): void { this.rMin = Number.POSITIVE_INFINITY; this.rMax = 0; }
+  resetOberth(): void { this.rMin = Number.POSITIVE_INFINITY; this.rMax = 0; this.rWellMin = Number.POSITIVE_INFINITY; this.rWellMax = 0; }
 
   /**
    * Oberth 效应提示。
@@ -1207,9 +1210,15 @@ export class Hud {
         const T = 2 * Math.PI * Math.sqrt((a * a * a) / Math.max(1e-9, mu));
         const ecc = Math.sqrt(Math.max(0, 1 - (r * v * v) / mu));
         const peri = a * (1 - ecc);
-        line1 = `已捕获 · 周期 ${T.toFixed(1)}s`;
+
+        // 甩摆窗口：相对井的径向距离接近历史极小 → 松手能抛出最大速度
+        if (r < this.rWellMin) this.rWellMin = r;
+        if (r > this.rWellMax) this.rWellMax = r;
+        const wspan = this.rWellMax - this.rWellMin;
+        const atPeri = wspan > 1e-4 && r < this.rWellMin + wspan * 0.10;        line1 = `已捕获 · 周期 ${T.toFixed(1)}s`;
         col = pal.station;
         line2 = `相对速度 ${v.toFixed(3)} / 逃逸 ${vEsc.toFixed(3)} · 近井点 ${peri.toFixed(2)} RU · 松手即沿当前速度方向甩出`;
+        if (atPeri) line2 += '  ⚑ 甩摆窗口：现在松手可获得最大抛射速度';
         break;
       }
     }

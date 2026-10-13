@@ -483,6 +483,40 @@ function advanceObjective(world: World): void {
     `航段 ${lv.objectiveIndex + 1}/${list.length} · ${o.label_zh ?? '下一个目标'}`);
 }
 
+/** 甩摆稳定阻尼系数（1/TU）。刻意很小：只压径向摆动，不改切向速度。 */
+const K_SLING_DAMP = 0.05;
+
+/**
+ * 甩摆稳定阻尼：**只对已被引力井捕获的货舱**生效，且只阻尼相对井的**径向**速度分量。
+ *
+ * 为什么只动径向：切向速度决定轨道能量，动它等于白送或白扣玩家的燃料；径向摆动才是
+ * "看起来乱飘"的来源。压住它，玩家能预期货舱下一圈怎么走——这正是"只做特定"的辅助。
+ * 判据与 HUD 捕获面板同源：μ_eff = M_w·cut(r)，|v_rel| < sqrt(2μ_eff/r) 视为被捕获。
+ */
+function wellCaptureAssist(world: World, dt: number): void {
+  if (!world.fieldEnabled) return;
+  const wl = world.well;
+  if (!(wl.mass > 0)) return;
+  for (let i = 0; i < world.pods.length; i++) {
+    const p = world.pods[i];
+    if (!p.alive || p.delivered) continue;
+    const dx = p.x - wl.x;
+    const dy = p.y - wl.y;
+    const r = Math.hypot(dx, dy);
+    if (!(r > 1e-4) || r > WELL_RANGE * 2.2) continue;
+    const cut = 1 / (1 + Math.pow(r / WELL_RANGE, 6));
+    const mu = wl.mass * cut;
+    const rvx = p.vx - wl.vx;
+    const rvy = p.vy - wl.vy;
+    const v2 = rvx * rvx + rvy * rvy;
+    if (v2 >= (2 * mu) / r) continue;                 // 没被捕获：不干预
+    const rad = (rvx * dx + rvy * dy) / r;            // 径向速度分量
+    const damp = Math.min(0.5, K_SLING_DAMP * dt);
+    p.vx -= rad * damp * (dx / r);
+    p.vy -= rad * damp * (dy / r);
+  }
+}
+
 function applyShower(world: World, dt: number): void {
   const list = world.level.events;
   if (!list || !list.length) return;
@@ -868,6 +902,7 @@ export function stepOnce(world: World, dt: number, depth = 0): void {
   applyFlare(world, dt);
   applyWave(world, dt);
   applyShower(world, dt);
+  wellCaptureAssist(world, dt);
   updateTrails(world, dt);
 }
 
