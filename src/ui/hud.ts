@@ -21,6 +21,7 @@ import {
   STRESS_WARN, WELL_MASS_MAX, WELL_MASS_MIN,
   circularVelocity, escapeVelocity, hillSphere, keplerPeriod, lagrangePoints,
   rocheLimit, sphereDensity, timeDilation, visViva, WELL_RANGE } from '../sim/constants';
+import { cr3bp, jacobi, toRotating, zvcMask } from '../sim/zvc';
 import { stateToElements } from '../sim/physics';
 import {
   clamp, clamp01, fmtDv, fmtFixed, fmtPct, fmtSci, fmtDrift, fmtSig, fmtTime,
@@ -547,6 +548,7 @@ export class Hud {
     this.drawFieldCard(f, pal, 0, 0);
 
     this.drawSling(f, pal);
+    this.drawZVC(f, pal);
     this.drawLegs(f, pal);
     // 6) 屏幕世界的危险叠加（潮汐应力环 / 货舱标记 / 实体名牌 / 目标指示）
     this.drawPodMarkers(f, pal);
@@ -1025,6 +1027,83 @@ export class Hud {
    * 半长轴由活力公式 a = 1/(2/r − v²/μ) 给出，周期 Kepler 第三定律 T = 2π√(a³/μ)。
    * 玩家据此判断"什么时候松手能把它甩出去"——这正是甩摆玩法的核心信息。
    */
+  /** ZVC 离屏栅格缓存（键 = μ|C） */
+  private zvcCache: { key: string; cv: HTMLCanvasElement; frac: number } | null = null;
+
+  /**
+   * 零速度曲线（Z 键）：把 CR3BP 的"禁区"（2Ω < C）画成半透明色块，边界即 ZVC。
+   *
+   * 取**两个最重的主天体**做两体近似。本作多数关卡不止两个天体、还有引力井，
+   * 因此 C 会漂移 —— 界面上如实标注"两体近似"，不宣称精确积分。
+   */
+  private drawZVC(f: HudFrame, pal: Palette): void {
+    if (!f.view.showZVC) return;
+    const w = f.world;
+    const prim = [...w.primaries].sort((a, b) => b.mass - a.mass).filter((b) => b.mass > 0);
+    if (prim.length < 2) return;
+    const A = prim[0];
+    const B = prim[1];
+    const d = Math.hypot(B.x - A.x, B.y - A.y);
+    if (!(d > 1e-6) || B.mass / (A.mass + B.mass) > 0.5) return;
+    const par = cr3bp(A.mass, B.mass, d);
+    const pod = w.pods.find((p) => p.alive && !p.delivered) ?? w.pods[0];
+    if (!pod) return;
+    const rot = toRotating(pod.x, pod.y, pod.vx - A.vx, pod.vy - A.vy,
+      A.x, A.y, B.x, B.y, A.mass, B.mass);
+    const C = jacobi(rot.mu, rot.x, rot.y, rot.vx, rot.vy);
+
+    // ---- 离屏栅格（48×48，缓存）----
+    const N = 48;
+    const span = 2.6;                       // 归一化视野：覆盖两主天体与近场
+    const key = `${rot.mu.toFixed(4)}|${C.toFixed(2)}|${N}`;
+    if (!this.zvcCache || this.zvcCache.key !== key) {
+      const mask = zvcMask(rot.mu, C, -span * 0.4, span, -span * 0.6, span * 0.6, N, N);
+      const cv = document.createElement('canvas');
+      cv.width = N; cv.height = N;
+      const cg = cv.getContext('2d');
+      if (!cg) return;
+      const img = cg.createImageData(N, N);
+      let blocked = 0;
+      for (let i = 0; i < mask.blocked.length; i++) {
+        if (mask.blocked[i]) {
+          blocked++;
+          img.data[i * 4 + 0] = 255; img.data[i * 4 + 1] = 90; img.data[i * 4 + 2] = 90;
+          img.data[i * 4 + 3] = 58;
+        }
+      }
+      cg.putImageData(img, 0, 0);
+      this.zvcCache = { key, cv, frac: blocked / mask.blocked.length };
+    }
+    const cache = this.zvcCache;
+    if (!cache) return;
+
+    // ---- 归一化旋转系 → 屏幕：原点在重天体，x 轴指向轻天体，单位 = d ----
+    const ux = (B.x - A.x) / d;
+    const uy = (B.y - A.y) / d;
+    const toScr = (nx: number, ny: number, out: { x: number; y: number }) =>
+      worldToScreen(f.view, A.x + (nx + rot.mu) * d * ux - ny * d * uy,
+        A.y + (nx + rot.mu) * d * uy + ny * d * ux, out);
+    const p0 = { x: 0, y: 0 };
+    const p1 = { x: 0, y: 0 };
+    toScr(-span * 0.4, -span * 0.6, p0);
+    toScr(span, span * 0.6, p1);
+    const g = this.g;
+    g.save();
+    g.globalAlpha = 0.85;
+    g.drawImage(cache.cv, p0.x, p0.y, p1.x - p0.x, p1.y - p0.y);
+    g.restore();
+
+    // ---- 读数（如实标注近似）----
+    const boxW = 330;
+    const bx = this.w - boxW - 16;
+    const by = this.h - 150;
+    this.panel(bx, by, boxW, 52, pal);
+    this.txt('零速度曲线 / ZVC (Z)', bx + 12, by + 16, pal.uiDim, 10);
+    this.txt(`雅可比常数 C = ${C.toFixed(3)}`, bx + 12, by + 34, pal.uiAccent, 12, 'left', '600');
+    this.txt(`禁区占比 ${(cache.frac * 100).toFixed(0)}% · 两体近似（主星+最重行星，其余天体与引力井会让 C 漂移）`,
+      bx + 12, by + 46, pal.uiDim, 9);
+  }
+
   private drawSling(f: HudFrame, pal: Palette): void {
     const wl = f.world.well;
     const ix = f.world.level ? 0 : 0;

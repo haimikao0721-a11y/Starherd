@@ -912,6 +912,7 @@ export class Game {
     if (inp.pressed('KeyG')) { this.view.showField = !this.view.showField; this.save.settings.showField = this.view.showField; }
     if (inp.pressed('KeyF')) this.view.showVectors = !this.view.showVectors;
     if (inp.pressed('KeyO')) this.view.showOrbits = !this.view.showOrbits;
+    if (inp.pressed('KeyZ')) this.view.showZVC = !this.view.showZVC;   // 零速度曲线（CR3BP 禁区，两体近似）
     if (inp.pressed('KeyH')) this.showHelp = !this.showHelp;
     // **帧率上限（Y）**：玩家反馈"帧率低、希望有固定帧率生效"。
     // 不限 → 120 → 60 → 30 循环；超出预算的帧直接跳过，让帧间隔稳定（抖动比峰值更影响手感）。

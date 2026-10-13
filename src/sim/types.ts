@@ -444,7 +444,9 @@ export interface ViewState {
   w: number; h: number; dpr: number;
   zoom: number; targetZoom: number;
   shake: number; hitstop: number; flash: number; chroma: number;
-  showField: boolean; showVectors: boolean; showPredict: boolean;
+  showField: boolean;
+  /** 零速度曲线叠加层（Z 键）：画 CR3BP 的禁区与边界 */
+  showZVC?: boolean; showVectors: boolean; showPredict: boolean;
   showOrbits: boolean;
   slowmo: number; intensity: number;
   fade: number; uiAlpha: number;
