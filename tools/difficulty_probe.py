@@ -110,10 +110,17 @@ def main(argv: list[str] | None = None) -> int:
         par_time = float(lv.get("par_time", 0) or 0)
         fuel_cap = (40 + 6 * float(lv.get("difficulty", 1))) * float(lv.get("fuel_scale", 1) or 1)
         grade, why = classify(row, par_time, fuel_cap)
+        # 多段关卡的口径限制：探针的自动驾驶不支持多航段，它的失败不代表人类难度
+        legs = len(lv.get("objectives") or [])
+        limited = legs > 1 and not row["success"]
+        if limited:
+            why += f"；**口径受限**：本关有 {legs} 段航程，而探针的 AI 不会切换航段，该分档不等于人类难度"
         counts[grade] += 1
-        report[lid] = {"grade": grade, "why": why, **row, "parTime": par_time, "fuelCap": fuel_cap}
+        report[lid] = {"grade": grade, "why": why, "limited": limited, "legs": legs,
+                       **row, "parTime": par_time, "fuelCap": fuel_cap}
         print(f"  {lid:<6} {grade:<4} 用时 {row['time']:6.2f} TU  耗油 {row['fuelUsed']:6.1f}/{fuel_cap:.0f}"
-              f"  最近 {'-' if row['closest'] != row['closest'] else format(row['closest'], '.2f')} RU   {why}")
+              f"  最近 {'-' if row['closest'] != row['closest'] else format(row['closest'], '.2f')} RU   "
+              f"{why}" + ("  [多段·口径受限]" if limited else ""))
 
     print()
     print(f"  合计：普通 {counts['普通']} · 困难 {counts['困难']} · 挑战 {counts['挑战']}")

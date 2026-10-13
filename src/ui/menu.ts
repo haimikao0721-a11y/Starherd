@@ -31,7 +31,7 @@ export const AUTHOR = {
   homepage: 'https://github.com/haimikao0721-a11y',
   /** 联系邮箱（想改就改这一行；关于页会显示并可一键复制） */
   email: 'haimikao0721@gmail.com',
-  version: 'v1.2.0',
+  version: 'v1.2.1',
 };
 
 export type ScreenName =
@@ -727,6 +727,8 @@ export class Menu {
           <div class="lc-stat"><span class="lc-stat-k">时限</span><span class="lc-stat-v">${fmtTime(Math.max(90, lv.par_time * 3.4), 'floor')}</span></div>
           <div class="lc-stat"><span class="lc-stat-k">Δv 预算</span><span class="lc-stat-v">${fmtDv((40 + 6 * lv.difficulty) * (lv.fuel_scale ?? 1))}${lv.fuel_scale ? ` <span class="lc-dim">(×${lv.fuel_scale} 余量)</span>` : ''}</span></div>
           <div class="lc-stat"><span class="lc-stat-k">par 时间 / par Δv</span><span class="lc-stat-v">${fmtTime(lv.par_time, 'floor')} / ${fmtDv(lv.par_fuel)}</span></div>
+          ${(lv.difficulty_label || '').endsWith('*')
+            ? `<p class="lc-hint">带 * 的档位：本关有多个航段，内置 AI 探针不会切换航段，该分档反映 AI 的能力边界，仅供参考。</p>` : ''}
           ${(() => { const t = this.transferLine(lv); return t
             ? `<div class="lc-stat"><span class="lc-stat-k">转移方案</span><span class="lc-stat-v">${t}</span></div>` : ''; })()}
           <div class="lc-stat"><span class="lc-stat-k">星域尺度</span><span class="lc-stat-v">bounds ${lv.bounds} RU · μ★ ${lv.mu_star}</span></div>
