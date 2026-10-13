@@ -604,7 +604,7 @@ export class Menu {
         ${btn('quit', '退出', { cls: 'lc-danger' })}
       </nav>
       
-      <p class="lc-hint">↑↓ 选择 · Enter 确认 · Esc 返回 · 鼠标可直接点击 · 首次游玩建议先看操作演示</p>`;
+      <p class="lc-hint">↑↓ 选择 · Enter 确认 · Esc 返回 · 鼠标可直接点击 · 首次游玩建议先看操作演示</p>${this.contactBlock()}`;
     this.shell(body);
   }
 
