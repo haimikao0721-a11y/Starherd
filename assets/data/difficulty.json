@@ -7,7 +7,7 @@
   "counts": {
     "普通": 4,
     "困难": 2,
-    "挑战": 9
+    "挑战": 14
   },
   "levels": {
     "L1-1": {
@@ -54,11 +54,11 @@
       "why": "AI 未通关且距离较远（有构造性可行性证明，需自行发明解法）",
       "status": "未达成",
       "success": false,
-      "time": 20.9,
+      "time": 18.8,
       "delivered": 0,
       "lost": 2,
       "closest": NaN,
-      "fuelUsed": 49.75,
+      "fuelUsed": 47.12,
       "parTime": 70.0,
       "fuelCap": 80.0
     },
@@ -132,11 +132,11 @@
       "why": "AI 一次通关",
       "status": "成功",
       "success": true,
-      "time": 23.4,
+      "time": 23.3,
       "delivered": 1,
-      "lost": 0,
-      "closest": 0.481,
-      "fuelUsed": 55.81,
+      "lost": 1,
+      "closest": 0.42,
+      "fuelUsed": 53.73,
       "parTime": 26.0,
       "fuelCap": 100.0
     },
@@ -158,11 +158,11 @@
       "why": "AI 未通关且距离较远（有构造性可行性证明，需自行发明解法）",
       "status": "未达成",
       "success": false,
-      "time": 10.9,
+      "time": 2.5,
       "delivered": 0,
       "lost": 2,
       "closest": NaN,
-      "fuelUsed": 32.72,
+      "fuelUsed": 7.5,
       "parTime": 40.0,
       "fuelCap": 151.20000000000002
     },
@@ -171,11 +171,11 @@
       "why": "AI 未通关且距离较远（有构造性可行性证明，需自行发明解法）",
       "status": "未达成",
       "success": false,
-      "time": 20.6,
+      "time": 19.0,
       "delivered": 0,
       "lost": 2,
       "closest": NaN,
-      "fuelUsed": 52.43,
+      "fuelUsed": 36.65,
       "parTime": 70.0,
       "fuelCap": 141.6
     },
@@ -204,6 +204,72 @@
       "fuelUsed": 52.56,
       "parTime": 70.0,
       "fuelCap": 175.5
+    },
+    "L5-4": {
+      "grade": "挑战",
+      "why": "AI 未通关且距离较远（有构造性可行性证明，需自行发明解法）",
+      "status": "未达成",
+      "success": false,
+      "time": 7.8,
+      "delivered": 0,
+      "lost": 1,
+      "closest": NaN,
+      "fuelUsed": 21.21,
+      "parTime": 70.0,
+      "fuelCap": 136.0
+    },
+    "L5-6": {
+      "grade": "挑战",
+      "why": "AI 未通关且距离较远（有构造性可行性证明，需自行发明解法）",
+      "status": "未达成",
+      "success": false,
+      "time": 33.7,
+      "delivered": 0,
+      "lost": 3,
+      "closest": NaN,
+      "fuelUsed": 89.76,
+      "parTime": 70.0,
+      "fuelCap": 198.79999999999998
+    },
+    "L5-7": {
+      "grade": "挑战",
+      "why": "AI 未通关且距离较远（有构造性可行性证明，需自行发明解法）",
+      "status": "未达成",
+      "success": false,
+      "time": 33.0,
+      "delivered": 0,
+      "lost": 2,
+      "closest": NaN,
+      "fuelUsed": 88.84,
+      "parTime": 70.0,
+      "fuelCap": 207.2
+    },
+    "L5-8": {
+      "grade": "挑战",
+      "why": "AI 未通关且距离较远（有构造性可行性证明，需自行发明解法）",
+      "status": "未达成",
+      "success": false,
+      "time": 33.0,
+      "delivered": 0,
+      "lost": 2,
+      "closest": NaN,
+      "fuelUsed": 89.41,
+      "parTime": 70.0,
+      "fuelCap": 231.0
+    },
+    "L5-9": {
+      "grade": "挑战",
+      "why": "AI 未通关且距离较远（有构造性可行性证明，需自行发明解法）",
+      "status": "未达成",
+      "success": false,
+      "time": 28.4,
+      "delivered": 0,
+      "lost": 2,
+      "closest": NaN,
+      "fuelUsed": 83.94,
+      "parTime": 70.0,
+      "fuelCap": 240.0
     }
-  }
+  },
+  "caveat": "探针内置的自动驾驶没有多段目标（objectives）逻辑：它只会朝'当前泊位'飞，泊位切换后不会重新规划。因此所有多段关卡（L5-1/L5-3/L5-6/L5-8/L5-9 等）都会被判为'挑战'——这反映的是 AI 的能力边界，不等同于人类难度。真正的人类难度需要'会切航段的 AI'或人工试玩来定。"
 }

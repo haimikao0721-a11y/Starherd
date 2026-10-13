@@ -121,8 +121,14 @@ def main(argv: list[str] | None = None) -> int:
     if args.dry:
         return 0
 
+    # 口径局限必须随数据一起写出去，否则分档会被误读
+    caveat = ("探针内置的自动驾驶没有多段目标（objectives）逻辑：它只会朝'当前泊位'飞，"
+              "泊位切换后不会重新规划。因此所有多段关卡（L5-1/L5-3/L5-6/L5-8/L5-9 等）"
+              "都会被判为'挑战'——这反映的是 AI 的能力边界，不等同于人类难度。"
+              "真正的人类难度需要'会切航段的 AI'或人工试玩来定。")
     OUT.write_text(json.dumps({"scale": {"普通": "AI 一次通关", "困难": "勉强通关或已很接近",
                                          "挑战": "AI 未通关（有可行性证明，需自行发明解法）"},
+                               "caveat": caveat,
                                "counts": counts, "levels": report},
                               ensure_ascii=False, indent=2), encoding="utf-8")
     for lid, r in report.items():
