@@ -409,13 +409,17 @@ class MissionControl:
 
     def _compute_assets_ok(self) -> bool:
         """素材完好性：优先用 W-assets 的 verify_manifest()，否则自行抽查 manifest 列出的文件。"""
-        try:
-            import assets_gen  # type: ignore
-            ok, bad = assets_gen.verify_manifest()
-            self._assets_bad_files = list(bad or [])
-            return bool(ok)
-        except Exception:  # noqa: BLE001
-            pass
+        # 冻结环境不要走 assets_gen 这条路：它是**构建期**模块，按源码树的相对路径校验素材，
+        # 在 PyInstaller 解包目录里必然失配，会让打包版一直报 assets_ok=false（实际素材是好的）。
+        import sys as _sys
+        if not getattr(_sys, "frozen", False):
+            try:
+                import assets_gen  # type: ignore
+                ok, bad = assets_gen.verify_manifest()
+                self._assets_bad_files = list(bad or [])
+                return bool(ok)
+            except Exception:  # noqa: BLE001
+                pass
 
         manifest = self._get_manifest()
         missing: list[str] = []
