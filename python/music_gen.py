@@ -2,7 +2,7 @@
 
 《牧星者 / STARHERD》W-assets 程序化素材管线。
 
-5 首：``menu`` + ``loop1..loop4``（对应 4 章）。Python 只产出**谱面 JSON**，
+8 首：``menu`` + ``loop1..loop4``（第 1..5 章主题 + 风暴 / 救援 / 终章）。Python 只产出**谱面 JSON**，
 TS 侧 WebAudio 合成器实时演奏；每音符带 ``intensity`` 阈值，随游戏强度叠加声部。
 
 固定约定（与渲染/音频侧对齐）
