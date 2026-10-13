@@ -244,7 +244,7 @@ export class Game {
     const shell = (window as unknown as { LCShell?: { progress?: (pct: number, detail?: string) => void; done?: (ms?: number) => void } }).LCShell;
     const setBoot = (t: string, frac = 0): void => {
       this.phase(t);
-      if (shell?.progress) shell.progress(Math.max(1, Math.min(99, Math.round(frac * 100))), t);
+      if (shell?.progress) shell.progress(Math.max(0, Math.min(1, frac)), t);
       else if (boot) boot.textContent = t;
     };
 

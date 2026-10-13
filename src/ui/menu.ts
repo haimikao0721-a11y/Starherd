@@ -586,7 +586,7 @@ export class Menu {
     const pct = clamp01(typeof d.progress === 'number' ? d.progress : 0) * 100;
     this.shell(`${this.contactBlock()}` + `
       <div class="lc-boot">
-        <div class="lc-boot-ring" aria-hidden="true"></div>
+        <img class="boot-gif lc-boot-gif" src="/assets/art/boot.gif" alt="牧星者 / STARHERD" width="640" height="320">
         <h2 class="lc-boot-title">正在连接任务控制中心…</h2>
         <p class="lc-boot-text">${esc(d.text ?? '建立遥测链路 · 校验素材 sha256 · 载入星图')}</p>
         <div class="lc-progress"><i style="width:${pct.toFixed(1)}%"></i></div>

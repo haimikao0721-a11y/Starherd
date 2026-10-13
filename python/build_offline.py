@@ -31,7 +31,7 @@ ASSETS = ROOT / "assets"
 OUT_DIR = ROOT / "dist_offline"
 
 MIME = {
-    ".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg",
+    ".png": "image/png", ".gif": "image/gif", ".jpg": "image/jpeg", ".jpeg": "image/jpeg",
     ".wav": "audio/wav", ".json": "application/json", ".ico": "image/x-icon",
 }
 
@@ -104,6 +104,9 @@ def build(out_path: Path) -> dict:
     # 去掉对外部资源/脚本的引用（我们全部内联）
     body = re.sub(r'<script[^>]*src=["\'][^"\']*app\.js[^"\']*["\'][^>]*>\s*</script>', "", body, flags=re.I)
     body = re.sub(r"<link[^>]*styles\.css[^>]*>", "", body, flags=re.I)
+    boot_gif = ASSETS / "art" / "boot.gif"
+    if boot_gif.is_file():
+        body = body.replace('src="/assets/art/boot.gif"', f'src="{data_url(boot_gif)}"', 1)
 
     js_safe = app.replace("</script", "<\\/script")
     payload = json.dumps(welcome, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")

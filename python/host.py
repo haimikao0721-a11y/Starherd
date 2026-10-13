@@ -80,6 +80,7 @@ _EXTRA_MIME = {
     ".svg": ("image/svg+xml", "utf-8"),
     ".txt": ("text/plain", "utf-8"),
     ".png": ("image/png", None),
+    ".gif": ("image/gif", None),
     ".jpg": ("image/jpeg", None),
     ".jpeg": ("image/jpeg", None),
     ".webp": ("image/webp", None),

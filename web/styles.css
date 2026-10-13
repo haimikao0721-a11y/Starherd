@@ -95,15 +95,19 @@ html, body {
 #boot.boot-error .boot-status { color: var(--danger); }
 #boot.boot-error .boot-fill { background: linear-gradient(90deg, var(--danger), #ff9aa4); }
 
-.boot-box {
-  width: min(560px, 88vw);
-  padding: 34px 36px 26px;
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  background: linear-gradient(180deg, rgba(10, 16, 36, 0.86), rgba(5, 7, 15, 0.92));
-  box-shadow: 0 0 60px rgba(89, 217, 255, 0.08), inset 0 0 80px rgba(89, 217, 255, 0.03);
+.boot-stage {
+  width: min(920px, 92vw);
   text-align: center;
-  animation: lc-panel-in 0.5s cubic-bezier(0.22, 0.8, 0.2, 1) both;
+}
+
+.boot-gif {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 0 auto 18px;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  background: #05070f;
 }
 
 /* main.ts 的 fatal() 会自己拼一份 .boot-panel，这里给出同样的玻璃面板外观 */
@@ -136,35 +140,10 @@ html, body {
   white-space: pre-wrap;
 }
 
-.boot-logo-zh {
-  display: block;
-  font-size: clamp(26px, 3vw, 40px);
-  letter-spacing: 0.14em;
-  font-weight: 600;
-  background: linear-gradient(94deg, #eaf6ff 6%, var(--accent) 46%, #ff6fd8 96%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-.boot-logo-en {
-  display: block;
-  margin-top: 6px;
-  font-family: var(--mono);
-  font-size: clamp(10px, 1vw, 13px);
-  letter-spacing: 0.5em;
-  color: rgba(89, 217, 255, 0.65);
-}
-
-.boot-tag {
-  margin-top: 12px;
-  font-size: 13px;
-  letter-spacing: 0.28em;
-  color: var(--ui-dim);
-}
+.lc-boot .boot-gif { width: min(480px, 100%); margin-bottom: 12px; }
 
 .boot-status {
-  margin: 26px 0 12px;
+  margin: 8px 0 12px;
   font-family: var(--mono);
   font-size: 13px;
   color: var(--ui);
