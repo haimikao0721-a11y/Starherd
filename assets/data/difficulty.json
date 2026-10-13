@@ -7,7 +7,7 @@
   "counts": {
     "普通": 4,
     "困难": 2,
-    "挑战": 6
+    "挑战": 9
   },
   "levels": {
     "L1-1": {
@@ -165,6 +165,45 @@
       "fuelUsed": 32.72,
       "parTime": 40.0,
       "fuelCap": 151.20000000000002
+    },
+    "L5-1": {
+      "grade": "挑战",
+      "why": "AI 未通关且距离较远（有构造性可行性证明，需自行发明解法）",
+      "status": "未达成",
+      "success": false,
+      "time": 20.6,
+      "delivered": 0,
+      "lost": 2,
+      "closest": NaN,
+      "fuelUsed": 52.43,
+      "parTime": 70.0,
+      "fuelCap": 141.6
+    },
+    "L5-2": {
+      "grade": "挑战",
+      "why": "AI 未通关且距离较远（有构造性可行性证明，需自行发明解法）",
+      "status": "未达成",
+      "success": false,
+      "time": 21.1,
+      "delivered": 0,
+      "lost": 2,
+      "closest": NaN,
+      "fuelUsed": 62.86,
+      "parTime": 70.0,
+      "fuelCap": 161.20000000000002
+    },
+    "L5-3": {
+      "grade": "挑战",
+      "why": "AI 未通关且距离较远（有构造性可行性证明，需自行发明解法）",
+      "status": "未达成",
+      "success": false,
+      "time": 31.1,
+      "delivered": 0,
+      "lost": 3,
+      "closest": NaN,
+      "fuelUsed": 52.56,
+      "parTime": 70.0,
+      "fuelCap": 175.5
     }
   }
 }
