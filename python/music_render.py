@@ -57,6 +57,9 @@ ASSETS = _assets_dir()
 
 # 正式曲名（不改动谱面 JSON：避免牵动 manifest 的 sha256 与离线包）
 TITLES = {
+    "storm":  ("宇宙风暴", "Cosmic Storm"),
+    "rescue": ("救援倒计时", "Rescue Countdown"),
+    "finale": ("终章", "Finale"),
     "menu":  ("牧星者", "Shepherd of Stars"),
     "loop1": ("首次接触", "First Contact"),
     "loop2": ("碎屑带", "Debris Belt"),

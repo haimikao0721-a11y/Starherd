@@ -44,6 +44,9 @@ MODES = {
     "mixolydian": [0, 2, 4, 5, 7, 9, 10],
     "aeolian": [0, 2, 3, 5, 7, 8, 10],
     "locrian": [0, 1, 3, 5, 6, 8, 10],
+    # 扩展方案第 5 项新增两种色彩调式
+    "hijaz": [0, 1, 4, 5, 7, 8, 10],        # 增二度 → 异域/紧张，用于宇宙风暴
+    "whole": [0, 2, 4, 6, 8, 10],           # 全音阶 → 失重/释然，用于终章
 }
 
 # 主音音高（八度 3 区，pad 和声围绕它铺开）
@@ -139,8 +142,59 @@ PIECES = [
         lead_repeat=1, lead_from_bar=4, lead_to_bar=12,
         lead_level=0.50, arp_level=0.50,
     ),
+    # ---- 扩展方案第 5 项：事件与终章 ----------
+    # 注：原本打算用全音阶（whole-tone）写终章，但本项目的谱面 schema 要求
+    # scale 为 7 音（verify_score 会判定 6 音非法），因此改用 ionian（大调）——
+    # 对「终章」的释然感其实更贴切。
+    dict(
+        name="storm", title_zh="宇宙风暴", key="G", mode="hijaz", bpm=118,
+        bars=16, prog=[0, 1, 4, 5], bars_per_chord=2,
+        sections=[(0, "warning", 0.25), (4, "storm", 1.00), (12, "aftermath", 0.40)],
+        pad_center=59, bass_pattern=[(0, 0.0, 0.5), (0, 0.5, 0.5), (4, 1.0, 1.0),
+                                     (2, 2.0, 0.5), (0, 2.5, 0.5), (4, 3.0, 1.0)],
+        kick=[(0.0, 1.00), (1.0, 0.78), (2.0, 0.95), (3.0, 0.78)],
+        snare=[(1.0, 0.80), (3.0, 0.86)],
+        hat_step=0.25, hat_vel=0.26, hat_accent=0.46,
+        perc_from_bar=2, hat_from_bar=2,
+        arp=[(0, 1, 0.25), (2, 1, 0.25), (4, 1, 0.25), (6, 1, 0.25),
+             (4, 1, 0.25), (2, 1, 0.25), (1, 1, 0.25), (0, 1, 0.25)],
+        arp_from_bar=4, arp_to_bar=16,
+        lead=[(4, 1, 0.0, 1.0), (5, 1, 1.0, 1.0), (4, 1, 2.0, 2.0),
+              (2, 1, 4.0, 1.0), (4, 1, 5.0, 0.5), (1, 1, 5.5, 0.5),
+              (0, 1, 6.0, 2.0)],
+        lead_repeat=2, lead_from_bar=4, lead_to_bar=16,
+    ),
+    dict(
+        name="rescue", title_zh="救援倒计时", key="A", mode="locrian", bpm=104,
+        bars=16, prog=[0, 1, 0, 6], bars_per_chord=2,
+        sections=[(0, "alert", 0.35), (3, "countdown", 0.95), (12, "resolve", 0.45)],
+        pad_center=57, bass_pattern=[(0, 0.0, 1.0), (0, 1.0, 1.0), (0, 2.0, 1.0),
+                                     (4, 3.0, 1.0)],
+        kick=[(0.0, 0.72), (2.0, 0.62)],
+        snare=[(3.0, 0.55)],
+        hat_step=0.5, hat_vel=0.30, hat_accent=0.48,     # 稳定的滴答 → 倒计时感
+        perc_from_bar=2, hat_from_bar=1,
+        arp=[(0, 1, 0.5), (2, 1, 0.5), (4, 1, 0.5), (2, 1, 0.5)],
+        arp_from_bar=3, arp_to_bar=16,
+        lead=[(0, 1, 0.0, 1.5), (1, 1, 2.0, 0.5), (0, 1, 3.0, 1.0),
+              (6, 1, 5.0, 1.0)],
+        lead_repeat=3, lead_from_bar=3, lead_to_bar=16,
+    ),
+    dict(
+        name="finale", title_zh="终章", key="D", mode="ionian", bpm=84,
+        bars=16, prog=[0, 2, 4, 1], bars_per_chord=2,
+        sections=[(0, "drift", 0.20), (6, "bloom", 0.70), (12, "rest", 0.25)],
+        pad_center=62, bass_pattern=[(0, 0.0, 3.0), (4, 3.0, 1.0)],
+        kick=[], snare=[],                                # 终章不用打击乐
+        hat_step=1.0, hat_vel=0.14, hat_accent=0.20,
+        perc_from_bar=16, hat_from_bar=8,
+        arp=[(0, 1, 1.0), (2, 1, 1.0), (4, 1, 1.0), (2, 1, 1.0)],
+        arp_from_bar=6, arp_to_bar=16,
+        lead=[(4, 1, 0.0, 2.0), (2, 1, 2.0, 2.0), (0, 1, 4.0, 4.0)],
+        lead_repeat=2, lead_from_bar=6, lead_to_bar=16,
+        lead_level=0.45, arp_level=0.45,
+    ),
 ]
-
 
 # --------------------------------------------------------------------------- #
 # 乐理工具
@@ -156,7 +210,8 @@ def _mix_seed(seed: int, name: str) -> int:
 def _midi(root_midi: int, scale, degree: int, octave: int = 0) -> int:
     """音阶级数（可越界，自动跨八度）→ MIDI 音高。"""
     d = int(degree)
-    return int(root_midi) + 12 * (d // 7 + int(octave)) + scale[d % 7]
+    n = len(scale)          # 调式音数（全音阶为 6，不能写死 7）
+    return int(root_midi) + 12 * (d // n + int(octave)) + scale[d % n]
 
 
 def _voice(prev, root_midi: int, scale, degree: int, center: float = 57.0):
@@ -352,8 +407,10 @@ def build_score(piece: dict, seed: int = DEFAULT_SEED) -> dict:
 
 
 def build_all_scores(seed: int = DEFAULT_SEED) -> list[dict]:
-    """按 manifest 声明顺序返回 5 首谱面：loop1..loop4, menu。"""
-    order = ["loop1", "loop2", "loop3", "loop4", "menu"]
+    """按 manifest 声明顺序返回全部谱面：loop1..loop4, menu, storm, rescue, finale。"""
+    # 顺序表必须与 PIECES 同步：新增曲目要加进来，否则谱面永远不会被构建
+    # （扩展方案第 5 项：storm / rescue / finale）
+    order = ["loop1", "loop2", "loop3", "loop4", "menu", "storm", "rescue", "finale"]
     by_name = {p["name"]: p for p in PIECES}
     return [build_score(by_name[n], seed) for n in order]
 
