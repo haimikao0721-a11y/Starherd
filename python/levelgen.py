@@ -101,8 +101,8 @@ DV_SCALE_MAX = 1.60
 
 
 def difficulty_dv_scale(difficulty: int) -> float:
-    """难度系数: 难度 1 -> 1.15, 难度 12 -> 1.60, 线性递增。"""
-    if not (1 <= difficulty <= 12):
+    """难度系数: 难度 1 -> 1.15, 难度 12 -> 1.60, 线性递增；扩展关卡（>12）继续外推。"""
+    if not (1 <= difficulty <= 24):
         raise ValueError("difficulty 必须在 1..12")
     return DV_SCALE_MIN + (DV_SCALE_MAX - DV_SCALE_MIN) * (difficulty - 1) / 11.0
 
@@ -1057,8 +1057,11 @@ def validate(levels: list[dict]) -> list[str]:
     problems: list[str] = []
 
     # ---- 集合层面 ----
-    if len(levels) != 12:
-        problems.append(f"关卡总数 {len(levels)} != 12")
+    if len(levels) < 12:
+        problems.append(f"关卡总数 {len(levels)} < 12")
+    idx_seq = sorted(lv["index"] for lv in levels)
+    if idx_seq != list(range(1, len(levels) + 1)):
+        problems.append(f"关卡序号不连续: {idx_seq}")
     chapters: dict[int, list[dict]] = {}
     for lv in levels:
         chapters.setdefault(int(lv.get("chapter", 0)), []).append(lv)
@@ -1072,7 +1075,8 @@ def validate(levels: list[dict]) -> list[str]:
     if diffs != sorted(diffs):
         problems.append(f"难度未递增: {diffs}")
     if diffs and diffs != list(range(1, 13)):
-        problems.append(f"难度未覆盖 1..12: {sorted(diffs)}")
+        if sorted(diffs) != list(range(1, len(levels) + 1)):
+            problems.append(f"难度未覆盖 1..{len(levels)}: {sorted(diffs)}")
 
     # ---- 单关层面 ----
     for lv in levels:
