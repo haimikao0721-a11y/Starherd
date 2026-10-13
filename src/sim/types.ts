@@ -410,6 +410,9 @@ export interface World {
   primaries: Body[];
   /** 事件运行时状态（每步由 sim 更新，HUD 与渲染读取） */
   events?: EventRuntime[];
+  /** 层级三体构型（由 game 层在载入时算好挂上；null = 本关不是层级构型） */
+  hierarchy?: { inner: string; outer: string; aIn: number; eIn: number;
+    aOut: number; eOut: number; mIn1: number; mIn2: number; mOut: number } | null;
   pods: Body[];
   shards: Body[];
   well: Well;

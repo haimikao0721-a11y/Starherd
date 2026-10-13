@@ -11,6 +11,7 @@ import type {
 import { DEFAULT_QUALITY, DEFAULT_SAVE, PALETTES } from '../sim/types';
 import { createWorld } from '../sim/world';
 import { advance, frameEnd, stepOnce } from '../sim/step';
+import { pickHierarchy } from '../sim/kozai';
 import { predictPaths } from '../sim/predict';
 import { DT, SLOWMO_SCALE, STAR_KEEPOUT, TIME_SCALE, WELL_MASS_MAX, WELL_MASS_MIN, WELL_PRESETS, WELL_RANGE } from '../sim/constants';
 import { PX_PER_RU } from '../engine/view';
@@ -594,6 +595,13 @@ export class Game {
     this.pilot = createPilot();
     this.brightFx = 0;
     this.hud?.resetOberth?.();
+    // 层级构型（Kozai-Lidov 面板用）：关卡数据在 game 层手边，算好挂到 world 上
+    if (spec && spec.bodies) {
+      const rootId = spec.bodies[0]?.id ?? 'star';
+      this.world!.hierarchy = pickHierarchy(
+        spec.bodies.map((b) => ({ id: b.id, mass: b.mass,
+          orbit: b.orbit ? { a: b.orbit.a, e: b.orbit.e, parent: b.orbit.parent } : null })), rootId);
+    }
     if (!this.autotest) this.audio?.setMusic(this.assets.music(this.world?.level.music ?? 'loop1') ?? null);
   }
 

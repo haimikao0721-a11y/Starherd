@@ -550,6 +550,7 @@ export class Hud {
     this.drawSling(f, pal);
     this.drawZVC(f, pal);
     this.drawOberth(f, pal);
+    this.drawHierarchy(f, pal);
     this.drawLegs(f, pal);
     // 6) 屏幕世界的危险叠加（潮汐应力环 / 货舱标记 / 实体名牌 / 目标指示）
     this.drawPodMarkers(f, pal);
@@ -1086,6 +1087,26 @@ export class Hud {
     }
     this.txt(`r = ${r.toFixed(2)} RU（${this.rMin.toFixed(2)}~${this.rMax.toFixed(2)}）· 相对速度 ${relV.toFixed(3)} · 径向 ${radV.toFixed(3)}`,
       bx + 12, by + 48, pal.uiDim, 9);
+  }
+
+  /** 层级构型面板：显示"谁是内轨/外轨、半径比、稳定性"，以及**诚实的 KL 状态**。 */
+  private drawHierarchy(f: HudFrame, pal: Palette): void {
+    const h = f.world.hierarchy;
+    if (!h) return;
+    const ratio = h.aOut / Math.max(1e-9, h.aIn);
+    const boxW = 300;
+    const bx = this.w - boxW - 16;
+    const by = this.h - 276;
+    this.panel(bx, by, boxW, 58, pal);
+    this.txt('层级构型 / HIERARCHY', bx + 12, by + 16, pal.uiDim, 10);
+    this.txt(`${h.inner} 绕 ${h.outer} · 半径比 ${ratio.toFixed(1)}`, bx + 12, by + 34,
+      pal.uiAccent, 12, 'left', '600');
+    // 诚实：二维共面系统里 KL 不可能发生（它需要 > 39.23° 的离面倾角）
+    const iCritDeg = (Math.acos(Math.sqrt(3 / 5)) * 180) / Math.PI;
+    this.txt(`内轨 e = ${h.eIn.toFixed(3)} · 倾角 0°（本作物理为二维共面）`,
+      bx + 12, by + 48, pal.uiDim, 9);
+    this.txt(`→ 不发生 Kozai-Lidov 振荡（KL 需要离面倾角 > ${iCritDeg.toFixed(1)}°）`,
+      bx + 12, by + 58, pal.uiDim, 9);
   }
 
   private drawZVC(f: HudFrame, pal: Palette): void {
