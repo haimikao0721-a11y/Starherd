@@ -38,15 +38,10 @@ const BACKDROP_QUALITY: Quality = {
 
 type Screen = ScreenName | 'play' | 'finale';
 
-/** 通关结尾播放的外来录音。不是本项目原创。 */
-const ENDING_RECORDING_ID = 'hopes-and-dreams';
-const ENDING_RECORDING_URL = '/assets/audio/third_party/hopes_and_dreams.m4a';
-
 type FinaleBeat =
   | { kind: 'play'; index: number }
   | { kind: 'card'; index: number }
-  | { kind: 'medal'; id: 'shepherd' | 'flawless' }
-  | { kind: 'credit' };
+  | { kind: 'medal'; id: 'shepherd' | 'flawless' };
 
 export interface GameOptions {
   canvas: HTMLCanvasElement;
@@ -104,7 +99,7 @@ export class Game {
   /** 当前正在播放的曲目 id（事件驱动切换用；空串表示尚未设置） */
   private musicTrack = '';
   private recorder = new ClipRecorder();
-  private finale: { beats: FinaleBeat[]; i: number; hold: number; clipEnd: number; songEnded: boolean } | null = null;
+  private finale: { beats: FinaleBeat[]; i: number; hold: number; clipEnd: number } | null = null;
   private finaleHold = false;
   private showHelp = false;
   private simAccum = 0;
@@ -543,7 +538,7 @@ export class Game {
 
   /** 事件驱动选曲：风暴/救援/终章优先，其余用关卡自带曲目。 */
   private desiredMusic(): string {
-    if (this.screen === 'finale') return ENDING_RECORDING_ID;
+    if (this.screen === 'finale') return 'menu';
     if (this.screen === 'menu') return 'menu';
     if (this.screen === 'end') return 'finale';
     const w = this.world;
@@ -569,10 +564,6 @@ export class Game {
   private syncEventMusic(): void {
     const want = this.desiredMusic();
     if (want === this.musicTrack) return;
-    if (want === ENDING_RECORDING_ID) {
-      this.musicTrack = want;
-      return;
-    }
     const track = this.assets.music(want) ?? null;
     if (!track) return;
     this.musicTrack = want;
@@ -619,15 +610,11 @@ export class Game {
     }
     beats.push({ kind: 'medal', id: 'shepherd' });
     if (stand.flawless) beats.push({ kind: 'medal', id: 'flawless' });
-    beats.push({ kind: 'credit' });
-    this.finale = { beats, i: 0, hold: 0, clipEnd: 0, songEnded: false };
+    this.finale = { beats, i: 0, hold: 0, clipEnd: 0 };
     this.finaleHold = false;
-    this.musicTrack = ENDING_RECORDING_ID;
+    this.musicTrack = 'menu';
     this.setScreen('finale');
-    void this.audio?.playRecording(ENDING_RECORDING_URL, {
-      loop: false,
-      onEnded: () => { if (this.finale) this.finale.songEnded = true; },
-    });
+    this.audio?.setMusic(this.assets.music('menu') ?? null);
     this.showFinaleBeat();
   }
 
@@ -677,12 +664,6 @@ export class Game {
       this.paintFinale('成就 · 最难', '无瑕航线', '20 关的最佳成绩全部是 S。');
       return;
     }
-    fin.hold = 16;
-    this.paintFinale(
-      '鸣谢',
-      'Hopes and Dreams',
-      'Toby Fox ·《Undertale》<br>这首曲子不是《牧星者》原创，版权归原作者。<br>感谢你把整条航线飞完。',
-    );
   }
 
   private updateFinale(dtReal: number): void {
@@ -693,11 +674,6 @@ export class Game {
     if (!beat) return;
     if (beat.kind === 'play' && w && !this.finaleHold && w.time >= fin.clipEnd - 1e-3) {
       this.advanceFinale();
-      return;
-    }
-    if (beat.kind === 'credit') {
-      if (fin.songEnded) fin.hold -= dtReal;
-      if (fin.songEnded && fin.hold <= 0) this.advanceFinale();
       return;
     }
     if (this.finaleHold) {

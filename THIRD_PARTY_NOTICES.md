@@ -2,10 +2,7 @@
 
 《牧星者 / STARHERD》随仓库分发的美术、音效和音乐谱面，由
 `python/assets_gen.py` 与 `python/music_gen.py` 程序化生成，属于本项目 MIT 许可的一部分
-（详见 [LICENSE](LICENSE)）。
-
-全通关结尾若在本机播放《Hopes and Dreams》，那是 **Toby Fox** 为《Undertale》所写的曲子。
-录音文件不在本仓库、不在发布包里，也不适用 MIT。版权归原作者。
+（详见 [LICENSE](LICENSE)）。主菜单与全通关结尾用的也是这套合成音乐。
 
 本文件列出构建与运行时实际使用的第三方**软件组件**及其许可证。
 
@@ -57,4 +54,3 @@ PyInstaller 本体是 GPL-2.0-or-later，但**其 bootloader 带有明确例外�
 | 音乐（下载用 WAV） | 按需 | `python/music_render.py`（离线渲染同一份谱面） |
 
 > 以上生成器与种子均在仓库内，可复现出一致的程序化素材。
-> 《Hopes and Dreams》（Toby Fox）不在此列，也不在发行包内。

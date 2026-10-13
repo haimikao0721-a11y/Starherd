@@ -550,6 +550,11 @@ function arpVoice(env: VoiceEnv, midi: number, when: number, dur: number, vel: n
  * （>0.55 半程回声，>0.8 再加八度回声），这是"强度门限"在听感上的直接体现。
  */
 function playArp(env: VoiceEnv, note: MusicNote, when: number, dur: number): boolean {
+  // 长音当钢琴和弦，短音仍是拨弦
+  if (dur >= 0.55) {
+    const pan = ((note.midi % 5) - 2) / 5;
+    return playPiano(env, note.midi, when, dur, note.vel * 0.85, pan);
+  }
   const pan = ((note.midi % 5) - 2) / 2 * 0.45;
   const ok = arpVoice(env, note.midi, when, dur, note.vel, pan);
   if (env.intensity > 0.55 && env.budget.available() > 0) {
@@ -635,58 +640,71 @@ function playPerc(env: VoiceEnv, note: MusicNote, when: number): boolean {
   return launch(env, 1, when, stop + 0.01, [noise, hp, amp], [{ n: noise, offset: (note.midi * 0.211) % 1.5 }]);
 }
 
-/** lead：旋律。出现时机由谱面 intensity 和声部开关决定，不再额外卡在 0.7。 */
-function playLead(env: VoiceEnv, note: MusicNote, when: number, dur: number): boolean {
-  const n = Math.min(2, env.budget.available());
-  if (n <= 0) return false;
+/**
+ * 钢琴：基频正弦 + 很快衰减的二次、三次谐波，起音加一小段琴槌噪声。
+ * 音量自己往下掉，不像铺底那样一直撑着。
+ */
+function playPiano(env: VoiceEnv, midi: number, when: number, dur: number, vel: number, pan: number): boolean {
+  const voices = Math.min(4, env.budget.available());
+  if (voices < 1) return false;
   const ctx = env.ctx;
-  const midi = snapToPentatonic(note.midi, env.pcs);
   const freq = midiToFreq(midi);
-
-  const filter = ctx.createBiquadFilter();
-  filter.type = 'lowpass';
-  filter.frequency.value = clamp(1300 + 5200 * env.intensity, 800, 13000);
-  filter.Q.value = 1.4;
+  const peak = 0.2 * clamp(vel, 0, 1.4);
+  const decay = clamp(dur * 0.9, 0.4, 2.4);
 
   const amp = ctx.createGain();
-  amp.gain.value = 0.0001;
-  const stop = envSustain(amp.gain, when, dur, 0.12 * clamp(note.vel, 0, 1.4), 0.02, 0.28);
-
+  const stop = envPerc(amp.gain, when, peak, 0.008, decay);
   const p = ctx.createStereoPanner();
-  p.pan.value = (midi % 2 === 0 ? -1 : 1) * 0.22;
-
-  const nodes: AudioNode[] = [filter, amp, p];
-  const sources: SourceSpec[] = [];
-  const osc = ctx.createOscillator();
-  osc.type = 'triangle';
-  osc.frequency.setValueAtTime(clamp(freq * 0.985, 20, 12000), when);
-  osc.frequency.linearRampToValueAtTime(clamp(freq, 20, 12000), when + 0.07);
-  if (dur > 0.35) {
-    osc.frequency.linearRampToValueAtTime(clamp(freq * 1.006, 20, 12000), when + dur * 0.55);
-    osc.frequency.linearRampToValueAtTime(clamp(freq, 20, 12000), when + dur);
-  }
-  osc.detune.value = clamp(env.detuneCents + 4, -1200, 1200);
-  osc.connect(filter);
-  nodes.push(osc);
-  sources.push({ n: osc });
-
-  if (n >= 2) {
-    const harm = ctx.createOscillator();
-    harm.type = 'square';
-    harm.frequency.value = clamp(freq, 20, 12000);
-    harm.detune.value = clamp(env.detuneCents + 9, -1200, 1200);
-    const og = ctx.createGain();
-    og.gain.value = 0.3;
-    harm.connect(og);
-    og.connect(filter);
-    nodes.push(og, harm);
-    sources.push({ n: harm });
-  }
-
-  filter.connect(amp);
+  p.pan.value = clamp(pan, -1, 1);
   amp.connect(p);
   p.connect(env.dest);
-  return launch(env, n, when, stop + 0.02, nodes, sources);
+
+  const nodes: AudioNode[] = [amp, p];
+  const sources: SourceSpec[] = [];
+  const addTone = (ratio: number, level: number, detune: number): void => {
+    if (sources.length >= voices) return;
+    const osc = ctx.createOscillator();
+    osc.type = 'sine';
+    osc.frequency.value = clamp(freq * ratio, 20, 12000);
+    osc.detune.value = clamp(env.detuneCents + detune, -1200, 1200);
+    if (level >= 0.999) {
+      osc.connect(amp);
+    } else {
+      const g = ctx.createGain();
+      const harmStop = envPerc(g.gain, when, level, 0.004, decay * (0.28 + 0.2 / ratio));
+      void harmStop;
+      osc.connect(g);
+      g.connect(amp);
+      nodes.push(g);
+    }
+    nodes.push(osc);
+    sources.push({ n: osc });
+  };
+  addTone(1, 1, 0);
+  if (voices >= 2) addTone(2, 0.32, 3);
+  if (voices >= 3) addTone(3, 0.14, -2);
+  if (voices >= 4) {
+    const noise = ctx.createBufferSource();
+    noise.buffer = getNoiseBuffer(ctx);
+    noise.loop = true;
+    const hp = ctx.createBiquadFilter();
+    hp.type = 'highpass';
+    hp.frequency.value = 1800;
+    const ng = ctx.createGain();
+    envPerc(ng.gain, when, 0.18, 0.001, 0.018);
+    noise.connect(hp);
+    hp.connect(ng);
+    ng.connect(amp);
+    nodes.push(noise, hp, ng);
+    sources.push({ n: noise, offset: (midi * 0.017) % 1.2 });
+  }
+  return launch(env, sources.length, when, stop + 0.02, nodes, sources);
+}
+
+/** lead：旋律钢琴。谱面写什么音就弹什么音。 */
+function playLead(env: VoiceEnv, note: MusicNote, when: number, dur: number): boolean {
+  const pan = (note.midi % 2 === 0 ? -1 : 1) * 0.18;
+  return playPiano(env, note.midi, when, dur, note.vel, pan);
 }
 
 /** 按 note.track 分发到不同合成器 */

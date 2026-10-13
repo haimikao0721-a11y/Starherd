@@ -29,7 +29,7 @@ Thumbs.db
 desktop.ini
 .DS_Store
 
-# ---- 第三方录音：只在本机播放，不进版本库、不进发布包 ----
+# ---- 本机音频：不属于本项目，不进版本库 ----
 assets/audio/third_party/*.m4a
 assets/audio/third_party/*.mp3
 assets/audio/third_party/*.ogg

@@ -841,9 +841,7 @@ export class Menu {
       </section>
       <section class="lc-note lc-note-about">
         <h4>许可与素材</h4>
-        <p class="lc-hint">源码、程序化美术、音效和关卡配乐为 <b>MIT</b>。全部通关后的结尾会播放
-          <b>Hopes and Dreams</b>（<b>Toby Fox</b>，《Undertale》）。
-          这首不是本项目原创，版权归原作者，不包含在 MIT 里，也不随仓库和安装包分发。</p>
+        <p class="lc-hint">源码、程序化美术、音效和音乐谱面为 <b>MIT</b>。关卡配乐与主菜单都由本项目合成。</p>
         <p class="lc-hint">游戏内背景音乐可在暂停页下载（仅 EXE / 网页模式）。</p>
       </section>
       <nav class="lc-nav">

@@ -284,7 +284,7 @@ def build_with_pyinstaller(args) -> int:
                 warn(f"--add-data 的 {rel}/ 目前是空目录（内容由其他 W-agent 负责）")
             argv += ["--add-data", f"{src}{os.pathsep}{rel}"]
             continue
-        # 第三方录音（Toby Fox 等）只留在开发机，不打进发行包。
+        # 本机误放进 assets/audio/third_party 的录音不打进发行包。
         skipped = 0
         for path in src.rglob("*"):
             if not path.is_file():
